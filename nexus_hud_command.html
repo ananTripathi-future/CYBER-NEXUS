@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS-X // CYBER COMMAND HUD</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --neon-cyan: #00f0ff;
+      --neon-blue: #0077ff;
+      --neon-green: #00ff66;
+      --neon-red: #ff0055;
+      --neon-amber: #ffaa00;
+      --neon-purple: #bd00ff;
+      --hud-bg: #03070d;
+      --hud-panel: rgba(6, 15, 26, 0.85);
+      --hud-border: #00f0ff44;
+      --hud-border-bright: #00f0ff;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background-color: var(--hud-bg);
+      color: #c8e6f5;
+      font-family: 'Share Tech Mono', monospace;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(0, 119, 255, 0.08) 0%, transparent 70%),
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+    }
+    .orbitron {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .hud-panel {
+      background: var(--hud-panel);
+      border: 1px solid var(--hud-border);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.1), inset 0 0 20px rgba(0, 119, 255, 0.05);
+      position: relative;
+      backdrop-filter: blur(8px);
+    }
+    .hud-panel::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px; width: 8px; height: 8px;
+      border-top: 2px solid var(--neon-cyan);
+      border-left: 2px solid var(--neon-cyan);
+    }
+    .hud-panel::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px; width: 8px; height: 8px;
+      border-bottom: 2px solid var(--neon-cyan);
+      border-right: 2px solid var(--neon-cyan);
+    }
+    .glow-cyan {
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+    }
+    .glow-green {
+      text-shadow: 0 0 10px rgba(0, 255, 102, 0.7);
+    }
+    .glow-red {
+      text-shadow: 0 0 10px rgba(255, 0, 85, 0.7);
+    }
+    .radar-sweep {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, rgba(0, 240, 255, 0.4) 0deg, rgba(0, 240, 255, 0.05) 60deg, transparent 60deg);
+      animation: sweep 4s linear infinite;
+    }
+    @keyframes sweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .scanline {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 240, 255, 0.02) 51%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 50;
+    }
+    .pulse-slow {
+      animation: pulse-glow 3s infinite ease-in-out;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 6px rgba(0,240,255,0.6)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 16px rgba(0,240,255,0.9)); }
+    }
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #040912;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00f0ff44;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00f0ffaa;
+    }
+  </style>
+</head>
+<body class="p-3 min-h-screen flex flex-col justify-between">
+  <div class="scanline"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- TOP HUD BAR // SYSTEM STATUS & QUANTUM SYNAPSE -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <header class="hud-panel rounded-xl p-3 mb-3 flex flex-wrap justify-between items-center border-b-2 border-cyan-500/40">
+    <div class="flex items-center space-x-4">
+      <div class="relative w-10 h-10 flex items-center justify-center">
+        <div class="absolute inset-0 rounded-full border border-cyan-500/50 animate-ping"></div>
+        <div class="w-8 h-8 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-cyan-950/40 text-cyan-300 font-bold text-xs orbitron">NX</div>
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <h1 class="orbitron font-black text-lg tracking-wider text-cyan-400 glow-cyan">NEXUS-X // COMMAND DECK</h1>
+          <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 tracking-widest uppercase">AUTONOMOUS MODE ACTIVE</span>
+        </div>
+        <div class="text-[10px] text-cyan-500/80 tracking-wider">PERCEPTION ➔ REASONING ➔ RESEARCH ➔ SIMULATION ➔ DECISION ➔ DEFENSE</div>
+      </div>
+    </div>
+
+    <!-- Live Audio / Voice Synth Indicator (NEXUS top bar) -->
+    <div class="flex items-center space-x-3 bg-[#061424] px-4 py-2 rounded-xl border border-cyan-500/30 my-2 sm:my-0">
+      <div class="flex items-center space-x-1">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[11px] text-emerald-300 font-bold orbitron">NEXUS COGNITIVE CORE</span>
+      </div>
+      <div class="flex items-center space-x-1 h-5 px-2">
+        <span class="w-1 bg-cyan-400 animate-[bounce_1s_infinite_100ms] h-3 rounded-full"></span>
+        <span class="w-1 bg-cyan-300 animate-[bounce_1.2s_infinite_200ms] h-5 rounded-full"></span>
+        <span class="w-1 bg-cyan-400 animate-[bounce_0.8s_infinite_300ms] h-2 rounded-full"></span>
+        <span class="w-1 bg-cyan-200 animate-[bounce_1.1s_infinite_150ms] h-4 rounded-full"></span>
+        <span class="w-1 bg-cyan-400 animate-[bounce_0.9s_infinite_250ms] h-3 rounded-full"></span>
+      </div>
+      <span class="text-[10px] text-cyan-400/80 font-mono">LISTENING // READY</span>
+    </div>
+
+    <div class="flex items-center space-x-2 flex-wrap text-[10px]">
+      <div class="px-2.5 py-1 rounded bg-[#061a1e] border border-teal-500/40 text-teal-300"><span class="text-teal-400 font-bold">9-STREAM:</span> FUSED</div>
+      <div class="px-2.5 py-1 rounded bg-[#150924] border border-purple-500/40 text-purple-300"><span class="text-purple-400 font-bold">QAOA:</span> -2.208 H</div>
+      <div class="px-2.5 py-1 rounded bg-[#072418] border border-emerald-500/40 text-emerald-300"><span class="text-emerald-400 font-bold">GUARDIAN:</span> SAFE</div>
+      <div class="px-2.5 py-1 rounded bg-[#1c1505] border border-amber-500/40 text-amber-300"><span class="text-amber-400 font-bold">LEDGER:</span> BLOCK #1</div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- MAIN CYBER DECK GRID -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <main class="grid grid-cols-1 lg:grid-cols-12 gap-3 flex-1">
+
+    <!-- LEFT COLUMN: HOLOGRAPHIC QUANTUM BRAIN & ATTACK RADAR (3 COLS) -->
+    <div class="lg:col-span-3 space-y-3 flex flex-col justify-between">
+
+      <!-- Holographic Quantum AGI Brain -->
+      <div class="hud-panel rounded-xl p-3 flex-1 flex flex-col justify-between">
+        <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1.5 mb-2">
+          <span class="orbitron text-xs font-bold text-cyan-400 flex items-center space-x-1.5">
+            <span>🧠</span><span>QUANTUM AGI BRAIN</span>
+          </span>
+          <span class="text-[9px] text-emerald-400 font-bold animate-pulse">● ACTIVE (95% CONF)</span>
+        </div>
+        
+        <div class="relative h-44 w-full flex items-center justify-center overflow-hidden rounded-lg bg-[#02060d] border border-cyan-500/20">
+          <canvas id="brainCanvas" width="280" height="170" class="w-full h-full"></canvas>
+          <div class="absolute bottom-1.5 left-2 right-2 flex justify-between text-[9px] font-mono text-cyan-400/80 bg-[#06101d]/80 px-2 py-0.5 rounded border border-cyan-500/30">
+            <span>NODES: 256 QUBITS</span>
+            <span>TOPOLOGY: 7-PHASE DAG</span>
+          </div>
+        </div>
+
+        <div class="mt-2 grid grid-cols-2 gap-1.5 text-[10px]">
+          <div class="p-1.5 bg-[#071322] border border-cyan-500/30 rounded">
+            <span class="text-slate-400 block text-[8px]">PRIMARY HYPOTHESIS</span>
+            <span class="text-cyan-300 font-bold">APT-41 Kill Chain</span>
+          </div>
+          <div class="p-1.5 bg-[#071322] border border-cyan-500/30 rounded">
+            <span class="text-slate-400 block text-[8px]">RESIDUAL RISK</span>
+            <span class="text-emerald-400 font-bold font-mono">94% ➔ 6%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cyber Targeting & Reachability Radar -->
+      <div class="hud-panel rounded-xl p-3 flex-1 flex flex-col justify-between">
+        <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1.5 mb-2">
+          <span class="orbitron text-xs font-bold text-cyan-400 flex items-center space-x-1.5">
+            <span>🎯</span><span>ATTACK PATH RADAR</span>
+          </span>
+          <span class="text-[9px] text-cyan-400 font-mono">SWEEP: 443/TCP</span>
+        </div>
+
+        <div class="relative w-full h-40 flex items-center justify-center bg-[#020813] rounded-lg border border-cyan-500/20 overflow-hidden">
+          <div class="w-36 h-36 rounded-full border border-cyan-500/30 relative flex items-center justify-center">
+            <div class="w-24 h-24 rounded-full border border-cyan-500/20"></div>
+            <div class="w-12 h-12 rounded-full border border-cyan-500/20"></div>
+            <!-- Crosshairs -->
+            <div class="absolute w-full h-[1px] bg-cyan-500/30"></div>
+            <div class="absolute h-full w-[1px] bg-cyan-500/30"></div>
+            <!-- Radar Sweep -->
+            <div class="radar-sweep"></div>
+            <!-- Target Blips -->
+            <div class="absolute top-7 right-8 w-2 h-2 rounded-full bg-red-500 animate-ping" title="10.0.4.50 (Entry Point)"></div>
+            <div class="absolute top-7 right-8 w-2 h-2 rounded-full bg-red-400" title="10.0.4.50"></div>
+            <div class="absolute bottom-8 left-10 w-2 h-2 rounded-full bg-amber-400" title="10.0.4.51 (Crown Jewel DB)"></div>
+            <div class="absolute top-16 left-12 w-2 h-2 rounded-full bg-purple-400" title="AWS S3 Vault"></div>
+          </div>
+        </div>
+
+        <div class="mt-2 text-[9px] text-slate-300 flex justify-between font-mono">
+          <span class="text-red-400">● 10.0.4.50 (Web)</span>
+          <span class="text-amber-400">● 10.0.4.51 (DB)</span>
+          <span class="text-purple-400">● S3 Vault</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CENTER COLUMN: INTERACTIVE COPILOT CHAT & WHAT-IF WORKBENCH (6 COLS) -->
+    <div class="lg:col-span-6 space-y-3 flex flex-col justify-between">
+
+      <!-- NEXUS Interactive Copilot Console -->
+      <div class="hud-panel rounded-xl p-4 flex-1 flex flex-col justify-between h-[420px]">
+        <div class="flex justify-between items-center border-b border-cyan-500/30 pb-2 mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+            <h2 class="orbitron text-xs font-bold text-cyan-300 tracking-wider">NATURAL LANGUAGE TACTICAL CONSOLE</h2>
+          </div>
+          <span class="text-[9px] text-slate-400 font-mono">INTERFACE: SEC_COMMANDER // CLEARANCE: TS/SCI</span>
+        </div>
+
+        <!-- Quick Natural Language Chips -->
+        <div class="flex flex-wrap gap-1.5 pb-2 mb-2 border-b border-cyan-500/20 text-[10px]">
+          <button onclick="executeHudCommand('What is happening?')" class="px-2 py-0.5 rounded bg-[#071a2e] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 transition">"What is happening?"</button>
+          <button onclick="executeHudCommand('Investigate.')" class="px-2 py-0.5 rounded bg-[#071a2e] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 transition">"Investigate."</button>
+          <button onclick="executeHudCommand('Research the technique.')" class="px-2 py-0.5 rounded bg-[#071a2e] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 transition">"Research technique."</button>
+          <button onclick="executeHudCommand('Simulate the likely attack.')" class="px-2 py-0.5 rounded bg-[#071a2e] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 transition">"Simulate attack."</button>
+          <button onclick="executeHudCommand('Defend.')" class="px-2 py-0.5 rounded bg-[#071a2e] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 transition">"Defend."</button>
+          <button onclick="executeHudCommand('Approve option 1.')" class="px-2 py-0.5 rounded bg-[#0a2f1c] hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/40 transition font-bold">"Approve #1"</button>
+          <button onclick="executeHudCommand('Did it work?')" class="px-2 py-0.5 rounded bg-[#18260b] hover:bg-teal-500/40 text-teal-300 border border-teal-500/40 transition">"Did it work?"</button>
+        </div>
+
+        <!-- Conversation Viewport -->
+        <div id="hudTerminal" class="flex-1 overflow-y-auto space-y-2.5 text-xs pr-1 font-mono">
+          <div class="p-2.5 bg-[#030914] border border-cyan-500/30 rounded-lg text-cyan-300">
+            <span class="text-cyan-400 font-bold orbitron text-[10px] block mb-1">🤖 NEXUS-X CORE:</span>
+            <span>System fully initialized. Monitoring 9 telemetry streams, 26 real-time events, and Digital Twin. Ready for tactical instructions.</span>
+          </div>
+        </div>
+
+        <!-- Input Bar with Glow Reticle -->
+        <div class="mt-2 pt-2 border-t border-cyan-500/30 flex space-x-2">
+          <div class="relative flex-1">
+            <input id="hudInput" type="text" onkeydown="if(event.key==='Enter') submitHudInput()" placeholder="Enter tactical directive or query (e.g. 'Investigate.', 'Defend.')..." class="w-full bg-[#020712] border border-cyan-500/50 rounded-lg px-3 py-1.5 text-xs text-cyan-200 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+          </div>
+          <button onclick="submitHudInput()" class="px-4 py-1.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg text-xs orbitron transition glow-cyan flex items-center space-x-1">
+            <span>TRANSMIT</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick "WHAT-IF?" Counterfactual Simulator Panel -->
+      <div class="hud-panel rounded-xl p-3">
+        <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1.5 mb-2">
+          <span class="orbitron text-xs font-bold text-amber-400 flex items-center space-x-1.5">
+            <span>🔮</span><span>"WHAT IF?" COUNTERFACTUAL MATRIX</span>
+          </span>
+          <span class="text-[9px] text-amber-400 font-mono">DIGITAL TWIN SANDBOX</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px]">
+          <button onclick="runHudWhatIf('compromise_server')" class="p-2 bg-[#0d1627] hover:bg-[#1a2842] border border-cyan-500/30 rounded text-left transition">
+            <div class="font-bold text-cyan-300">🖥️ Compromise Svr 50?</div>
+            <div class="text-[8px] text-slate-400">3 paths to DB</div>
+          </button>
+          <button onclick="runHudWhatIf('disable_waf')" class="p-2 bg-[#0d1627] hover:bg-[#1a2842] border border-cyan-500/30 rounded text-left transition">
+            <div class="font-bold text-orange-300">🛡️ Disable WAF Rule?</div>
+            <div class="text-[8px] text-slate-400">+180% CVSS 10 exposure</div>
+          </button>
+          <button onclick="runHudWhatIf('top_3_defenses')" class="p-2 bg-[#0d1627] hover:bg-[#1a2842] border border-cyan-500/30 rounded text-left transition">
+            <div class="font-bold text-teal-300">🎯 Top 3 Choke Points?</div>
+            <div class="text-[8px] text-slate-400">-88% Total Path Risk</div>
+          </button>
+          <button onclick="runHudWhatIf('pqc_migration')" class="p-2 bg-[#0d1627] hover:bg-[#1a2842] border border-cyan-500/30 rounded text-left transition">
+            <div class="font-bold text-purple-300">⚛️ PQC Migration?</div>
+            <div class="text-[8px] text-slate-400">RSA-1024 Urgency #1</div>
+          </button>
+        </div>
+
+        <div id="whatifResultBox" class="mt-2 p-2 bg-[#030814] border border-cyan-500/20 rounded text-[10px] text-slate-300 min-h-[48px] flex items-center">
+          <span class="text-slate-500 font-mono italic">Select any scenario above to execute counterfactual graph traversal in Shadow-Twin sandbox.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: 9-STREAM TELEMETRY MATRIX & ACTION GATE (3 COLS) -->
+    <div class="lg:col-span-3 space-y-3 flex flex-col justify-between">
+
+      <!-- 9-Stream Telemetry Matrix -->
+      <div class="hud-panel rounded-xl p-3 flex-1 flex flex-col justify-between">
+        <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1.5 mb-2">
+          <span class="orbitron text-xs font-bold text-cyan-400 flex items-center space-x-1.5">
+            <span>📡</span><span>9-STREAM TELEMETRY</span>
+          </span>
+          <span class="text-[9px] text-emerald-400 font-bold font-mono">26/26 STREAMS LIVE</span>
+        </div>
+
+        <div class="space-y-1 text-[10px] font-mono">
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-blue-300">1. Network Telemetry</span>
+            <span class="text-red-400 font-bold">SYN + SSH C2 (3)</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-emerald-300">2. Endpoint Events</span>
+            <span class="text-red-400 font-bold">LSASS Dump (3)</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-amber-300">3. Authentication</span>
+            <span class="text-red-400 font-bold">Tor Exit + Spray (4)</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-orange-300">4. Application Logs</span>
+            <span class="text-amber-300">SQLi Attempt (2)</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-sky-300">5. Cloud Telemetry</span>
+            <span class="text-red-400 font-bold">S3 Public ACL (2)</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-rose-300">6. Vulnerability Info</span>
+            <span class="text-red-400 font-bold">CVE-2024-3400 (3)</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-slate-300">7. Config Baseline</span>
+            <span class="text-amber-300">TLS 1.0 Drift (3)</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-pink-300">8. Threat Intel</span>
+            <span class="text-red-400 font-bold">APT-41 C2 Match (3)</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-[#061424] border border-cyan-500/20 rounded">
+            <span class="text-purple-300">9. Security Tests</span>
+            <span class="text-amber-300">Pentest Overdue (3)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Human Authorization Intercept & Actions -->
+      <div class="hud-panel rounded-xl p-3 border-2 border-yellow-500/40 bg-[#161205]/90 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-yellow-500/30 pb-1.5 mb-2">
+            <span class="orbitron text-xs font-bold text-yellow-400 flex items-center space-x-1.5">
+              <span>⚠️</span><span>AUTHORIZATION GATE</span>
+            </span>
+            <span class="text-[9px] text-yellow-300 font-mono font-bold">ID: NX-84721</span>
+          </div>
+
+          <div class="p-2 bg-[#090e18] border border-yellow-500/30 rounded text-[10px] space-y-1 mb-2 font-mono">
+            <div class="flex justify-between"><span class="text-slate-400">Target:</span> <span class="text-cyan-300 font-bold">10.0.4.50 + AWS</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Strategy:</span> <span class="text-blue-300 font-bold">Blue Containment</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">QAOA Efficacy:</span> <span class="text-emerald-400 font-bold">97% (Zero Downtime)</span></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-1.5 text-[10px]">
+          <button onclick="executeHudCommand('Approve option 1.')" class="p-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg orbitron transition glow-cyan text-center">
+            🔵 DEFEND (BLUE)
+          </button>
+          <button onclick="executeHudCommand('Simulate the likely attack.')" class="p-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg orbitron transition glow-red text-center">
+            🔴 REPLAY (RED)
+          </button>
+          <button onclick="executeHudCommand('Investigate.')" class="p-1.5 bg-[#0f223a] hover:bg-cyan-900/50 text-cyan-300 border border-cyan-500/40 rounded text-center">
+            🟡 INVESTIGATE
+          </button>
+          <button onclick="alert('Aborting proposed actions.')" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-center">
+            ❌ CANCEL
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- BOTTOM TELEMETRY TICKER -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <footer class="hud-panel rounded-xl p-2 mt-3 flex justify-between items-center text-[10px] font-mono text-cyan-400/80">
+    <div class="flex items-center space-x-2">
+      <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+      <span>NEXUS-X ENGINE v4.2 [9-STREAM FUSION // SHA-256 LEDGER: <strong class="text-cyan-200">3044ca45...</strong>]</span>
+    </div>
+    <div class="flex space-x-4">
+      <span>LATENCY: <strong class="text-cyan-300">18ms</strong></span>
+      <span>CPU LOAD: <strong class="text-emerald-400">12.4%</strong></span>
+      <span>MEMORY: <strong class="text-cyan-300">1.8 / 16 GB</strong></span>
+      <span>SEC LEVEL: <strong class="text-emerald-400">ARMED</strong></span>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- JAVASCRIPT: HOLOGRAPHIC 3D CANVAS & DIALOGUE LOGIC -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <script>
+    // 3D Quantum Brain Canvas Animation
+    const canvas = document.getElementById('brainCanvas');
+    const ctx = canvas.getContext('2d');
+    let angle = 0;
+
+    const nodes = [];
+    for(let i=0; i<32; i++) {
+      nodes.push({
+        x: (Math.random() - 0.5) * 160,
+        y: (Math.random() - 0.5) * 100,
+        z: (Math.random() - 0.5) * 140
+      });
+    }
+
+    function drawBrain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      angle += 0.015;
+
+      const projected = nodes.map(n => {
+        // Rotate Y
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        const x1 = n.x * cos - n.z * sin;
+        const z1 = n.z * cos + n.x * sin;
+        // Project
+        const fov = 180;
+        const scale = fov / (fov + z1 + 100);
+        return {
+          x: cx + x1 * scale,
+          y: cy + n.y * scale,
+          z: z1,
+          scale: scale
+        };
+      });
+
+      // Draw Edges
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.18)';
+      ctx.lineWidth = 1;
+      for(let i=0; i<projected.length; i++) {
+        for(let j=i+1; j<projected.length; j++) {
+          const dx = projected[i].x - projected[j].x;
+          const dy = projected[i].y - projected[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 45) {
+            ctx.beginPath();
+            ctx.moveTo(projected[i].x, projected[i].y);
+            ctx.lineTo(projected[j].x, projected[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw Nodes
+      projected.forEach(p => {
+        ctx.fillStyle = p.z > 0 ? '#00f0ff' : '#0077ff';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(1.5, p.scale * 3), 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      requestAnimationFrame(drawBrain);
+    }
+    drawBrain();
+
+    // Natural Language Command Response Matrix
+    const HUD_RESPONSES = {
+      "what is happening?": "🚨 <strong>THREE CORRELATED ANOMALIES DETECTED:</strong><br>1. External SYN scan probed 427 ports from APT-41 C2 infrastructure (<code class='text-cyan-300'>198.51.100.44</code>).<br>2. 15 authentication failures followed by Tor exit node login on <code class='text-cyan-300'>admin_svc</code>.<br>3. Encoded PowerShell spawned from svchost (PID 4012) with token elevation & reverse SSH tunnel.",
+
+      "investigate.": "🔍 <strong>CORRELATED 2,481 TELEMETRY EVENTS ACROSS 9 STREAMS:</strong><br>• Causal chain indicates active intrusion with <strong>95% confidence (H1)</strong>.<br>• Unpatched <code class='text-red-400'>CVE-2026-1184</code> exploited for token elevation.<br>• Persistence installed via scheduled task <code class='text-cyan-300'>WindowsUpdate_Svc</code>.<br>• Lateral token replay observed targeting database replica <code class='text-cyan-300'>10.0.4.51</code>.",
+
+      "research the technique.": "📚 <strong>THREAT INTELLIGENCE & ADVISORY SYNTHESIS:</strong><br>• MITRE ATT&CK: 11 techniques mapped (T1110, T1078, T1059.001, T1003, T1053, T1572).<br>• Advisories: US-CERT AA26-081A (APT-41 Campaigns) and CISA Alert ICS-CERT-2026-014.<br>• Internal Finding: Q2 pentest report <code class='text-amber-300'>TEST-001</code> identified this exact attack path (overdue remediation).",
+
+      "simulate the likely attack.": "♊ <strong>SHADOW-TWIN DIGITAL REPLAY COMPLETED:</strong><br>• Path 1 (Primary): Host 10.0.4.50 ➔ Customer DB 10.0.4.51 (Success: <strong>92%</strong>).<br>• Path 2 (Cloud Pivot): Lambda backup role escalation ➔ public S3 bucket exfiltration (Success: <strong>68%</strong>).<br>• Blast radius: Contained in sandbox twin; 0s production downtime.",
+
+      "defend.": "🛡️ <strong>RECOMMENDED DEFENSIVE ACTION MATRIX:</strong><br>• <strong>Option 1 (Optimal - Blue Mode):</strong> Revoke admin_svc sessions, isolate host 10.0.4.50, block C2 IP/domain, remove beacon task, revert S3 ACL (QAOA Score: -2.208 H, Efficacy: 97%).<br>• <strong>Option 2 (Red Mode):</strong> Replay attack chain in Twin to verify patch efficacy.<br><span class='text-amber-300 font-bold'>⚠️ Awaiting Security Commander cryptographic authorization.</span>",
+
+      "approve option 1.": "⚡ <strong>EXECUTING SIGNED DEFENSE DIRECTIVE (ID: NX-84721)...</strong><br><code class='text-cyan-300 text-[10px]'>nexus-blue --revoke-sessions admin_svc --isolate-host 10.0.4.50,10.0.4.51 --block-ip 198.51.100.44 --block-domain c2beacon.apt41-infra.example --remove-task 'WindowsUpdate_Svc' --revert-s3-acl prod-secrets-vault --deploy-waf R-9901</code><br>✓ Execution Status: <strong class='text-emerald-400'>SUCCESS</strong>. Signed by Security Commander.",
+
+      "did it work?": "✅ <strong>POST-ACTION VERIFICATION AUDIT PASSED:</strong><br>• Threat neutralized: <strong>TRUE</strong><br>• Reverse SSH C2 tunnel: <strong>SEVERED</strong><br>• Persistence artifact: <strong>REMOVED</strong><br>• Cloud IAM & S3 exposure: <strong>LOCKED DOWN</strong><br>• Residual risk dropped from <strong>94% ➔ 6%</strong>.<br>• Sealed in SHA-256 Ledger Block #1 (<code class='text-cyan-300'>3044ca45...</code>)."
+    };
+
+    function executeHudCommand(cmd) {
+      const term = document.getElementById('hudTerminal');
+      if (!term) return;
+
+      // Commander Speech Bubble
+      const userDiv = document.createElement('div');
+      userDiv.className = "p-2 bg-[#061424] border border-cyan-500/40 rounded-lg text-cyan-200 ml-6";
+      userDiv.innerHTML = `<span class="text-cyan-400 font-bold orbitron text-[10px] block mb-0.5">👤 SECURITY COMMANDER:</span>${cmd}`;
+      term.appendChild(userDiv);
+
+      const norm = cmd.trim().toLowerCase();
+      const resp = HUD_RESPONSES[norm] || `Command received: "<em>${cmd}</em>". Telemetry fusion and causal graph synthesis active.`;
+
+      setTimeout(() => {
+        const aiDiv = document.createElement('div');
+        aiDiv.className = "p-2 bg-[#020914] border border-cyan-500/30 rounded-lg text-slate-200";
+        aiDiv.innerHTML = `<span class="text-cyan-400 font-bold orbitron text-[10px] block mb-0.5">🤖 NEXUS-X:</span>${resp}`;
+        term.appendChild(aiDiv);
+        term.scrollTop = term.scrollHeight;
+      }, 200);
+
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function submitHudInput() {
+      const input = document.getElementById('hudInput');
+      if (!input || !input.value.trim()) return;
+      const val = input.value.trim();
+      input.value = '';
+      executeHudCommand(val);
+    }
+
+    const WHATIF_DATA = {
+      compromise_server: "<strong class='text-red-400'>[IMPACT: CRITICAL]</strong> Adversary gains admin_svc cached token ➔ <strong>3 reachable pathways</strong> to Customer DB 10.0.4.51 (100% reachability) and S3 vaults.",
+      disable_waf: "<strong class='text-orange-400'>[EXPOSURE: +180%]</strong> CVE-2024-3400 (CVSS 10.0) becomes directly exploitable from external IPs. Mean time to compromise: 4.2 minutes.",
+      top_3_defenses: "<strong class='text-teal-300'>[QAOA OPTIMAL CHOKE POINTS]</strong> 1) Enforce FIDO2 MFA (-48%), 2) Disable RC4 Kerberos (-26%), 3) Attach Cloud Deny-Public SCP (-14%). Total risk reduction: <strong>88%</strong>.",
+      pqc_migration: "<strong class='text-purple-300'>[PQC HARVEST-NOW AUDIT]</strong> Core Identity Vault 10.0.4.50 (RSA-1024 expiring in 11 days, 10+ yr longevity PII) is <strong>Priority #1</strong> for Kyber/Dilithium migration."
+    };
+
+    function runHudWhatIf(key) {
+      const box = document.getElementById('whatifResultBox');
+      if (box && WHATIF_DATA[key]) {
+        box.innerHTML = WHATIF_DATA[key];
+      }
+    }
+  </script>
+</body>
+</html>

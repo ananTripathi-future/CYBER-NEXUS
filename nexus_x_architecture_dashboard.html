@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>NEXUS-X Power Stack Dashboard</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --bg-deep: #060b13;
+      --card-deep: #0a111e;
+      --card-border: #152238;
+      --accent-cyan: #00f0ff;
+      --accent-blue: #3b82f6;
+    }
+    body {
+      background-color: #060b13 !important;
+      color: #e2e8f0 !important;
+    }
+    .dark-card {
+      background-color: #0a111e !important;
+      border-color: #152238 !important;
+    }
+    .dark-card-inner {
+      background-color: #0d1627 !important;
+      border-color: #1e3050 !important;
+    }
+    .glow-cyan { box-shadow: 0 0 20px rgba(0, 240, 255, 0.25); }
+    .glow-purple { box-shadow: 0 0 20px rgba(168, 85, 247, 0.25); }
+    .glow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.25); }
+    .glow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.25); }
+    .glow-amber { box-shadow: 0 0 20px rgba(245, 158, 11, 0.25); }
+    .node-pulse { animation: pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.85;transform:scale(1.02)} }
+    .flow-arrow { color: #38bdf8; font-size: 13px; font-weight: bold; opacity: 0.7; }
+  </style>
+</head>
+<body class="bg-[#060b13] text-slate-200 antialiased p-5 font-sans min-h-screen">
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- HEADER -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="bg-[#0a111e] border border-[#152238] rounded-2xl p-5 mb-5 shadow-2xl">
+  <div class="flex flex-wrap justify-between items-center">
+    <div>
+      <div class="flex items-center space-x-3">
+        <span class="text-3xl">🧠⚛️</span>
+        <div>
+          <h1 class="text-xl font-bold tracking-wide text-cyan-400">NEXUS-X POWER STACK</h1>
+          <p class="text-[11px] text-[var(--muted-foreground)] font-mono">PERCEPTION → REASONING → RESEARCH → SIMULATION → DECISION</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center space-x-2 mt-3 sm:mt-0 flex-wrap gap-1">
+      <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">● ALL SYSTEMS ONLINE</span>
+      <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">9-STREAM FUSION</span>
+      <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30">QAOA OPTIMIZER v3.2</span>
+      <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">SHA-256 LEDGER</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TABS -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="flex space-x-1 border-b border-[var(--border)] mb-5 overflow-x-auto text-xs">
+  <button onclick="switchTab('arch')" id="tab-arch" class="px-3 py-2 font-semibold border-b-2 border-cyan-400 text-cyan-400 whitespace-nowrap">🏗️ Power Stack Architecture</button>
+  <button onclick="switchTab('agents')" id="tab-agents" class="px-3 py-2 font-semibold border-b-2 border-transparent text-[var(--muted-foreground)] hover:text-[var(--foreground)] whitespace-nowrap">🔴🔵 Red / Blue Agents</button>
+  <button onclick="switchTab('quantum')" id="tab-quantum" class="px-3 py-2 font-semibold border-b-2 border-transparent text-[var(--muted-foreground)] hover:text-[var(--foreground)] whitespace-nowrap">⚛️ Quantum Optimizer</button>
+  <button onclick="switchTab('copilot')" id="tab-copilot" class="px-3 py-2 font-semibold border-b-2 border-transparent text-[var(--muted-foreground)] hover:text-[var(--foreground)] whitespace-nowrap">💬 Copilot & Approval</button>
+  <button onclick="switchTab('whatif')" id="tab-whatif" class="px-3 py-2 font-semibold border-b-2 border-transparent text-amber-400 hover:text-amber-300 whitespace-nowrap">🔮 "What-If?" Simulator</button>
+  <button onclick="switchTab('ledger')" id="tab-ledger" class="px-3 py-2 font-semibold border-b-2 border-transparent text-[var(--muted-foreground)] hover:text-[var(--foreground)] whitespace-nowrap">💾 Ledger & Report</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TAB 1: POWER STACK ARCHITECTURE -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="content-arch" class="space-y-5">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+    <!-- Architecture Diagram -->
+    <div class="lg:col-span-2 bg-[#0a111e] border border-[#152238] rounded-2xl p-5 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="font-bold text-sm text-cyan-400">Interactive Power Stack Pipeline</h2>
+        <span class="text-[10px] text-slate-400">Click any node to inspect</span>
+      </div>
+
+      <!-- Human + Copilot -->
+      <div class="flex justify-center mb-2">
+        <div onclick="selectNode('human')" class="cursor-pointer px-5 py-3 rounded-xl border border-cyan-500/30 bg-[#0d1627] hover:border-cyan-400 transition text-center glow-cyan">
+          <div class="text-lg">👤</div>
+          <div class="font-bold text-[11px] text-cyan-200">HUMAN</div>
+          <div class="text-[9px] text-slate-400">Security Commander</div>
+        </div>
+      </div>
+      <div class="flow-arrow text-center my-1">↓ AI COPILOT ↓</div>
+
+      <!-- NEXUS-X CORE Banner -->
+      <div onclick="selectNode('core')" class="cursor-pointer my-2 p-3 rounded-xl border border-cyan-500/50 bg-[#071526] text-center glow-cyan">
+        <div class="font-bold text-xs text-cyan-300 tracking-wider">NEXUS-X CORE</div>
+        <div class="text-[10px] text-cyan-400/80 font-mono">PERCEPTION → REASONING → RESEARCH → SIMULATION → DECISION</div>
+      </div>
+
+      <!-- 9 Telemetry Streams -->
+      <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-9 gap-1.5 my-2">
+        <div onclick="selectNode('net')" class="cursor-pointer p-2 rounded-lg border border-blue-500/40 bg-[#09152a] hover:border-blue-400 transition text-center">
+          <div class="text-sm">📡</div><div class="font-bold text-[8px] text-blue-300">Network</div>
+        </div>
+        <div onclick="selectNode('endpoint')" class="cursor-pointer p-2 rounded-lg border border-emerald-500/40 bg-[#071e1a] hover:border-emerald-400 transition text-center">
+          <div class="text-sm">🖥️</div><div class="font-bold text-[8px] text-emerald-300">Endpoint</div>
+        </div>
+        <div onclick="selectNode('auth')" class="cursor-pointer p-2 rounded-lg border border-amber-500/40 bg-[#1e1908] hover:border-amber-400 transition text-center">
+          <div class="text-sm">🔑</div><div class="font-bold text-[8px] text-amber-300">Auth</div>
+        </div>
+        <div onclick="selectNode('applog')" class="cursor-pointer p-2 rounded-lg border border-orange-500/40 bg-[#1e1208] hover:border-orange-400 transition text-center">
+          <div class="text-sm">📋</div><div class="font-bold text-[8px] text-orange-300">App Logs</div>
+        </div>
+        <div onclick="selectNode('cloud')" class="cursor-pointer p-2 rounded-lg border border-sky-500/40 bg-[#081a28] hover:border-sky-400 transition text-center">
+          <div class="text-sm">☁️</div><div class="font-bold text-[8px] text-sky-300">Cloud</div>
+        </div>
+        <div onclick="selectNode('vuln')" class="cursor-pointer p-2 rounded-lg border border-red-500/40 bg-[#23090e] hover:border-red-400 transition text-center">
+          <div class="text-sm">🛡️</div><div class="font-bold text-[8px] text-red-300">Vuln Info</div>
+        </div>
+        <div onclick="selectNode('config')" class="cursor-pointer p-2 rounded-lg border border-slate-500/40 bg-[#0d1627] hover:border-slate-400 transition text-center">
+          <div class="text-sm">⚙️</div><div class="font-bold text-[8px] text-slate-300">Config</div>
+        </div>
+        <div onclick="selectNode('threatintel')" class="cursor-pointer p-2 rounded-lg border border-rose-500/40 bg-[#250916] hover:border-rose-400 transition text-center">
+          <div class="text-sm">🎯</div><div class="font-bold text-[8px] text-rose-300">Threat Intel</div>
+        </div>
+        <div onclick="selectNode('sectest')" class="cursor-pointer p-2 rounded-lg border border-purple-500/40 bg-[#1b0a2a] hover:border-purple-400 transition text-center">
+          <div class="text-sm">🧪</div><div class="font-bold text-[8px] text-purple-300">Sec Tests</div>
+        </div>
+      </div>
+      <div class="flow-arrow text-center my-1">↓</div>
+
+      <!-- Sentinel -> Q-Reason -> Research -> Shadow-Twin -->
+      <div class="space-y-1.5 my-2">
+        <div onclick="selectNode('sentinel')" class="cursor-pointer p-2.5 rounded-xl border border-amber-500/40 bg-[#181409] hover:border-amber-400 transition flex items-center space-x-3">
+          <span class="text-lg">👁️</span>
+          <div><div class="font-bold text-[11px] text-amber-300">SENTINEL-X</div><div class="text-[9px] text-slate-400">Detect + Infer | 9-Stream Fusion Engine</div></div>
+        </div>
+        <div class="flow-arrow text-center">↓</div>
+        <div onclick="selectNode('qreason')" class="cursor-pointer p-2.5 rounded-xl border border-purple-500/50 bg-[#150924] hover:border-purple-400 transition flex items-center space-x-3 node-pulse glow-purple">
+          <span class="text-lg">🧠</span>
+          <div><div class="font-bold text-[11px] text-purple-300">Q-REASON</div><div class="text-[9px] text-slate-400">Causal Reasoning | Attack Graphs | H1-H4</div></div>
+        </div>
+        <div class="flow-arrow text-center">↓</div>
+        <div onclick="selectNode('research')" class="cursor-pointer p-2.5 rounded-xl border border-cyan-500/40 bg-[#071825] hover:border-cyan-400 transition flex items-center space-x-3">
+          <span class="text-lg">📚</span>
+          <div><div class="font-bold text-[11px] text-cyan-300">RESEARCH AI</div><div class="text-[9px] text-slate-400">CVE / CWE / ATT&CK / Papers / Advisory</div></div>
+        </div>
+        <div class="flow-arrow text-center">↓</div>
+        <div onclick="selectNode('shadow')" class="cursor-pointer p-2.5 rounded-xl border border-indigo-500/40 bg-[#0d102a] hover:border-indigo-400 transition flex items-center space-x-3">
+          <span class="text-lg">♊</span>
+          <div><div class="font-bold text-[11px] text-indigo-300">SHADOW-TWIN</div><div class="text-[9px] text-slate-400">Digital Cyber Environment Simulator</div></div>
+        </div>
+      </div>
+      <div class="flow-arrow text-center my-1">↓</div>
+
+      <!-- Red / Blue -->
+      <div class="grid grid-cols-2 gap-2 my-2">
+        <div onclick="selectNode('red')" class="cursor-pointer p-2.5 rounded-xl border border-red-500/50 bg-[#20090f] hover:border-red-400 transition text-center glow-red">
+          <div class="text-base">🔴</div><div class="font-bold text-[11px] text-red-400">RED AGENT</div><div class="text-[9px] text-slate-400">Attack Validation</div>
+        </div>
+        <div onclick="selectNode('blue')" class="cursor-pointer p-2.5 rounded-xl border border-blue-500/50 bg-[#09152b] hover:border-blue-400 transition text-center glow-blue">
+          <div class="text-base">🔵</div><div class="font-bold text-[11px] text-blue-400">BLUE AGENT</div><div class="text-[9px] text-slate-400">Defense Planning</div>
+        </div>
+      </div>
+      <div class="flow-arrow text-center my-1">↓</div>
+
+      <!-- Quantum -> Policy -> Human Approval -->
+      <div class="space-y-1.5 my-2">
+        <div onclick="selectNode('quantum')" class="cursor-pointer p-2.5 rounded-xl border border-teal-500/40 bg-[#061a1e] hover:border-teal-400 transition flex items-center space-x-3 glow-cyan">
+          <span class="text-lg">⚛️</span>
+          <div><div class="font-bold text-[11px] text-teal-300">QUANTUM / Q-INSPIRED OPTIMIZER</div><div class="text-[9px] text-slate-400">QUBO Multi-Objective Solver</div></div>
+        </div>
+        <div class="flow-arrow text-center">↓</div>
+        <div onclick="selectNode('policy')" class="cursor-pointer p-2.5 rounded-xl border border-amber-500/40 bg-[#191308] hover:border-amber-400 transition flex items-center space-x-3">
+          <span class="text-lg">📜</span>
+          <div><div class="font-bold text-[11px] text-amber-300">POLICY / RISK AUTHORIZATION</div><div class="text-[9px] text-slate-400">Scope, Governance, Risk Threshold</div></div>
+        </div>
+        <div class="flow-arrow text-center">↓</div>
+        <div onclick="selectNode('approval')" class="cursor-pointer p-3 rounded-xl border-2 border-yellow-400/80 bg-[#1f1606] hover:border-yellow-300 transition text-center glow-amber">
+          <div class="font-bold text-xs text-yellow-300">⚠️ HUMAN APPROVAL</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">🔴 Validate &nbsp; 🔵 Defend &nbsp; 🟡 Investigate &nbsp; ❌ Cancel</div>
+        </div>
+      </div>
+      <div class="flow-arrow text-center my-1">↓</div>
+
+      <!-- Execution -> Verification -> Ledger -> Report -> Learning -->
+      <div class="grid grid-cols-5 gap-1.5 my-2">
+        <div onclick="selectNode('exec')" class="cursor-pointer p-2 rounded-lg border border-emerald-600/40 bg-[#061f18] hover:border-emerald-400 transition text-center">
+          <div class="text-sm">⚡</div><div class="font-bold text-[9px] text-emerald-300">EXECUTE</div>
+        </div>
+        <div onclick="selectNode('verify')" class="cursor-pointer p-2 rounded-lg border border-teal-600/40 bg-[#061d1e] hover:border-teal-400 transition text-center">
+          <div class="text-sm">✅</div><div class="font-bold text-[9px] text-teal-300">VERIFY</div>
+        </div>
+        <div onclick="selectNode('evidence')" class="cursor-pointer p-2 rounded-lg border border-slate-600 bg-[#0a111e] hover:border-slate-400 transition text-center">
+          <div class="text-sm">💾</div><div class="font-bold text-[9px] text-slate-300">LEDGER</div>
+        </div>
+        <div onclick="selectNode('report')" class="cursor-pointer p-2 rounded-lg border border-cyan-600/40 bg-[#071625] hover:border-cyan-400 transition text-center">
+          <div class="text-sm">📄</div><div class="font-bold text-[9px] text-cyan-300">REPORT</div>
+        </div>
+        <div onclick="selectNode('learn')" class="cursor-pointer p-2 rounded-lg border border-emerald-400 bg-[#072418] hover:border-emerald-300 transition text-center glow-cyan">
+          <div class="text-sm">🔄</div><div class="font-bold text-[9px] text-emerald-300">LEARN</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Node Detail Panel -->
+    <div class="bg-[#0a111e] border border-[#152238] rounded-2xl p-5 shadow-2xl flex flex-col justify-between">
+      <div>
+        <div class="flex items-center space-x-2 border-b border-[#152238] pb-3 mb-3">
+          <span id="detail-icon" class="text-2xl">🧠</span>
+          <div>
+            <h3 id="detail-title" class="font-bold text-base text-purple-400">Q-REASON Engine</h3>
+            <div id="detail-tag" class="text-[10px] text-slate-400">Causal Attack Graph Reasoning</div>
+          </div>
+        </div>
+        <div class="space-y-3 text-xs">
+          <div>
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] block mb-1">Responsibilities</span>
+            <ul id="detail-list" class="list-disc list-inside space-y-1 text-slate-200">
+              <li>Builds directed causal attack graphs across event timeline</li>
+              <li>Generates competing hypotheses H1-H4 with confidence scores</li>
+              <li>Maps 5-phase kill chain: Recon → Cred Access → PrivEsc → Persist → C2</li>
+            </ul>
+          </div>
+          <div>
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] block mb-1">Engine Output</span>
+            <pre id="detail-json" class="p-2.5 bg-[#040810] border border-[#152238] rounded-xl text-[10px] font-mono text-cyan-300 overflow-x-auto leading-relaxed">{
+  "H1": "APT Cred Compromise → PrivEsc → Persistence (93%)",
+  "H2": "Insider Threat (41%)",
+  "H3": "Red Team Exercise (12%)",
+  "H4": "False Positive (4%)"
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="pt-3 border-t border-[#152238] mt-3 flex justify-between items-center text-[10px] text-slate-400">
+        <span>Status: <strong class="text-emerald-400">ACTIVE</strong></span>
+        <span>Latency: <strong class="font-mono text-cyan-400">38ms</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TAB 2: RED / BLUE AGENTS -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="content-agents" class="hidden space-y-5">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <!-- Red Agent -->
+    <div class="bg-[#0a111e] border border-red-500/40 rounded-2xl p-5 shadow-2xl glow-red">
+      <div class="flex items-center space-x-2 border-b border-red-500/30 pb-3 mb-4">
+        <span class="text-2xl">🔴</span>
+        <div><h3 class="font-bold text-sm text-red-400">RED AGENT — Attack Validation</h3><p class="text-[10px] text-slate-400">Controlled exploitation strategy generator</p></div>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="p-3 bg-[#0d1627] border border-[#1e3050] rounded-xl"><div class="text-slate-400 text-[10px] mb-1">Strategy</div><div class="text-sm font-bold text-red-300">Controlled Attack Path Replay (APT-41 TTPs)</div></div>
+        <div class="p-3 bg-[#0d1627] border border-[#1e3050] rounded-xl"><div class="text-slate-400 text-[10px] mb-1">Payload</div><div class="font-mono text-[10px] text-red-200">nexus-red --replay-chain 'scan→spray→elevate→persist→tunnel' --canary-mode</div></div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="p-2 bg-[#0d1627] border border-[#1e3050] rounded-lg text-center"><div class="text-[9px] text-slate-400">Risk</div><div class="font-bold text-amber-400 font-mono">0.15</div></div>
+          <div class="p-2 bg-[#0d1627] border border-[#1e3050] rounded-lg text-center"><div class="text-[9px] text-slate-400">Efficacy</div><div class="font-bold text-red-400 font-mono">88%</div></div>
+          <div class="p-2 bg-[#0d1627] border border-[#1e3050] rounded-lg text-center"><div class="text-[9px] text-slate-400">Sim Success</div><div class="font-bold text-emerald-400 font-mono">94%</div></div>
+        </div>
+        <div class="p-2 bg-[#1b080c] border border-red-900/50 rounded-lg text-[10px] text-slate-300">✓ Reversible &nbsp; ✓ Shadow-Twin Isolated &nbsp; ✓ Canary Instrumented</div>
+      </div>
+    </div>
+
+    <!-- Blue Agent -->
+    <div class="bg-[#0a111e] border border-blue-500/40 rounded-2xl p-5 shadow-2xl glow-blue">
+      <div class="flex items-center space-x-2 border-b border-blue-500/30 pb-3 mb-4">
+        <span class="text-2xl">🔵</span>
+        <div><h3 class="font-bold text-sm text-blue-400">BLUE AGENT — Defense Planning</h3><p class="text-[10px] text-slate-400">Containment, remediation, and hardening</p></div>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="p-3 bg-[#0d1627] border border-[#1e3050] rounded-xl"><div class="text-slate-400 text-[10px] mb-1">Strategy</div><div class="text-sm font-bold text-blue-300">Containment + Credential Rotation + C2 Severance</div></div>
+        <div class="p-3 bg-[#0d1627] border border-[#1e3050] rounded-xl"><div class="text-slate-400 text-[10px] mb-1">Payload</div><div class="font-mono text-[10px] text-blue-200">nexus-blue --revoke-sessions admin_svc --isolate-host 10.0.4.50 --block-ip 198.51.100.44 --remove-task 'WindowsUpdate_Svc' --deploy-waf R-9901</div></div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="p-2 bg-[#0d1627] border border-[#1e3050] rounded-lg text-center"><div class="text-[9px] text-slate-400">Risk</div><div class="font-bold text-emerald-400 font-mono">0.08</div></div>
+          <div class="p-2 bg-[#0d1627] border border-[#1e3050] rounded-lg text-center"><div class="text-[9px] text-slate-400">Efficacy</div><div class="font-bold text-blue-400 font-mono">96%</div></div>
+          <div class="p-2 bg-[#0d1627] border border-[#1e3050] rounded-lg text-center"><div class="text-[9px] text-slate-400">Sim Success</div><div class="font-bold text-emerald-400 font-mono">97%</div></div>
+        </div>
+        <div class="p-2 bg-[#081525] border border-blue-900/50 rounded-lg text-[10px] text-slate-300">✓ Zero Downtime &nbsp; ✓ C2 Severed &nbsp; ✓ Persistence Quarantined</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TAB 3: QUANTUM OPTIMIZER -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="content-quantum" class="hidden space-y-5">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <div class="bg-[#0a111e] border border-[#152238] rounded-2xl p-5 shadow-2xl">
+      <h2 class="text-sm font-bold text-teal-400 mb-4 flex items-center space-x-2"><span>⚛️</span><span>QUBO Hyperparameters</span></h2>
+      <div class="space-y-4 text-xs">
+        <div><div class="flex justify-between font-semibold mb-1"><span>α Risk</span><span id="val-a" class="text-teal-400 font-mono">1.0</span></div><input type="range" min="0.1" max="3" step="0.1" value="1.0" oninput="recalcQubo()" id="in-a" class="w-full accent-teal-400"></div>
+        <div><div class="flex justify-between font-semibold mb-1"><span>β Business Impact</span><span id="val-b" class="text-teal-400 font-mono">1.2</span></div><input type="range" min="0.1" max="3" step="0.1" value="1.2" oninput="recalcQubo()" id="in-b" class="w-full accent-teal-400"></div>
+        <div><div class="flex justify-between font-semibold mb-1"><span>γ Mitigation Efficacy</span><span id="val-g" class="text-teal-400 font-mono">2.5</span></div><input type="range" min="0.1" max="5" step="0.1" value="2.5" oninput="recalcQubo()" id="in-g" class="w-full accent-teal-400"></div>
+        <div><div class="flex justify-between font-semibold mb-1"><span>δ Cost</span><span id="val-d" class="text-teal-400 font-mono">0.3</span></div><input type="range" min="0.1" max="2" step="0.1" value="0.3" oninput="recalcQubo()" id="in-d" class="w-full accent-teal-400"></div>
+        <div class="p-2.5 bg-[#040810] border border-[#152238] rounded-lg font-mono text-[10px] text-cyan-300">Score = α·Risk + β·Impact − γ·Efficacy + δ·CostNorm</div>
+      </div>
+    </div>
+    <div class="lg:col-span-2 bg-[#0a111e] border border-[#152238] rounded-2xl p-5 shadow-2xl">
+      <h2 class="text-sm font-bold text-slate-200 mb-4 flex justify-between"><span>Strategy Evaluator</span><span class="text-[10px] text-teal-400 font-mono font-normal">QAOA Simulated Annealing</span></h2>
+      <table class="w-full text-left text-[11px]">
+        <thead class="bg-[#070e1a] border-b border-[#152238] text-slate-400">
+          <tr><th class="p-2">Strategy</th><th class="p-2">Mode</th><th class="p-2">Risk</th><th class="p-2">Impact</th><th class="p-2">Efficacy</th><th class="p-2">Cost</th><th class="p-2">Score</th><th class="p-2">Status</th></tr>
+        </thead>
+        <tbody id="qubo-tbody" class="divide-y divide-[#152238]"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TAB 4: COPILOT COMMAND INTERFACE & APPROVAL -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="content-copilot" class="hidden space-y-5">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <!-- Chat Command Interface -->
+    <div class="lg:col-span-2 bg-[#0a111e] border border-[#152238] rounded-2xl p-5 shadow-2xl flex flex-col h-[560px]">
+      <div class="flex items-center justify-between border-b border-[#152238] pb-2 mb-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-lg">💬</span>
+          <h3 class="font-bold text-xs text-cyan-400">NEXUS-X UNIFIED COPILOT COMMAND INTERFACE</h3>
+        </div>
+        <span class="text-[10px] text-slate-400">Natural Language Security Operations</span>
+      </div>
+
+      <!-- Quick Command Buttons -->
+      <div class="flex flex-wrap gap-1.5 pb-2 mb-2 border-b border-[#152238] text-[10px]">
+        <button onclick="sendCopilotMsg('What is happening?')" class="px-2.5 py-1 rounded-lg bg-[#0d1627] hover:bg-[#13233e] text-cyan-300 border border-[#1e3050]">"What is happening?"</button>
+        <button onclick="sendCopilotMsg('Investigate.')" class="px-2.5 py-1 rounded-lg bg-[#0d1627] hover:bg-[#13233e] text-cyan-300 border border-[#1e3050]">"Investigate."</button>
+        <button onclick="sendCopilotMsg('Research the technique.')" class="px-2.5 py-1 rounded-lg bg-[#0d1627] hover:bg-[#13233e] text-cyan-300 border border-[#1e3050]">"Research the technique."</button>
+        <button onclick="sendCopilotMsg('Simulate the likely attack.')" class="px-2.5 py-1 rounded-lg bg-[#0d1627] hover:bg-[#13233e] text-cyan-300 border border-[#1e3050]">"Simulate the likely attack."</button>
+        <button onclick="sendCopilotMsg('Defend.')" class="px-2.5 py-1 rounded-lg bg-[#0d1627] hover:bg-[#13233e] text-cyan-300 border border-[#1e3050]">"Defend."</button>
+        <button onclick="sendCopilotMsg('Approve option 1.')" class="px-2.5 py-1 rounded-lg bg-[#0b2440] hover:bg-[#0f345c] text-sky-300 border border-sky-600">"Approve option 1."</button>
+        <button onclick="sendCopilotMsg('Did it work?')" class="px-2.5 py-1 rounded-lg bg-[#072418] hover:bg-[#0a3826] text-emerald-300 border border-emerald-600">"Did it work?"</button>
+      </div>
+
+      <!-- Messages Stream -->
+      <div id="copilot-chat-box" class="flex-1 overflow-y-auto space-y-3 text-xs pr-1">
+        <div class="bg-[#0d1627] border border-[#1e3050] p-3 rounded-xl">
+          <div class="font-bold text-cyan-400 mb-1 text-[11px]">🤖 NEXUS-X COPILOT</div>
+          <p class="text-slate-300">NEXUS-X is actively monitoring 9 telemetry streams. Type a natural language command or use the quick buttons above to begin reasoning.</p>
+        </div>
+      </div>
+
+      <!-- Input Bar -->
+      <div class="pt-2 border-t border-[#152238] flex space-x-2 mt-2">
+        <input id="copilot-custom-input" type="text" onkeydown="if(event.key==='Enter') submitCustomCopilot()" placeholder="Type command (e.g., 'What is happening?', 'Investigate.', 'Defend.')..." class="flex-1 bg-[#040810] border border-[#152238] rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-400">
+        <button onclick="submitCustomCopilot()" class="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-slate-900 font-bold rounded-xl text-xs transition glow-cyan">Execute</button>
+      </div>
+    </div>
+
+    <!-- Human Approval Gate -->
+    <div class="bg-[#0a111e] border border-yellow-500/50 rounded-2xl p-5 shadow-2xl bg-yellow-950/10 flex flex-col justify-between glow-amber h-[560px]">
+      <div>
+        <div class="flex items-center space-x-2 border-b border-yellow-500/30 pb-3 mb-4">
+          <span class="text-xl">⚠️</span>
+          <div><h3 class="font-bold text-sm text-yellow-400">HUMAN APPROVAL GATE</h3><p class="text-[10px] text-yellow-200/70">Mandatory Authorization Required</p></div>
+        </div>
+        <div class="space-y-3 text-xs">
+          <div class="p-2.5 bg-[#0d1627] border border-[#1e3050] rounded-xl"><div class="text-slate-400 text-[10px]">Target Asset</div><div class="font-bold text-slate-100 font-mono text-sm">10.0.4.50 (Core DB) + AWS</div></div>
+          <div class="p-2.5 bg-[#0d1627] border border-[#1e3050] rounded-xl"><div class="text-slate-400 text-[10px]">Recommended Action</div><div class="font-mono text-[10px] text-cyan-300">nexus-blue --revoke-sessions --isolate-host --block-ip --revert-s3-acl --deploy-waf</div></div>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="p-2 bg-[#0d1627] border border-[#1e3050] rounded-lg text-center"><div class="text-[9px] text-slate-400">Risk Score</div><div class="font-bold text-emerald-400 font-mono">0.07</div></div>
+            <div class="p-2 bg-[#0d1627] border border-[#1e3050] rounded-lg text-center"><div class="text-[9px] text-slate-400">Mitigation Efficacy</div><div class="font-bold text-cyan-400 font-mono">97%</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-1.5 mt-3">
+        <button onclick="handleApproval('RED_VALIDATE')" class="w-full py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs transition flex items-center justify-center space-x-1.5"><span>🔴</span><span>1. VALIDATE (Red Mode)</span></button>
+        <button onclick="handleApproval('BLUE_DEFEND')" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition flex items-center justify-center space-x-1.5"><span>🔵</span><span>2. DEFEND (Blue Mode)</span></button>
+        <button onclick="handleApproval('INVESTIGATE')" class="w-full py-1.5 bg-amber-600/80 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition text-center">🟡 3. INVESTIGATE MORE</button>
+        <button onclick="handleApproval('CANCEL')" class="w-full py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs transition text-center">❌ 4. CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TAB 5: LEDGER & REPORT -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="content-ledger" class="hidden space-y-5">
+  <div class="bg-[#0a111e] border border-[#152238] rounded-2xl p-5 shadow-2xl">
+    <div class="flex justify-between items-center border-b border-[#152238] pb-3 mb-4">
+      <h2 class="font-bold text-sm text-amber-400 flex items-center space-x-2"><span>💾</span><span>Evidence Ledger & Power Stack Incident Report</span></h2>
+      <span class="text-[10px] font-mono text-cyan-400">BLOCK #1 | SHA-256 VERIFIED</span>
+    </div>
+    <pre class="p-4 bg-[#040810] border border-[#152238] rounded-xl text-[10px] font-mono text-cyan-300 overflow-x-auto leading-relaxed max-h-[600px] overflow-y-auto">
+================================================================================
+                     NEXUS-X POWER STACK INCIDENT REPORT
+================================================================================
+
+1. EXECUTIVE SUMMARY
+   Incident     : APT Credential Compromise → Privilege Escalation → Persistence
+   Severity     : CRITICAL
+   Confidence   : 93%
+   Status       : RESOLVED
+
+2. DETECTION
+   Alert ID     : SNTL-2026-0913-001
+   Correlated   : 8 events across 5 telemetry streams
+   Streams      : Network | Host | Web/Cloud | Threat Intel | Crypto Posture
+
+3. EVIDENCE
+   NET-001  : SYN scan 427 ports from APT-41 infra (198.51.100.44)
+   NET-002  : Reverse SSH C2 tunnel to 198.51.100.44:4443
+   WEB-001  : 15 auth failures on /api/auth/login (admin_svc)
+   WEB-002  : Successful login from Tor exit node
+   HOST-001 : PowerShell token elevation (svchost → powershell.exe PID 4012)
+   HOST-002 : Persistence: scheduled task → beacon.exe
+   INTEL-001: IOC match — APT-41 infrastructure (FS-ISAC)
+   CRYPTO-001: TLS 1.0 enabled, RSA-1024 cert expiring
+
+4. AI REASONING (COMPETING HYPOTHESES)
+   H1  APT Cred Compromise → PrivEsc → Persistence  :  93%  [PRIMARY]
+   H2  Insider Threat + External Collaboration       :  41%
+   H3  Authorized Red Team Exercise                  :  12%
+   H4  False Positive — Maintenance Coincidence      :   4%
+
+5. ATTACK PATH (5-Phase Kill Chain)
+   Phase 1: Reconnaissance     (SYN scan from APT-41 infra)
+        |
+   Phase 2: Credential Access  (Spray → Tor-exit login)
+        |
+   Phase 3: Privilege Escalation (PowerShell token elevation)
+        |
+   Phase 4: Persistence        (Scheduled task → beacon.exe)
+        |
+   Phase 5: Command & Control  (Reverse SSH tunnel)
+
+6. RESEARCH & INTELLIGENCE
+   Techniques : T1110, T1078, T1059.001, T1053.005, T1572
+   CWE Refs   : CWE-287, CWE-250
+   CVE Refs   : CVE-2024-3400, CVE-2026-1184
+   Advisory   : US-CERT AA26-081A
+
+7. QUANTUM OPTIMIZATION
+   QUBO Energy       : -2.1535 H
+   Classical Baseline : -2.7565 H
+   Selected Strategy : Blue Agent — Containment + C2 Severance
+
+8. HUMAN DECISION
+   Decision ID  : NX-84721
+   Decision     : BLUE_DEFEND
+   Approved By  : Security Commander (Human)
+
+9. ACTIONS PERFORMED & VERIFICATION
+   Command      : nexus-blue --revoke-sessions --isolate-host --block-ip --remove-task --deploy-waf
+   Threat Neutralized  : True
+   C2 Severed          : True
+   Persistence Removed : True
+   Residual Risk       : 92% → 8%
+
+10. RECOMMENDATIONS
+   1. Enforce FIDO2 hardware MFA on all privileged accounts.
+   2. Rotate all credentials for admin_svc.
+   3. Block CIDR 198.51.100.0/24 permanently.
+   4. Upgrade TLS to 1.3, replace RSA-1024 with ECDSA-P384.
+   5. Schedule quarterly Shadow-Twin replay exercises.
+
+================================================================================
+   Ledger Block #1
+   SHA-256 : ddece1615a8bf0f0d4a0a56a756264615a45fbbe495cc9f6...
+   Prev    : 0000000000000000000000000000000000000000000000000...
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TAB: WHAT-IF SIMULATOR -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="content-whatif" class="hidden space-y-5">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    
+    <!-- Scenario Selection Controls -->
+    <div class="bg-[#0a111e] border border-amber-500/40 rounded-2xl p-5 shadow-2xl space-y-4 glow-amber">
+      <div class="flex items-center space-x-2 border-b border-amber-500/30 pb-3">
+        <span class="text-2xl">🔮</span>
+        <div>
+          <h2 class="text-sm font-bold text-amber-400">"WHAT IF?" Decision Engine</h2>
+          <p class="text-[10px] text-slate-400">Run counterfactual simulations in Digital Twin</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-300">Select a hypothesis to run in the isolated <strong>Shadow-Twin</strong> before changing production state:</p>
+
+      <div class="space-y-2">
+        <button onclick="runWhatIf('compromise_server')" class="w-full p-3 text-left rounded-xl border border-[#1e3050] bg-[#0d1627] hover:border-amber-400 hover:bg-[#1a1c28] transition text-xs">
+          <div class="font-bold text-amber-300 flex items-center space-x-1.5"><span>🖥️</span><span>"What if Server 10.0.4.50 is compromised?"</span></div>
+          <div class="text-[10px] text-slate-400 mt-1">Simulates lateral movement reachability to Crown Jewels</div>
+        </button>
+
+        <button onclick="runWhatIf('disable_waf')" class="w-full p-3 text-left rounded-xl border border-[#1e3050] bg-[#0d1627] hover:border-amber-400 hover:bg-[#1a1c28] transition text-xs">
+          <div class="font-bold text-amber-300 flex items-center space-x-1.5"><span>🛡️</span><span>"What if WAF Rule R-9901 is disabled?"</span></div>
+          <div class="text-[10px] text-slate-400 mt-1">Tests perimeter exposure to CVE-2024-3400 command injection</div>
+        </button>
+
+        <button onclick="runWhatIf('top_3_defenses')" class="w-full p-3 text-left rounded-xl border border-[#1e3050] bg-[#0d1627] hover:border-amber-400 hover:bg-[#1a1c28] transition text-xs">
+          <div class="font-bold text-amber-300 flex items-center space-x-1.5"><span>🎯</span><span>"Which 3 changes reduce greatest attack risk?"</span></div>
+          <div class="text-[10px] text-slate-400 mt-1">Solves minimum-cut choke points across all active attack graphs</div>
+        </button>
+
+        <button onclick="runWhatIf('pqc_migration')" class="w-full p-3 text-left rounded-xl border border-[#1e3050] bg-[#0d1627] hover:border-amber-400 hover:bg-[#1a1c28] transition text-xs">
+          <div class="font-bold text-amber-300 flex items-center space-x-1.5"><span>⚛️</span><span>"Which asset to prioritize for PQC migration?"</span></div>
+          <div class="text-[10px] text-slate-400 mt-1">Evaluates crypto harvest-now-decrypt-later risk on RSA/ECC assets</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Digital Twin Simulation Output -->
+    <div class="lg:col-span-2 bg-[#0a111e] border border-[#152238] rounded-2xl p-5 shadow-2xl flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center border-b border-[#152238] pb-3 mb-4">
+          <div class="flex items-center space-x-2">
+            <span class="text-xl">♊</span>
+            <h3 id="whatif-title" class="font-bold text-sm text-cyan-400">Digital Twin Simulation Output</h3>
+          </div>
+          <span id="whatif-badge" class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">READY</span>
+        </div>
+
+        <div id="whatif-body" class="space-y-3 text-xs">
+          <div class="p-4 bg-[#040810] border border-[#152238] rounded-xl font-mono text-[11px] text-slate-300 leading-relaxed">
+            Click any "What-If" scenario on the left to execute an autonomous counterfactual simulation inside the Digital Twin without touching live infrastructure.
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-[#152238] mt-4 flex justify-between items-center text-[10px] text-slate-400">
+        <span>Execution Engine: <strong class="text-cyan-400 font-mono">Shadow-Twin Graph Simulator</strong></span>
+        <span>Impact on Production: <strong class="text-emerald-400 font-bold">ZERO (SANDBOXED)</strong></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT ENGINE -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<script>
+const TABS = ['arch','agents','quantum','copilot','whatif','ledger'];
+function switchTab(id) {
+  TABS.forEach(t => {
+    document.getElementById('content-'+t).classList.add('hidden');
+    const b = document.getElementById('tab-'+t);
+    if (b) {
+      b.classList.remove('border-cyan-400','text-cyan-400','border-amber-400','text-amber-400');
+      b.classList.add('border-transparent','text-[var(--muted-foreground)]');
+    }
+  });
+  const target = document.getElementById('content-'+id);
+  if (target) target.classList.remove('hidden');
+  const ab = document.getElementById('tab-'+id);
+  if (ab) {
+    const colorClass = id === 'whatif' ? 'border-amber-400 text-amber-400' : 'border-cyan-400 text-cyan-400';
+    ab.className = `px-3 py-2 font-semibold border-b-2 ${colorClass} whitespace-nowrap`;
+  }
+}
+
+const WHATIF_SCENARIOS = {
+  compromise_server: {
+    title: "Scenario: Server 10.0.4.50 Compromised (Lateral Propagation)",
+    badge: "SIMULATION COMPLETE",
+    html: `
+      <div class="p-3 bg-red-950/20 border border-red-800/40 rounded-xl space-y-2">
+        <div class="font-bold text-red-400">🚨 Reachability Impact: High (3 Exposed Critical Assets)</div>
+        <p class="text-gray-300">If 10.0.4.50 is fully compromised, adversary obtains cached domain credentials for <code class="text-cyan-300">admin_svc</code>. Digital Twin reveals <strong>3 downstream reachable pathways</strong>:</p>
+        <ul class="list-disc list-inside space-y-1 text-gray-300 text-[11px]">
+          <li><strong>Path 1 (100% Reachable):</strong> Lateral movement via Kerberos RC4 downgrade to Customer DB <code class="text-cyan-300">10.0.4.51</code> (Crown Jewel).</li>
+          <li><strong>Path 2 (78% Reachable):</strong> Cloud backup escalation via assumed role <code class="text-cyan-300">lambda-backup-role</code> to access S3 vaults.</li>
+          <li><strong>Path 3 (45% Reachable):</strong> Internal API probing across subnet 10.0.4.0/24.</li>
+        </ul>
+        <div class="mt-2 p-2 bg-slate-900 border border-slate-800 rounded-lg text-amber-300 font-semibold text-[10px]">
+          💡 Recommended Pre-emptive Choke Point: Invalidate all Kerberos TGTs for admin_svc and enforce subnet micro-segmentation.
+        </div>
+      </div>`
+  },
+  disable_waf: {
+    title: "Scenario: WAF Rule R-9901 Disabled (Perimeter Vulnerability Exposure)",
+    badge: "EXPOSURE ELEVATED",
+    html: `
+      <div class="p-3 bg-orange-950/20 border border-orange-800/40 rounded-xl space-y-2">
+        <div class="font-bold text-orange-400">⚠️ Attack Surface Expansion: +180% Exposure</div>
+        <p class="text-gray-300">Disabling WAF Rule R-9901 directly exposes unpatched <code class="text-red-300">CVE-2024-3400 (CVSS 10.0)</code> on endpoint <code class="text-cyan-300">/api/search</code>.</p>
+        <div class="grid grid-cols-2 gap-2 text-[10px]">
+          <div class="p-2 bg-slate-900 border border-slate-800 rounded-lg"><span class="text-gray-400">Mean Time to Compromise:</span> <strong class="text-red-400 font-mono">4.2 minutes</strong></div>
+          <div class="p-2 bg-slate-900 border border-slate-800 rounded-lg"><span class="text-gray-400">Attack Path Complexity:</span> <strong class="text-emerald-400 font-mono">TRIVIAL (1 Hop)</strong></div>
+        </div>
+        <div class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-cyan-300 text-[10px]">
+          🛡️ Digital Twin Finding: WAF virtual patching is currently the sole barrier preventing unauthenticated remote root shell.
+        </div>
+      </div>`
+  },
+  top_3_defenses: {
+    title: "Scenario: Minimum-Cut Optimization (Top 3 Defensive Changes)",
+    badge: "QAOA OPTIMAL CUT",
+    html: `
+      <div class="p-3 bg-teal-950/20 border border-teal-800/40 rounded-xl space-y-2">
+        <div class="font-bold text-teal-300">⚛️ Quantum Choke-Point Analysis (Max Risk Reduction)</div>
+        <p class="text-gray-300">Evaluating 37 potential defensive changes across active attack graphs. The following <strong>3 actions eliminate 88% of all attack paths</strong>:</p>
+        <div class="space-y-1.5">
+          <div class="p-2 bg-slate-900 border border-slate-800 rounded-lg flex justify-between items-center">
+            <div><strong class="text-cyan-300">1. Enforce FIDO2 Hardware MFA on admin_svc</strong><div class="text-[10px] text-gray-400">Severs initial access & Tor exit node replay</div></div>
+            <span class="px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 font-mono text-[10px]">-48% Total Path Risk</span>
+          </div>
+          <div class="p-2 bg-slate-900 border border-slate-800 rounded-lg flex justify-between items-center">
+            <div><strong class="text-cyan-300">2. Invalidate RC4 Ciphers in Active Directory Kerberos</strong><div class="text-[10px] text-gray-400">Blocks ticket manipulation and privilege escalation</div></div>
+            <span class="px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 font-mono text-[10px]">-26% Total Path Risk</span>
+          </div>
+          <div class="p-2 bg-slate-900 border border-slate-800 rounded-lg flex justify-between items-center">
+            <div><strong class="text-cyan-300">3. Attach SCP Deny-Public-Bucket on Cloud Account</strong><div class="text-[10px] text-gray-400">Permanently prevents S3 exfiltration channel</div></div>
+            <span class="px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 font-mono text-[10px]">-14% Total Path Risk</span>
+          </div>
+        </div>
+        <div class="p-2 bg-teal-950 border border-teal-800/50 rounded-lg text-emerald-300 font-bold text-center text-[10px]">
+          Cumulative Risk Reduction: 88% | Combined Implementation Cost: $115.00
+        </div>
+      </div>`
+  },
+  pqc_migration: {
+    title: "Scenario: Post-Quantum Cryptography (PQC) Migration Priority",
+    badge: "HARVEST-NOW RISK AUDIT",
+    html: `
+      <div class="p-3 bg-purple-950/20 border border-purple-800/40 rounded-xl space-y-2">
+        <div class="font-bold text-purple-300">🔐 Quantum Vulnerability & Longevity Scoring</div>
+        <p class="text-gray-300">Assessing assets against Shor's algorithm threat and "Harvest Now, Decrypt Later" (HNDL) exposure:</p>
+        <table class="w-full text-left text-[10px]">
+          <thead class="bg-slate-900 text-gray-400 border-b border-slate-800">
+            <tr><th class="p-1.5">Asset</th><th class="p-1.5">Current Cipher</th><th class="p-1.5">Data Longevity</th><th class="p-1.5">PQC Urgency</th></tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 font-mono">
+            <tr class="text-red-300 bg-red-950/30 font-bold"><td class="p-1.5">10.0.4.50 (Core Vault)</td><td class="p-1.5">RSA-1024 (Expires in 11d)</td><td class="p-1.5">10+ Years (PII)</td><td class="p-1.5">CRITICAL #1</td></tr>
+            <tr class="text-amber-300"><td class="p-1.5">10.0.4.51 (DB Replica)</td><td class="p-1.5">RSA-2048</td><td class="p-1.5">5 Years</td><td class="p-1.5">HIGH #2</td></tr>
+            <tr class="text-gray-300"><td class="p-1.5">Web API Gateway</td><td class="p-1.5">ECDSA P-256</td><td class="p-1.5">Transient (< 30d)</td><td class="p-1.5">MEDIUM #3</td></tr>
+          </tbody>
+        </table>
+        <div class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-cyan-300 text-[10px]">
+          🎯 Actionable Directive: Prioritize <code class="text-amber-300">10.0.4.50</code> for ML-KEM-768 (Kyber) & ML-DSA (Dilithium) hybrid certificate migration.
+        </div>
+      </div>`
+  }
+};
+
+function runWhatIf(key) {
+  const sc = WHATIF_SCENARIOS[key];
+  if (!sc) return;
+  document.getElementById('whatif-title').innerText = sc.title;
+  document.getElementById('whatif-badge').innerText = sc.badge;
+  document.getElementById('whatif-body').innerHTML = sc.html;
+}
+
+const NODES = {
+  human:     {icon:"👤",title:"Human Security Commander",tag:"Policy Overseer & Final Authority",list:["Reviews AI-generated incident analysis","Issues binding approval decisions (Validate/Defend/Investigate/Cancel)","Retains full operational control at all times"],json:{role:"Commander",authority:"FULL",mfa:"FIDO2 Enforced"}},
+  core:      {icon:"🧠",title:"NEXUS-X Core",tag:"Central Nervous System — 9-Stream Reasoning",list:["Orchestrates 14+ subsystems in closed-loop","Fuses 9 telemetry streams into unified situation awareness","Pipeline: PERCEPTION → REASONING → RESEARCH → SIMULATION → DECISION"],json:{subsystems:14,streams:9,pipeline:"PERCEPTION→REASONING→RESEARCH→SIMULATION→DECISION"}},
+  net:       {icon:"📡",title:"Stream 1: Network Telemetry",tag:"Packets, Flows, DNS, Firewall, IDS/IPS",list:["SYN scan: 427 ports probed from 198.51.100.44 in 12s","Reverse SSH C2 tunnel: 10.0.4.50 → 198.51.100.44:4443","DNS TXT exfil channel: Base64 pattern to c2beacon.apt41-infra.example"],json:{events:3,protos:["TCP","SSH","DNS"],alert:"CRITICAL"}},
+  endpoint:  {icon:"🖥️",title:"Stream 2: Endpoint Events",tag:"EDR Process Trees, Registry, FIM, Memory",list:["Token elevation: powershell.exe spawned from svchost.exe (PID 4012)","Persistence: scheduled task 'WindowsUpdate_Svc' → beacon.exe","LSASS credential dumping: mimikatz-pattern access to lsass.exe"],json:{events:3,processes:["powershell.exe","beacon.exe","lsass.exe"],persistence:"scheduled_task"}},
+  auth:      {icon:"🔑",title:"Stream 3: Authentication Events",tag:"Login, MFA, Sessions, Kerberos, OAuth",list:["15 consecutive auth failures (admin_svc) from 198.51.100.44","Successful login via Tor exit node — MFA BYPASSED","Kerberos RC4 downgrade (expected AES256)","Token replay lateral movement to DB replica 10.0.4.51"],json:{events:4,user:"admin_svc",mfa_bypass:true,kerberos_downgrade:true}},
+  applog:    {icon:"📋",title:"Stream 4: Application Logs",tag:"Web App Events, API Calls, Business Logic",list:["SQL injection attempt on /api/search (WAF blocked)","Bulk data export: 14,200 customer records off-hours (exfiltration signal)"],json:{events:2,sqli_blocked:true,records_exported:14200}},
+  cloud:     {icon:"☁️",title:"Stream 5: Cloud Telemetry",tag:"IAM, CloudTrail, Storage, Serverless Audit",list:["IAM: AdministratorAccess attached to lambda-backup-role (priv esc)","S3: prod-secrets-vault ACL changed to public-read (data exposure)"],json:{events:2,cloud:"AWS",iam_escalation:true,s3_exposed:true}},
+  vuln:      {icon:"🛡️",title:"Stream 6: Vulnerability Information",tag:"Scan Results, Patch Status, CVSS, Exploitability",list:["CVE-2024-3400: CVSS 10.0, PAN-OS RCE — UNPATCHED, exploit public","CVE-2026-1184: CVSS 8.8, Token Elevation Bypass — UNPATCHED","10.0.4.51: 15 vulns (3 high), scan 6 days stale"],json:{events:3,critical_unpatched:2,exploits_public:true}},
+  config:    {icon:"⚙️",title:"Stream 7: Configuration State",tag:"Baseline Drift, CIS Benchmarks, Hardening",list:["TLS 1.0 enabled on :443, RSA-1024 cert expires in 11 days (CIS FAIL)","PowerShell ScriptBlock logging DISABLED (defense evasion risk)","Firewall rule 'Legacy-RDP-Allow': RDP from ANY source (drift)"],json:{events:3,tls:"1.0 (weak)",scriptblock_logging:"DISABLED",rdp_open:true}},
+  threatintel:{icon:"🎯",title:"Stream 8: Threat Intelligence",tag:"IOC Feeds, Dark Web, ISAC, Threat Actors",list:["IOC: IP 198.51.100.44 = APT-41 C2 infrastructure (FS-ISAC HIGH)","IOC: Domain c2beacon.apt41-infra.example (CISA advisory AA26-081A)","Dark web: admin_svc credentials found on paste site (48h old)"],json:{events:3,threat_actor:"APT-41",dark_web_cred_leak:true}},
+  sectest:   {icon:"🧪",title:"Stream 9: Authorized Security-Test Results",tag:"Pentest, Red Team, Bug Bounty, Compliance Audit",list:["Q2 pentest: achieved domain admin via same attack path — FINDING OPEN","Q2 pentest: SSH exfil path confirmed — REMEDIATION OVERDUE","Bug bounty #BB-4419: Stored XSS (PATCHED, verified)"],json:{events:3,open_findings:2,overdue_remediation:true}},
+  sentinel:  {icon:"👁️",title:"SENTINEL-X Engine",tag:"9-Stream Fusion & Anomaly Detection",list:["Fuses all 9 telemetry streams into unified situation picture","Correlates 26 events, outputs CRITICAL alert at 95% confidence","Maps affected assets: 10.0.4.50, 10.0.4.51, AWS resources"],json:{alert_id:"SNTL-2026-0913-001",confidence:0.95,severity:"CRITICAL",streams_fused:9}},
+  qreason:   {icon:"🧠",title:"Q-REASON Engine",tag:"Causal Reasoning & Competing Hypotheses",list:["H1: APT-41 Compromise → PrivEsc → Persistence → Exfil (95%)","H2: Insider Threat (38%) | H3: Red Team Exercise (9%) | H4: FP (3%)","Reconstructs 7-phase kill chain across 23 evidence items from all 9 streams"],json:{H1:"95%",H2:"38%",H3:"9%",H4:"3%",kill_chain_phases:7,evidence_items:23}},
+  research:  {icon:"📚",title:"RESEARCH AI Agent",tag:"CVE/CWE/ATT&CK/Papers/Advisory/Internal",list:["11 MITRE ATT&CK techniques mapped across 9 tactics","3 CVEs, 4 CWEs, 3 advisories, 3 research papers","CRITICAL: Q2 pentest found SAME attack path — remediation was OVERDUE"],json:{techniques:11,tactics:9,cves:3,advisories:3,papers:3}},
+  shadow:    {icon:"♊",title:"SHADOW-TWIN Engine",tag:"Digital Cyber Environment Simulator",list:["Clones target topology for safe simulation","Red simulation: 94% success | Blue simulation: 97% success","Measures blast radius, downtime, and side effects pre-action"],json:{red_sim:"94%",blue_sim:"97%",downtime:"0s"}},
+  red:       {icon:"🔴",title:"RED AGENT",tag:"Attack Validation Strategy Generator",list:["Controlled 7-Phase Kill Chain Replay (APT-41 TTPs)","Shadow-Twin isolated, canary-instrumented, reversible","Risk: 0.12 | Efficacy: 90%"],json:{strategy:"7-Phase Replay",risk:0.12,efficacy:"90%"}},
+  blue:      {icon:"🔵",title:"BLUE AGENT",tag:"Defense, Containment & Cloud Lockdown",list:["Revoke sessions + Isolate hosts + Block C2 + Remove persistence","Revert S3 ACL + Force MFA re-enrollment + Deploy WAF","Risk: 0.07 | Efficacy: 97%"],json:{strategy:"Full Containment + Cloud Lockdown",risk:0.07,efficacy:"97%"}},
+  quantum:   {icon:"⚛️",title:"QUANTUM / Q-INSPIRED OPTIMIZER",tag:"QUBO Multi-Objective Solver",list:["Evaluates Red vs Blue across 4-weight cost function","QUBO Energy: -2.21 H (Classical: -2.83 H, 1.28x speedup)","Selected: Blue Agent — Full Containment (optimal vector [0,1])"],json:{qubo_energy:-2.208,speedup:"1.28x",selected:"BLUE"}},
+  policy:    {icon:"📜",title:"POLICY / RISK AUTHORIZATION",tag:"Scope, Governance & Risk Threshold",list:["Validates targets within authorized CIDR + cloud scope","Risk score 0.07 PASSES threshold (< 0.5)","Human approval MANDATORY for all execution (Policy §7.1)"],json:{scope:"PASS",risk:"ACCEPTABLE",human_required:true}},
+  approval:  {icon:"⚠️",title:"HUMAN APPROVAL GATE",tag:"4-Option Mandatory Authorization",list:["🔴 Validate — Approve Red Agent attack replay","🔵 Defend — Approve Blue Agent containment","🟡 Investigate — Request deeper analysis","❌ Cancel — Abort all proposed actions"],json:{options:["RED_VALIDATE","BLUE_DEFEND","INVESTIGATE","CANCEL"]}},
+  exec:      {icon:"⚡",title:"EXECUTION ENGINE",tag:"Authorized Sandboxed Action Dispatcher",list:["Dispatches signed payloads to target agents","Enforces rate-limiting and abort timers","All commands logged with microsecond timestamps"],json:{status:"SUCCESS",mode:"BLUE"}},
+  verify:    {icon:"✅",title:"VERIFICATION ENGINE",tag:"Post-Action Efficacy Audit",list:["Threat neutralized, C2 severed, persistence removed","Cloud locked down: IAM reverted, S3 ACL fixed","Residual risk: 94% → 6%"],json:{status:"PASSED",risk:"94%→6%",health:"RECOVERED"}},
+  evidence:  {icon:"💾",title:"EVIDENCE LEDGER",tag:"Tamper-Evident SHA-256 Chain",list:["Appends cryptographic block linking to previous hash","Records events, hypotheses, decisions, actions, results","Full forensic reconstruction: 'Why did you do X?'"],json:{block:1,hash:"sha256-209dc9d9..."}},
+  report:    {icon:"📄",title:"REPORT ENGINE",tag:"10-Section CISO Executive Report",list:["Covers all 9 streams in evidence section","7-phase attack path reconstruction","Recommendations include pentest SLA enforcement"],json:{sections:10,streams_covered:9}},
+  learn:     {icon:"🔄",title:"LEARNING ENGINE",tag:"7 Rules → Feedback Loop → OBSERVE",list:["IOC_BLOCK: Block APT-41 CIDR + C2 domains","AUTH_HARDENING: Reject MFA-less privileged logins","KERBEROS_POLICY: Deny RC4_HMAC tickets","CLOUD_GUARDRAIL: Block IAM AdminAccess + S3 public ACLs","CONFIG_ENFORCEMENT: Auto-fix disabled logging + open RDP","PENTEST_SLA: Escalate overdue findings to CISO (30d)","BEHAVIORAL_SIG: Detect svchost→PowerShell→LSASS chain"],json:{rules_learned:7,feedback:"→ OBSERVE (next cycle)"}}
+};
+
+function selectNode(key) {
+  const d = NODES[key]; if(!d) return;
+  document.getElementById('detail-icon').innerText = d.icon;
+  document.getElementById('detail-title').innerText = d.title;
+  document.getElementById('detail-tag').innerText = d.tag;
+  const ul = document.getElementById('detail-list'); ul.innerHTML='';
+  d.list.forEach(t => { const li=document.createElement('li'); li.innerText=t; ul.appendChild(li); });
+  document.getElementById('detail-json').innerText = JSON.stringify(d.json, null, 2);
+}
+
+const STRATEGIES = [
+  {id:"RED-001",name:"Controlled Attack Replay (APT-41)",mode:"RED",risk:0.15,impact:0.05,efficacy:0.88,cost:200},
+  {id:"BLUE-001",name:"Containment + C2 Severance",mode:"BLUE",risk:0.08,impact:0.12,efficacy:0.96,cost:75}
+];
+
+function recalcQubo() {
+  const a=parseFloat(document.getElementById('in-a').value);
+  const b=parseFloat(document.getElementById('in-b').value);
+  const g=parseFloat(document.getElementById('in-g').value);
+  const d=parseFloat(document.getElementById('in-d').value);
+  document.getElementById('val-a').innerText=a.toFixed(1);
+  document.getElementById('val-b').innerText=b.toFixed(1);
+  document.getElementById('val-g').innerText=g.toFixed(1);
+  document.getElementById('val-d').innerText=d.toFixed(1);
+
+  let best=null, bestScore=Infinity;
+  const scored = STRATEGIES.map(s => {
+    const sc = a*s.risk + b*s.impact - g*s.efficacy + d*(s.cost/1000);
+    if(sc<bestScore){bestScore=sc;best=s.id;}
+    return {...s, score:sc};
+  });
+
+  const tbody = document.getElementById('qubo-tbody'); tbody.innerHTML='';
+  scored.forEach(s => {
+    const win = s.id===best;
+    const tr = document.createElement('tr');
+    tr.className = win ? "bg-teal-950/40 font-semibold text-teal-300" : "hover:bg-slate-900/40 text-gray-300";
+    tr.innerHTML = `
+      <td class="p-2 font-medium">${s.name}</td>
+      <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[9px] ${s.mode==='RED'?'bg-red-500/20 text-red-400':'bg-blue-500/20 text-blue-400'}">${s.mode}</span></td>
+      <td class="p-2 font-mono">${s.risk}</td>
+      <td class="p-2 font-mono">${s.impact}</td>
+      <td class="p-2 font-mono">${(s.efficacy*100).toFixed(0)}%</td>
+      <td class="p-2 font-mono">\$${s.cost}</td>
+      <td class="p-2 font-mono font-bold">${s.score.toFixed(4)}</td>
+      <td class="p-2">${win?'<span class="px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-300 text-[9px] border border-emerald-500/50">★ OPTIMAL</span>':'<span class="text-gray-500">Candidate</span>'}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+const COPILOT_RESPONSES = {
+  "what is happening?": "🚨 <strong>Three related anomalies were detected:</strong><br>1. External SYN scan against 427 ports from APT-41 infrastructure (198.51.100.44).<br>2. 15 authentication failures followed by Tor exit node login on <code class='text-cyan-300'>admin_svc</code>.<br>3. Encoded PowerShell spawned from svchost (PID 4012) with token elevation and active reverse SSH C2 tunnel to port 4443.",
+  
+  "investigate.": "🔍 <strong>I correlated 2,481 events across 9 telemetry streams and found:</strong><br>• Causal chain indicates a multi-stage intrusion with <strong>95% confidence (H1)</strong>.<br>• Unpatched <code class='text-red-300'>CVE-2026-1184</code> was leveraged for token elevation.<br>• Persistence achieved via scheduled task <code class='text-cyan-300'>WindowsUpdate_Svc</code> -> beacon binary.<br>• Lateral movement token replayed on database replica <code class='text-cyan-300'>10.0.4.51</code>.",
+  
+  "research the technique.": "📚 <strong>I found relevant intelligence and mapped the behavior:</strong><br>• MITRE ATT&CK: 11 techniques mapped (T1110, T1078, T1059.001, T1003, T1053, T1572).<br>• Advisories: US-CERT AA26-081A (APT-41 Campaigns) and CISA Alert ICS-CERT-2026-014.<br>• Internal Intelligence: Q2 authorized pentest finding <code class='text-amber-300'>TEST-001</code> identified this exact pathway (remediation was overdue).",
+  
+  "simulate the likely attack.": "♊ <strong>Simulation completed in Digital Twin. Here are the probable paths:</strong><br>• Path 1 (Primary): Host 10.0.4.50 -> Customer DB 10.0.4.51 (Success Prob: <strong>92%</strong>).<br>• Path 2 (Cloud Pivot): Lambda backup role escalation -> public S3 bucket exfiltration (Success Prob: <strong>68%</strong>).<br>• Blast radius: Contained to sandbox twin; zero production downtime.",
+  
+  "defend.": "🛡️ <strong>I recommend these actions. Approval required:</strong><br>• <strong>Option 1 (Optimal - Blue Mode):</strong> Revoke admin_svc sessions, isolate host 10.0.4.50, block C2 IP/domain, quarantine beacon task, and revert S3 bucket policy (QAOA Score: -2.208 H, Efficacy: 97%).<br>• <strong>Option 2 (Red Validation):</strong> Replay attack chain in Twin to verify patch effectiveness before containment.<br><span class='text-amber-300 font-semibold'>⚠️ Awaiting human authorization to dispatch signed payload.</span>",
+  
+  "approve option 1.": "⚡ <strong>Executing authorized remediation (ID: NX-84721)...</strong><br><code class='text-cyan-300 text-[10px]'>nexus-blue --revoke-sessions admin_svc --isolate-host 10.0.4.50,10.0.4.51 --block-ip 198.51.100.44 --block-domain c2beacon.apt41-infra.example --remove-task 'WindowsUpdate_Svc' --revert-s3-acl prod-secrets-vault --deploy-waf R-9901</code><br>✓ Execution Status: <strong class='text-emerald-400'>SUCCESS</strong>. Signed by Security Commander.",
+  
+  "did it work?": "✅ <strong>Verification complete. Risk decreased from HIGH (94%) to LOW (6%):</strong><br>• Threat neutralized: <strong>TRUE</strong><br>• Reverse SSH C2 tunnel: <strong>SEVERED</strong><br>• Persistence artifact: <strong>REMOVED</strong><br>• Cloud IAM & S3 exposure: <strong>LOCKED DOWN</strong><br>• Evidence sealed in SHA-256 Ledger Block #1 (<code class='text-cyan-300'>cef915...</code>)."
+};
+
+function sendCopilotMsg(text) {
+  const box = document.getElementById('copilot-chat-box');
+  if (!box) return;
+
+  // Add User bubble
+  const userDiv = document.createElement('div');
+  userDiv.className = "bg-cyan-950/40 border border-cyan-800/50 p-3 rounded-xl ml-8";
+  userDiv.innerHTML = `<div class="font-bold text-cyan-300 mb-1 text-[11px]">👤 Security Commander</div><p class="text-gray-200">${text}</p>`;
+  box.appendChild(userDiv);
+
+  // Look up AI response
+  const normKey = text.trim().toLowerCase();
+  const resp = COPILOT_RESPONSES[normKey] || `I processed your request: "<em>${text}</em>". Multi-stream correlation is active. You can run 'What is happening?', 'Investigate.', 'Research the technique.', 'Simulate the likely attack.', 'Defend.', 'Approve option 1.', or 'Did it work?'.`;
+
+  setTimeout(() => {
+    const aiDiv = document.createElement('div');
+    aiDiv.className = "bg-slate-900/90 border border-slate-800 p-3 rounded-xl";
+    aiDiv.innerHTML = `<div class="font-bold text-cyan-400 mb-1 text-[11px]">🤖 NEXUS-X COPILOT</div><p class="text-gray-300">${resp}</p>`;
+    box.appendChild(aiDiv);
+    box.scrollTop = box.scrollHeight;
+  }, 250);
+
+  box.scrollTop = box.scrollHeight;
+}
+
+function submitCustomCopilot() {
+  const input = document.getElementById('copilot-custom-input');
+  if (!input || !input.value.trim()) return;
+  const val = input.value.trim();
+  input.value = '';
+  sendCopilotMsg(val);
+}
+
+function handleApproval(d) {
+  const labels = {RED_VALIDATE:"🔴 RED VALIDATE",BLUE_DEFEND:"🔵 BLUE DEFEND",INVESTIGATE:"🟡 INVESTIGATE MORE",CANCEL:"❌ CANCELLED"};
+  alert("Decision Recorded: " + (labels[d]||d) + "\nDecision ID: NX-84721\nRecorded in SHA-256 Evidence Ledger.");
+  sendCopilotMsg(d === 'BLUE_DEFEND' ? 'Approve option 1.' : `Selected: ${labels[d]}`);
+}
+
+recalcQubo();
+</script>
+</body>
+</html>
