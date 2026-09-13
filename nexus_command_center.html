@@ -183,9 +183,16 @@
       </div>
     </div>
 
-    <!-- Right Date/Time & Analyst Profile -->
-    <div class="flex items-center space-x-4 font-mono text-[10px]">
-      <div class="text-right">
+    <!-- Right Date/Time, Target Ingestion & Analyst Profile -->
+    <div class="flex items-center space-x-3 font-mono text-[10px]">
+      
+      <!-- + INGEST TARGET BUTTON -->
+      <button onclick="openTargetModal()" class="px-2.5 py-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-slate-950 font-black rounded flex items-center space-x-1 shadow-cyan transition-all transform hover:scale-105" style="font-family: 'Orbitron', sans-serif;">
+        <span class="text-xs">🎯</span>
+        <span class="text-[9px] tracking-wider">+ INGEST TARGET</span>
+      </button>
+
+      <div class="text-right pl-2 border-l border-[#112642]">
         <div class="text-slate-400 text-[8px]" id="liveDate">Sun, 13 Sep 2026</div>
         <div class="text-slate-100 font-bold text-xs" id="liveClock">22:20:00</div>
       </div>
@@ -298,6 +305,24 @@
       <!-- ==================================================================== -->
       <div id="screen-command" class="app-screen active space-y-2.5">
         
+        <!-- QUICK TARGET INGESTION BAR -->
+        <div class="cyber-card p-2 bg-[#050c18] border border-cyan-800/40 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-cyan-400 text-xs">🎯</span>
+            <span class="text-[9px] font-bold text-slate-100 uppercase" style="font-family: 'Orbitron', sans-serif;">TARGET INGESTION:</span>
+            <span class="text-[8px] text-slate-400 font-mono">Profile and ingest targets into active monitoring & defensive scope</span>
+          </div>
+          <div class="flex items-center space-x-1.5 flex-1 max-w-md">
+            <input type="text" id="quickTargetInput" placeholder="Enter Host, IP or CIDR (e.g. 10.0.5.88, srv-app-03)..." class="flex-1 bg-[#030812] border border-[#112642] rounded px-2.5 py-1 text-[8px] text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
+            <button onclick="quickIngestTarget()" class="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold rounded text-[8px] orbitron flex items-center space-x-1">
+              <span>+ INGEST</span>
+            </button>
+            <button onclick="openTargetModal()" class="px-2.5 py-1 bg-[#0a182d] hover:bg-[#112b4e] border border-cyan-800/60 text-cyan-300 font-mono rounded text-[8px]">
+              <span>Advanced ⚙</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Top 6 Metric Cards Row -->
         <div class="grid grid-cols-2 md:grid-cols-6 gap-2">
           <!-- 1. Threat Level -->
@@ -1650,7 +1675,398 @@
       renderCurves();
     }
 
-    // 7. Interactive Copilot Actions
+  <!-- ==================================================================== -->
+  <!-- TARGET INGESTION & PROFILING MODAL                                   -->
+  <!-- ==================================================================== -->
+  <div id="targetModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="cyber-card max-w-xl w-full p-5 space-y-4 border-2 border-cyan-500 shadow-cyan font-mono text-[9px] relative animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center border-b border-[#112642] pb-2.5">
+        <div class="flex items-center space-x-2">
+          <span class="text-base text-cyan-400">🎯</span>
+          <div>
+            <h2 class="text-xs font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">TARGET INGESTION & SCOPE PROFILER</h2>
+            <div class="text-[7px] text-slate-400">Register Target Asset, Define Scope Boundaries & Attach AI Security Engines</div>
+          </div>
+        </div>
+        <button onclick="closeTargetModal()" class="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold flex items-center justify-center text-xs">✕</button>
+      </div>
+
+      <!-- Form Grid -->
+      <form id="targetIngestForm" onsubmit="event.preventDefault(); submitTargetForm();" class="space-y-3">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Target Identifier -->
+          <div>
+            <label class="block text-[8px] text-slate-300 font-bold mb-1">TARGET HOST / FQDN / DOMAIN <span class="text-red-400">*</span></label>
+            <input type="text" id="targetHost" required placeholder="e.g. api-v2.corp.nexus, srv-db-03" class="w-full bg-[#030814] border border-[#112642] focus:border-cyan-400 rounded px-2.5 py-1.5 text-[8px] text-slate-100 font-mono">
+          </div>
+
+          <!-- Target IP / CIDR -->
+          <div>
+            <label class="block text-[8px] text-slate-300 font-bold mb-1">IP ADDRESS / CIDR RANGE <span class="text-red-400">*</span></label>
+            <input type="text" id="targetIp" required placeholder="e.g. 10.0.5.88 or 192.168.10.0/24" class="w-full bg-[#030814] border border-[#112642] focus:border-cyan-400 rounded px-2.5 py-1.5 text-[8px] text-slate-100 font-mono">
+          </div>
+
+          <!-- Role & Enclave -->
+          <div>
+            <label class="block text-[8px] text-slate-300 font-bold mb-1">ROLE & NETWORK ENCLAVE</label>
+            <select id="targetRole" class="w-full bg-[#030814] border border-[#112642] focus:border-cyan-400 rounded px-2 py-1.5 text-[8px] text-slate-200 font-mono">
+              <option value="Crown Jewel Database">Crown Jewel Database</option>
+              <option value="Public Web / REST API Gateway">Public Web / REST API Gateway</option>
+              <option value="Internal Active Directory DC">Internal Active Directory DC</option>
+              <option value="Kubernetes / Microservice Cluster">Kubernetes / Microservice Cluster</option>
+              <option value="Edge Firewall / VPN Gateway">Edge Firewall / VPN Gateway</option>
+              <option value="Payment Processing Vault">Payment Processing Vault</option>
+              <option value="Dev / Staging Environment">Dev / Staging Environment</option>
+            </select>
+          </div>
+
+          <!-- Criticality Classification -->
+          <div>
+            <label class="block text-[8px] text-slate-300 font-bold mb-1">SECURITY CRITICALITY</label>
+            <select id="targetCriticality" class="w-full bg-[#030814] border border-[#112642] focus:border-cyan-400 rounded px-2 py-1.5 text-[8px] text-slate-200 font-mono">
+              <option value="CRITICAL (Crown Jewel)">CRITICAL (Crown Jewel)</option>
+              <option value="HIGH (Production Core)" selected>HIGH (Production Core)</option>
+              <option value="MEDIUM (Internal Business)">MEDIUM (Internal Business)</option>
+              <option value="LOW (Test / Sandbox)">LOW (Test / Sandbox)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Profiling Engine & Dynamic Scope -->
+        <div class="p-2.5 bg-[#030712] border border-[#112642] rounded space-y-2">
+          <div class="text-[8px] font-bold text-cyan-400 uppercase">TARGET-DRIVEN SCOPE & PROFILING ENGINE</div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[8px]">
+            <div>
+              <label class="block text-slate-400 mb-0.5">Primary Profiling Engine:</label>
+              <select id="targetEngine" class="w-full bg-[#060e1d] border border-[#112642] rounded px-2 py-1 text-slate-200 text-[8px]">
+                <option value="Hadrian + XBOW">Hadrian (Recon) + XBOW (Web Audit)</option>
+                <option value="NodeZero">NodeZero (Multi-Hop Attack Path Analysis)</option>
+                <option value="Pentera">Pentera (Continuous Security Validation)</option>
+                <option value="Sentinel-X">Sentinel-X (Real-Time EDR Behavioral Defense)</option>
+                <option value="All 8 Engines (Full Orchestration)">All 8 Engines (Full Orchestration)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1 text-slate-300 pt-1">
+              <label class="flex items-center space-x-1.5 cursor-pointer">
+                <input type="checkbox" id="scopeSafeMode" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500">
+                <span>Production Safe Mode (Non-destructive)</span>
+              </label>
+              <label class="flex items-center space-x-1.5 cursor-pointer">
+                <input type="checkbox" id="scopeAutoDefense" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500">
+                <span>Enable Autonomous Defensive Shields</span>
+              </label>
+              <label class="flex items-center space-x-1.5 cursor-pointer">
+                <input type="checkbox" id="scopeDigitalTwin" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500">
+                <span>Clone Target to Digital Shadow Twin</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end space-x-2 pt-2 border-t border-[#112642]">
+          <button type="button" onclick="closeTargetModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[8px]">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-slate-950 font-bold rounded text-[9px] orbitron flex items-center space-x-1 shadow-cyan">
+            <span>⚡ PROFILE & INGEST TARGET</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- JAVASCRIPT: SCREEN SWITCHING, CANVASES & DYNAMIC INTERACTION        -->
+  <!-- ==================================================================== -->
+  <script>
+    // 1. Live Clock
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0];
+      const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      const clockEl = document.getElementById('liveClock');
+      const dateEl = document.getElementById('liveDate');
+      if (clockEl) clockEl.textContent = timeStr;
+      if (dateEl) dateEl.textContent = dateStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Target Ingestion Modal & Handlers
+    function openTargetModal() {
+      const modal = document.getElementById('targetModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closeTargetModal() {
+      const modal = document.getElementById('targetModal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
+
+    let monitoredAssetCount = 127;
+
+    function quickIngestTarget() {
+      const input = document.getElementById('quickTargetInput');
+      const val = input ? input.value.trim() : '';
+      if (!val) {
+        openTargetModal();
+        return;
+      }
+      ingestTargetData(val, val.includes('.') && isNaN(val[0]) ? '10.0.5.' + Math.floor(Math.random() * 200 + 10) : val, 'Public Web / API', 'HIGH (Production Core)', 'Hadrian + XBOW');
+      if (input) input.value = '';
+    }
+
+    function submitTargetForm() {
+      const host = document.getElementById('targetHost').value.trim();
+      const ip = document.getElementById('targetIp').value.trim();
+      const role = document.getElementById('targetRole').value;
+      const crit = document.getElementById('targetCriticality').value;
+      const engine = document.getElementById('targetEngine').value;
+      
+      closeTargetModal();
+      ingestTargetData(host, ip, role, crit, engine);
+      document.getElementById('targetIngestForm').reset();
+    }
+
+    function ingestTargetData(host, ip, role, crit, engine) {
+      monitoredAssetCount++;
+      
+      // Update Asset Counter on Dashboard
+      document.querySelectorAll('.app-screen .orbitron').forEach(el => {
+        if (el.textContent === '127' || el.textContent === '128' || el.textContent === '129') {
+          el.textContent = monitoredAssetCount;
+        }
+      });
+
+      // Add row to Asset Inventory Table
+      const tbody = document.querySelector('#screen-live-operations table tbody');
+      if (tbody) {
+        const tr = document.createElement('tr');
+        tr.className = "bg-cyan-950/20 border-l-2 border-l-cyan-400 animate-pulse";
+        const riskVal = crit.includes('CRITICAL') ? '92 / 100 CRITICAL' : crit.includes('HIGH') ? '65 / 100 HIGH' : '22 / 100 LOW';
+        const riskBadge = crit.includes('CRITICAL') ? 'bg-red-950 text-red-300 border-red-500' : crit.includes('HIGH') ? 'bg-amber-950 text-amber-300 border-amber-500' : 'bg-emerald-950 text-emerald-300 border-emerald-500';
+        
+        tr.innerHTML = `
+          <td class="py-1.5 font-bold text-cyan-300">${host}</td>
+          <td>${ip}</td>
+          <td>${role}</td>
+          <td><span class="px-1.5 py-0.2 ${riskBadge} border rounded font-bold">${riskVal}</span></td>
+          <td class="text-emerald-400 font-bold">PROFILED & INGESTED (${engine})</td>
+          <td><span class="text-emerald-400">Shield Engaged</span></td>
+          <td class="text-right"><button onclick="copilotPrompt('Inspect Target ${host}')" class="px-2 py-0.5 bg-cyan-800 hover:bg-cyan-700 text-slate-100 rounded">INSPECT</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+      }
+
+      // Copilot Notification
+      appendCopilot('🤖 NEXUS-X', `<strong>[TARGET INGESTED & PROFILED]</strong><br>Target: <code>${host}</code> (<code>${ip}</code>)<br>Role: <code>${role}</code> | Criticality: <code>${crit}</code><br>Profiling Engine: <code>${engine}</code><br>Target-driven scope activated. Total monitored assets: <strong>${monitoredAssetCount}</strong>.`);
+      
+      // Notify User and switch to Live Operations screen
+      showScreen('live-operations');
+      setPipelineStep(0);
+    }
+
+    // 3. Dynamic Screen Switching Logic
+    function showScreen(screenId) {
+      document.querySelectorAll('.app-screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+
+      const target = document.getElementById('screen-' + screenId);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeNav = document.getElementById('nav-' + screenId);
+      if (activeNav) {
+        activeNav.classList.add('active');
+      }
+
+      if (screenId === 'command') {
+        setTimeout(initCyberMap, 50);
+      }
+    }
+
+    // 4. Cognitive State Machine
+    function setPipelineStep(idx) {
+      document.querySelectorAll('.pipe-step').forEach((el, i) => {
+        const dot = el.querySelector('.step-dot');
+        const txt = el.querySelector('.step-text');
+        if (i === idx) {
+          el.classList.add('active');
+          dot.className = 'step-dot w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-cyan';
+          txt.className = 'step-text text-cyan-300 font-bold';
+        } else {
+          el.classList.remove('active');
+          dot.className = 'step-dot w-2 h-2 rounded-full bg-slate-600';
+          txt.className = 'step-text text-slate-400';
+        }
+      });
+    }
+
+    // 5. Cyber World Map Canvas Simulation
+    function initCyberMap() {
+      const canvas = document.getElementById('cyberMapCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      const nodes = [
+        { x: canvas.width * 0.18, y: canvas.height * 0.35, label: 'Origin', color: '#ff2a55' },
+        { x: canvas.width * 0.35, y: canvas.height * 0.45, label: 'SRV-02', color: '#ffaa00' },
+        { x: canvas.width * 0.48, y: canvas.height * 0.32, label: 'WEB-01', color: '#ff2a55' },
+        { x: canvas.width * 0.58, y: canvas.height * 0.52, label: 'DB-01', color: '#ff2a55' },
+        { x: canvas.width * 0.85, y: canvas.height * 0.42, label: 'OFFICE-NET', color: '#00ff88' },
+        { x: canvas.width * 0.72, y: canvas.height * 0.28, label: 'Node-Asia', color: '#00f0ff' }
+      ];
+
+      let t = 0;
+      function draw() {
+        t += 0.02;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw dotted world grid
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.08)';
+        const step = 14;
+        for (let x = 0; x < canvas.width; x += step) {
+          for (let y = 0; y < canvas.height; y += step) {
+            ctx.beginPath();
+            ctx.arc(x, y, 0.75, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Draw attack curves
+        ctx.lineWidth = 1.5;
+        // Curve 1: Origin to Web-01
+        ctx.strokeStyle = 'rgba(255, 42, 85, 0.75)';
+        ctx.beginPath();
+        ctx.moveTo(nodes[0].x, nodes[0].y);
+        ctx.quadraticCurveTo((nodes[0].x + nodes[2].x) / 2, nodes[0].y - 45, nodes[2].x, nodes[2].y);
+        ctx.stroke();
+
+        // Curve 2: Origin to SRV-02
+        ctx.strokeStyle = 'rgba(255, 170, 0, 0.75)';
+        ctx.beginPath();
+        ctx.moveTo(nodes[0].x, nodes[0].y);
+        ctx.quadraticCurveTo((nodes[0].x + nodes[1].x) / 2, nodes[0].y + 30, nodes[1].x, nodes[1].y);
+        ctx.stroke();
+
+        // Curve 3: Web-01 to DB-01
+        ctx.strokeStyle = 'rgba(255, 42, 85, 0.9)';
+        ctx.beginPath();
+        ctx.moveTo(nodes[2].x, nodes[2].y);
+        ctx.quadraticCurveTo((nodes[2].x + nodes[3].x) / 2, nodes[2].y + 20, nodes[3].x, nodes[3].y);
+        ctx.stroke();
+
+        // Normal Traffic Line
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
+        ctx.beginPath();
+        ctx.moveTo(nodes[3].x, nodes[3].y);
+        ctx.lineTo(nodes[5].x, nodes[5].y);
+        ctx.stroke();
+
+        // Draw Nodes & Pulsing Rings
+        nodes.forEach(n => {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = n.color;
+          ctx.fill();
+
+          const ringR = 4 + (Math.sin(t * 3) + 1) * 3;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, ringR, 0, Math.PI * 2);
+          ctx.strokeStyle = n.color;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        });
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    // 6. Rotating Globe Canvas
+    function initGlobe() {
+      const canvas = document.getElementById('globeCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = 32;
+      canvas.height = 32;
+      let angle = 0;
+
+      function renderGlobe() {
+        angle += 0.03;
+        ctx.clearRect(0, 0, 32, 32);
+
+        ctx.beginPath();
+        ctx.arc(16, 16, 14, 0, Math.PI * 2);
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.ellipse(16, 16, 14, 5, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = '#0088ff55';
+        ctx.stroke();
+
+        const rotWidth = Math.abs(Math.cos(angle)) * 14;
+        ctx.beginPath();
+        ctx.ellipse(16, 16, rotWidth, 14, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = '#00f0ff88';
+        ctx.stroke();
+
+        requestAnimationFrame(renderGlobe);
+      }
+      renderGlobe();
+    }
+
+    // 7. Quantum Waveform Curves
+    function initQuantumCurves() {
+      const c1 = document.getElementById('qCurve1');
+      const c2 = document.getElementById('qCurve2');
+      if (!c1 || !c2) return;
+
+      const ctx1 = c1.getContext('2d');
+      const ctx2 = c2.getContext('2d');
+      c1.width = c1.offsetWidth; c1.height = c1.offsetHeight;
+      c2.width = c2.offsetWidth; c2.height = c2.offsetHeight;
+
+      let ph = 0;
+      function renderCurves() {
+        ph += 0.05;
+        [ { ctx: ctx1, col: '#00f0ff', freq: 0.08 }, { ctx: ctx2, col: '#9d4edd', freq: 0.12 } ].forEach((item, idx) => {
+          const ctx = item.ctx;
+          ctx.clearRect(0, 0, 100, 50);
+          ctx.beginPath();
+          ctx.strokeStyle = item.col;
+          ctx.lineWidth = 1.2;
+          for (let x = 0; x < 100; x++) {
+            const y = 20 + Math.sin(x * item.freq + ph + idx) * 12;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        });
+        requestAnimationFrame(renderCurves);
+      }
+      renderCurves();
+    }
+
+    // 8. Interactive Copilot Actions
     function copilotPrompt(action) {
       appendCopilot('👤 You', action);
       setTimeout(() => {
