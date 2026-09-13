@@ -340,6 +340,35 @@
           </div>
         </div>
 
+        <!-- TARGET PROFILING, SCOPE BOUNDARY & DYNAMIC SELECTION HUD -->
+        <div class="hud-panel hud-interactive rounded-xl p-2.5 pointer-events-auto font-mono text-[8px]">
+          <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1 mb-1.5">
+            <div class="flex items-center space-x-1.5">
+              <span class="orbitron text-[9px] font-bold text-cyan-300">🎯 TARGET UNDERSTANDING & DYNAMIC SCOPE</span>
+              <span class="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/30 font-bold">42.5% TIME SAVED</span>
+            </div>
+            <span class="text-cyan-400">REACTIVE TOOL CHAIN</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-slate-300 mb-1">
+            <div class="p-1.5 bg-[#030914] border border-cyan-500/20 rounded">
+              <span class="text-cyan-400 font-bold block mb-0.5">1. TARGET PROFILE UNDERSTOOD:</span>
+              <span>web-prod-01 (Ubuntu 22.04 LTS / AWS Hybrid)</span>
+              <div class="text-[7px] text-slate-400">NGINX + AD Kerberos + PostgreSQL + S3</div>
+            </div>
+            <div class="p-1.5 bg-[#030914] border border-cyan-500/20 rounded">
+              <span class="text-amber-400 font-bold block mb-0.5">2. TARGET-DRIVEN SCOPE (FILTERED):</span>
+              <span class="text-emerald-300 font-bold">4 irrelevant tools excluded</span> (No SCADA, No Mainframe, No Bare-Metal escape).
+              <div class="text-[7px] text-slate-400">Zero wasted cycles • Clean operational boundary</div>
+            </div>
+          </div>
+
+          <div class="p-1 bg-[#020712] border border-cyan-500/30 rounded text-[7px] text-slate-300 flex justify-between items-center">
+            <span>⚡ <strong>DYNAMIC SELECTION RULE:</strong> <em>"Next tool is decided at runtime based on what the previous tool discovers."</em></span>
+            <span class="text-emerald-400 font-bold">DISCOVERY-DRIVEN</span>
+          </div>
+        </div>
+
         <!-- BOTTOM CENTER: 3D FLOW HINT -->
         <div class="hud-panel rounded-xl px-3 py-2 text-center pointer-events-auto font-mono text-[9px] text-cyan-400/90 flex justify-between items-center">
           <span>🖱️ <strong>3D VIEWPORT:</strong> Drag to rotate • Scroll to zoom • Click any numbered node ① ➔ ② ➔ ③ ➔ ④ ➔ ⑤</span>

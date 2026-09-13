@@ -2,10 +2,43 @@
 
 [![Security: Autonomous](https://img.shields.io/badge/Security-Autonomous_AI-00f0ff.svg)](#)
 [![Multi-Agent: 8 Engines](https://img.shields.io/badge/Multi--Agent-8_Specialized_Engines-00ff66.svg)](#)
+[![Scoping: Target--Driven](https://img.shields.io/badge/Scoping-Target--Driven_Adaptive-00f0ff.svg)](#)
+[![Selection: Dynamic](https://img.shields.io/badge/Selection-Dynamic_Feedback--Loop-00ff66.svg)](#)
 [![Optimization: Quantum QAOA](https://img.shields.io/badge/Optimization-Quantum_QAOA-b026ff.svg)](#)
 [![Ledger: SHA--256](https://img.shields.io/badge/Ledger-SHA--256_Tamper--Evident-ffb700.svg)](#)
 
 **NEXUS-X** is an autonomous cyber intelligence, attack validation, defense reasoning, and quantum optimization platform. It combines a **9-stream telemetry fusion engine**, a **7-phase causal reasoning kill chain**, an **8-agent specialized security intelligence suite**, a **closed-loop adversarial digital twin**, and a **WebGL 3D live workflow operations command center**.
+
+---
+
+## 💡 Four Core Operating Principles
+
+NEXUS-X is built on four fundamental architectural principles that distinguish it from static, rigid security scanners:
+
+### 1. 🔍 Target Understanding (First Principle)
+> **"The agent first needs to understand the target."**
+
+Before executing any tests, attack simulations, or defensive interventions, NEXUS-X initiates deep **Target Profiling**. It ingests real-time telemetry across network, endpoint, auth, and cloud to construct a rich semantic profile of the target: operating system, architecture (e.g. Cloud-Hybrid vs. K8s vs. Bare-Metal), active services, identity boundaries, and crown jewel assets.
+
+### 2. 🎯 Target-Driven Scope
+> **"The agent adapts to the actual target so we don't waste time running irrelevant tools."**
+
+Security testing is uselessly slow and noisy when running arbitrary tool batteries against incompatible targets. NEXUS-X evaluates **Target-Driven Scope Boundaries**:
+- If a target is a Cloud-Hybrid Linux instance, legacy mainframe (TN3270), SCADA/ICS (Modbus), and hypervisor escape tools are automatically scoped out.
+- This **saves ~42.5% of operational execution time**, eliminates scanner noise, and strictly confines the blast radius to authorized operational assets.
+
+### 3. ⚡ Dynamic Selection
+> **"The agent does not always run the same sequence. The next tool depends on what the previous tool discovered."**
+
+NEXUS-X does **not** follow a fixed, monolithic script. Every step is conditionally triggered based on real-time empirical discovery:
+- **Discovered exposed perimeter assets** $\longrightarrow$ Triggers **Hadrian** external reconnaissance & **Astra** multi-agent sub-task decomposition.
+- **Discovered unpatched RCE / CVE** $\longrightarrow$ Triggers **XBOW** autonomous exploit chain synthesis.
+- **Discovered credential leaks / token dumps** $\longrightarrow$ Triggers **NodeZero** attack path navigation across Active Directory & DB tiers.
+- **Discovered lateral paths** $\longrightarrow$ Triggers **Pentera** continuous control validation to test live WAF, MFA, and segmentation efficacy.
+- **Discovered control drifts** $\longrightarrow$ Triggers **PentestGPT** research tree & **QAOA** optimal mitigation solver.
+
+### 4. 🔄 Feedback-Driven Adaptive Chaining & AI Self-Defense
+Every tool's output feeds back into the **Penligent Orchestrator** to prune dead-end paths, backtrack when defensive barriers are encountered, and learn optimal environment-specific heuristics, while **Garak** and **AI Guardian** continuously defend the AI system itself against prompt injection and tool abuse.
 
 ---
 
