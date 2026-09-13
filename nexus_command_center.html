@@ -2,38 +2,36 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS-X // AI-POWERED CYBER DEFENSE & OFFENSE PLATFORM</title>
+  <title>NEXUS-X | Live Cyber Command Center</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
+  
+  <!-- Google Fonts: Orbitron & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,800;1,400&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
+  
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            nx: {
-              bg: '#040811',
-              card: '#081120',
-              cardBorder: '#0d223a',
-              accent: '#00f0ff',
-              red: '#ff2a55',
-              amber: '#ffaa00',
-              green: '#00ff88',
-              blue: '#0088ff',
-              purple: '#9d4edd',
-            }
+            obsidian: '#02060d',
+            charcoal: '#081120',
+            cardbg: '#060d1a',
+            bordercol: '#112642',
+            glowcyan: '#00f0ff',
+            glowred: '#ff2a55',
+            glowamber: '#ffaa00',
+            glowpurple: '#9d4edd',
+            glowgreen: '#00ff88'
           },
           fontFamily: {
             orbitron: ['Orbitron', 'sans-serif'],
-            mono: ['Fira Code', 'monospace'],
-            rajdhani: ['Rajdhani', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
           }
         }
       }
@@ -42,69 +40,84 @@
 
   <style>
     body {
-      background-color: #040811;
-      color: #cbd5e1;
-      font-family: 'Rajdhani', sans-serif;
+      background-color: #02060d;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
       overflow-x: hidden;
-      user-select: none;
     }
-    .orbitron { font-family: 'Orbitron', sans-serif; }
-    .font-mono { font-family: 'Fira Code', monospace; }
+    
+    /* Cyber Grid Background */
+    .cyber-grid-bg {
+      background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
 
-    /* Dark cyber card background */
+    /* Subtle Card Styling */
     .cyber-card {
-      background: #081120;
+      background: #060d1a;
       border: 1px solid #112642;
-      border-radius: 8px;
-    }
-    .cyber-card:hover {
-      border-color: #1a3c68;
-    }
-
-    .glow-cyan { text-shadow: 0 0 10px rgba(0, 240, 255, 0.7); }
-    .glow-red { text-shadow: 0 0 10px rgba(255, 42, 85, 0.7); }
-    .glow-green { text-shadow: 0 0 10px rgba(0, 255, 136, 0.7); }
-
-    /* Custom scrollbars */
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: #040811; }
-    ::-webkit-scrollbar-thumb { background: #112642; border-radius: 2px; }
-    ::-webkit-scrollbar-thumb:hover { background: #00f0ff44; }
-
-    /* Nav Item styling */
-    .nav-btn {
+      border-radius: 6px;
       transition: all 0.2s ease;
     }
+    .cyber-card:hover {
+      border-color: #00f0ff55;
+    }
+
+    /* Glow utilities */
+    .glow-cyan { text-shadow: 0 0 10px rgba(0, 240, 255, 0.6); }
+    .glow-red { text-shadow: 0 0 10px rgba(255, 42, 85, 0.6); }
+    .glow-green { text-shadow: 0 0 10px rgba(0, 255, 136, 0.6); }
+    .glow-purple { text-shadow: 0 0 10px rgba(157, 78, 221, 0.6); }
+    .shadow-cyan { box-shadow: 0 0 12px rgba(0, 240, 255, 0.35); }
+    .shadow-red { box-shadow: 0 0 12px rgba(255, 42, 85, 0.35); }
+    .shadow-amber { box-shadow: 0 0 12px rgba(255, 170, 0, 0.35); }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #040a14; }
+    ::-webkit-scrollbar-thumb { background: #112642; border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00f0ff88; }
+
+    /* Active Nav Item */
+    .nav-btn {
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
     .nav-btn.active {
-      background: #0e1e36;
+      background: linear-gradient(90deg, rgba(0, 240, 255, 0.15) 0%, rgba(0, 240, 255, 0.02) 100%);
       border-left: 3px solid #00f0ff;
       color: #00f0ff;
     }
     .nav-btn:hover:not(.active) {
-      background: #091526;
-      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.04);
+      color: #e2e8f0;
     }
 
-    /* Cognitive Timeline Active Step */
-    .pipe-step.active .step-dot {
-      background: #00f0ff;
-      box-shadow: 0 0 10px #00f0ff;
+    /* Screen view transitions */
+    .app-screen {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out forwards;
     }
-    .pipe-step.active .step-text {
-      color: #00f0ff;
-      font-weight: bold;
+    .app-screen.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body class="bg-[#040811] text-slate-300 min-h-screen flex flex-col justify-between text-xs">
+<body class="cyber-grid-bg min-h-screen flex flex-col justify-between select-none">
 
   <!-- ==================================================================== -->
   <!-- TOP HEADER & COGNITIVE TIMELINE                                     -->
   <!-- ==================================================================== -->
-  <header class="bg-[#060c18] border-b border-[#112642] px-4 py-2.5 flex flex-wrap justify-between items-center z-30">
+  <header class="bg-[#060c18] border-b border-[#112642] px-4 py-2 flex flex-wrap justify-between items-center z-30 sticky top-0">
     
     <!-- Logo & Title -->
-    <div class="flex items-center space-x-3">
+    <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('command')">
       <!-- Glowing Geometric Diamond Logo -->
       <div class="w-8 h-8 flex items-center justify-center relative">
         <svg class="w-7 h-7" viewBox="0 0 40 40" fill="none">
@@ -115,7 +128,7 @@
       </div>
       <div>
         <div class="flex items-center space-x-2">
-          <h1 class="orbitron font-black text-sm tracking-wider text-slate-100 glow-cyan">NEXUS-X</h1>
+          <h1 class="font-black text-sm tracking-wider text-slate-100 glow-cyan" style="font-family: 'Orbitron', sans-serif;">NEXUS-X</h1>
           <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/50">AI-POWERED CYBER DEFENSE & OFFENSE PLATFORM</span>
         </div>
         <div class="text-[8px] text-slate-400 font-mono tracking-wider">DETECT • RESEARCH • SIMULATE • DECIDE • EXECUTE • SECURE</div>
@@ -124,47 +137,47 @@
 
     <!-- Central Cognitive State Pipeline -->
     <div class="hidden xl:flex items-center space-x-1 font-mono text-[8px] tracking-wider">
-      <div id="step-0" class="pipe-step flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(0)">
+      <div id="step-0" class="pipe-step flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('live-operations'); setPipelineStep(0)">
         <span class="step-dot w-2 h-2 rounded-full bg-slate-600"></span>
         <span class="step-text text-slate-400">OBSERVING</span>
       </div>
       <span class="text-slate-600">──</span>
-      <div id="step-1" class="pipe-step active flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(1)">
+      <div id="step-1" class="pipe-step active flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('threats'); setPipelineStep(1)">
         <span class="step-dot w-2 h-2 rounded-full bg-cyan-400 shadow-cyan"></span>
         <span class="step-text text-cyan-300 font-bold">INVESTIGATING</span>
       </div>
       <span class="text-slate-600">──</span>
-      <div id="step-2" class="pipe-step flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(2)">
+      <div id="step-2" class="pipe-step flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('research'); setPipelineStep(2)">
         <span class="step-dot w-2 h-2 rounded-full bg-slate-600"></span>
         <span class="step-text text-slate-400">RESEARCHING</span>
       </div>
       <span class="text-slate-600">──</span>
-      <div id="step-3" class="pipe-step flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(3)">
+      <div id="step-3" class="pipe-step flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('digital-twin'); setPipelineStep(3)">
         <span class="step-dot w-2 h-2 rounded-full bg-slate-600"></span>
         <span class="step-text text-slate-400">SIMULATING</span>
       </div>
       <span class="text-slate-600">──</span>
-      <div id="step-4" class="pipe-step flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(4)">
+      <div id="step-4" class="pipe-step flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('policy'); setPipelineStep(4)">
         <span class="step-dot w-2 h-2 rounded-full bg-slate-600"></span>
         <span class="step-text text-slate-400">AWAITING APPROVAL</span>
       </div>
       <span class="text-slate-600">──</span>
-      <div id="step-5" class="pipe-step flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(5)">
+      <div id="step-5" class="pipe-step flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('tools'); setPipelineStep(5)">
         <span class="step-dot w-2 h-2 rounded-full bg-slate-600"></span>
         <span class="step-text text-slate-400">EXECUTING</span>
       </div>
       <span class="text-slate-600">──</span>
-      <div id="step-6" class="pipe-step flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(6)">
+      <div id="step-6" class="pipe-step flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('attack-graph'); setPipelineStep(6)">
         <span class="step-dot w-2 h-2 rounded-full bg-slate-600"></span>
         <span class="step-text text-slate-400">VERIFYING</span>
       </div>
       <span class="text-slate-600">──</span>
-      <div id="step-7" class="pipe-step flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(7)">
+      <div id="step-7" class="pipe-step flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('reports'); setPipelineStep(7)">
         <span class="step-dot w-2 h-2 rounded-full bg-slate-600"></span>
         <span class="step-text text-slate-400">REPORTING</span>
       </div>
       <span class="text-slate-600">──</span>
-      <div id="step-8" class="pipe-step flex items-center space-x-1 cursor-pointer" onclick="setPipelineStep(8)">
+      <div id="step-8" class="pipe-step flex items-center space-x-1 cursor-pointer hover:text-cyan-300" onclick="showScreen('command'); setPipelineStep(8)">
         <span class="step-dot w-2 h-2 rounded-full bg-slate-600"></span>
         <span class="step-text text-slate-400">MONITORING</span>
       </div>
@@ -173,13 +186,13 @@
     <!-- Right Date/Time & Analyst Profile -->
     <div class="flex items-center space-x-4 font-mono text-[10px]">
       <div class="text-right">
-        <div class="text-slate-400 text-[8px]" id="liveDate">Sun, 10 Nov 2024</div>
-        <div class="text-slate-100 font-bold text-xs" id="liveClock">22:14:31</div>
+        <div class="text-slate-400 text-[8px]" id="liveDate">Sun, 13 Sep 2026</div>
+        <div class="text-slate-100 font-bold text-xs" id="liveClock">22:20:00</div>
       </div>
       <!-- Notification Bell -->
-      <div class="relative cursor-pointer" onclick="setPipelineStep(1)">
+      <div class="relative cursor-pointer" onclick="showScreen('threats'); setPipelineStep(1)" title="3 Active Alerts">
         <span class="text-base">🔔</span>
-        <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-red-500 text-[8px] font-bold text-slate-950 flex items-center justify-center">3</span>
+        <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-red-500 text-[8px] font-bold text-slate-950 flex items-center justify-center animate-pulse">3</span>
       </div>
       <!-- Analyst Avatar -->
       <div class="flex items-center space-x-2 pl-2 border-l border-[#112642]">
@@ -193,59 +206,71 @@
   </header>
 
   <!-- ==================================================================== -->
-  <!-- MAIN WORKSPACE LAYOUT (LEFT NAV + CENTER + RIGHT COPILOT)           -->
+  <!-- MAIN WORKSPACE LAYOUT (LEFT NAV + CENTER DISPLAY + RIGHT COPILOT)    -->
   <!-- ==================================================================== -->
-  <div class="flex flex-1 overflow-hidden p-2.5 gap-2.5">
+  <div class="flex flex-1 overflow-hidden p-2.5 gap-2.5 min-h-[calc(100vh-80px)]">
 
-    <!-- 1. LEFT SIDEBAR NAVIGATION (Exact Items from Screenshot) -->
+    <!-- 1. LEFT SIDEBAR NAVIGATION -->
     <aside class="w-48 bg-[#060c18] border border-[#112642] rounded-lg flex flex-col justify-between p-2 shrink-0">
-      <nav class="space-y-0.5">
-        <button onclick="setNavActive(this)" class="nav-btn active w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-cyan-400">▦</span>
+      <nav class="space-y-1" id="sidebarNav">
+        
+        <button id="nav-command" onclick="showScreen('command')" class="nav-btn active w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-cyan-400 text-sm">▦</span>
           <div><div class="font-bold text-[10px]">COMMAND</div><div class="text-[7px] text-slate-500">Overview</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">🛡️</span>
+        
+        <button id="nav-live-operations" onclick="showScreen('live-operations')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">🛡️</span>
           <div><div class="font-bold text-[10px]">LIVE OPERATIONS</div><div class="text-[7px] text-slate-500">Real-time Activity</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-red-400">⚠️</span>
+        
+        <button id="nav-threats" onclick="showScreen('threats')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-red-400 text-sm">⚠️</span>
           <div><div class="font-bold text-[10px] text-red-300">THREATS</div><div class="text-[7px] text-slate-500">Incidents & Detections</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">🕸️</span>
+        
+        <button id="nav-attack-graph" onclick="showScreen('attack-graph')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">🕸️</span>
           <div><div class="font-bold text-[10px]">ATTACK GRAPH</div><div class="text-[7px] text-slate-500">Paths & Relationships</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">🌐</span>
+        
+        <button id="nav-digital-twin" onclick="showScreen('digital-twin')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">🌐</span>
           <div><div class="font-bold text-[10px]">DIGITAL TWIN</div><div class="text-[7px] text-slate-500">Simulation Environment</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-purple-400">⚔️</span>
+        
+        <button id="nav-red-blue" onclick="showScreen('red-blue')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-purple-400 text-sm">⚔️</span>
           <div><div class="font-bold text-[10px]">RED vs BLUE</div><div class="text-[7px] text-slate-500">AI Adversarial Training</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">💬</span>
+        
+        <button id="nav-ai-chat" onclick="showScreen('ai-chat')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">💬</span>
           <div><div class="font-bold text-[10px]">AI CHAT</div><div class="text-[7px] text-slate-500">NEXUS-X Copilot</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">🔬</span>
+        
+        <button id="nav-research" onclick="showScreen('research')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">🔬</span>
           <div><div class="font-bold text-[10px]">RESEARCH</div><div class="text-[7px] text-slate-500">Threat Intelligence</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">🛠️</span>
+        
+        <button id="nav-tools" onclick="showScreen('tools')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">🛠️</span>
           <div><div class="font-bold text-[10px]">TOOLS</div><div class="text-[7px] text-slate-500">Recon, Scan, Exploit, etc.</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">📊</span>
+        
+        <button id="nav-reports" onclick="showScreen('reports')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">📊</span>
           <div><div class="font-bold text-[10px]">REPORTS</div><div class="text-[7px] text-slate-500">Incidents & Analytics</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">⚙</span>
+        
+        <button id="nav-policy" onclick="showScreen('policy')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">⚙</span>
           <div><div class="font-bold text-[10px]">POLICY</div><div class="text-[7px] text-slate-500">Authorization & Control</div></div>
         </button>
-        <button onclick="setNavActive(this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded text-left">
-          <span class="text-slate-400">🔧</span>
+        
+        <button id="nav-settings" onclick="showScreen('settings')" class="nav-btn w-full flex items-center space-x-2.5 px-2.5 py-1.5 rounded text-left">
+          <span class="text-slate-400 text-sm">🔧</span>
           <div><div class="font-bold text-[10px]">SETTINGS</div><div class="text-[7px] text-slate-500">System Configuration</div></div>
         </button>
       </nav>
@@ -253,377 +278,1062 @@
       <!-- Bottom System Status Indicators -->
       <div class="border-t border-[#112642] pt-2 space-y-1 font-mono text-[8px]">
         <div class="text-slate-400 font-bold uppercase tracking-wider">SYSTEM STATUS</div>
-        <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>AI Agents Online</span></div>
+        <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>AI Agents Online (8/8)</span></div>
         <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Toolchain Ready</span></div>
         <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Digital Twin Active</span></div>
         <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Threat Intel Connected</span></div>
         <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Quantum Engine Ready</span></div>
         <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Human Approval Enabled</span></div>
-        <div class="pt-2 text-[7px] italic text-slate-400 border-t border-[#112642]/60">
-          "A safer tomorrow, through a more intelligent today."<br><span class="text-slate-400 font-bold">NEXUS-X</span>
+        <div class="pt-1.5 text-[7px] italic text-slate-400 border-t border-[#112642]/60">
+          "A safer tomorrow, through a more intelligent today."<br><span class="text-cyan-400 font-bold">NEXUS-X</span>
         </div>
       </div>
     </aside>
 
-    <!-- 2. CENTER STACK (METRICS + LIVE MAP + 4-PANEL MATRIX + RED/BLUE + TIMELINE) -->
-    <main class="flex-1 flex flex-col space-y-2.5 overflow-y-auto pr-1">
+    <!-- 2. CENTER STACK: DYNAMIC SCREENS -->
+    <main class="flex-1 overflow-y-auto pr-1">
 
-      <!-- TOP 6 METRIC CARDS ROW -->
-      <div class="grid grid-cols-2 md:grid-cols-6 gap-2">
-        <!-- 1. Threat Level -->
-        <div class="cyber-card p-2 border-l-4 border-l-red-500 flex flex-col justify-between">
-          <div class="text-[8px] font-mono text-slate-400 uppercase">THREAT LEVEL</div>
-          <div class="orbitron text-base font-black text-red-500 glow-red">HIGH</div>
-          <div class="flex space-x-0.5 mt-1">
-            <div class="h-1.5 flex-1 bg-red-500 rounded-sm"></div>
-            <div class="h-1.5 flex-1 bg-red-500 rounded-sm"></div>
-            <div class="h-1.5 flex-1 bg-red-500 rounded-sm"></div>
-            <div class="h-1.5 flex-1 bg-red-500 rounded-sm"></div>
-            <div class="h-1.5 flex-1 bg-red-500/30 rounded-sm"></div>
-          </div>
-        </div>
-
-        <!-- 2. Active Incidents -->
-        <div class="cyber-card p-2 flex flex-col justify-between">
-          <div class="text-[8px] font-mono text-slate-400 uppercase">ACTIVE INCIDENTS</div>
-          <div class="flex items-baseline space-x-1.5">
-            <span class="orbitron text-lg font-black text-slate-100">03</span>
-            <span class="text-[8px] font-mono text-red-400 font-bold">↑ +2</span>
-          </div>
-          <div class="text-[7px] text-slate-400">Critical investigation</div>
-        </div>
-
-        <!-- 3. Monitored Assets -->
-        <div class="cyber-card p-2 flex flex-col justify-between">
-          <div class="text-[8px] font-mono text-slate-400 uppercase">MONITORED ASSETS</div>
-          <div class="flex items-baseline space-x-1.5">
-            <span class="orbitron text-lg font-black text-cyan-300">127</span>
-            <span class="text-[8px] font-mono text-cyan-400 font-bold">↑ +12</span>
-          </div>
-          <div class="text-[7px] text-slate-400">Perimeter + Enclaves</div>
-        </div>
-
-        <!-- 4. Critical Assets -->
-        <div class="cyber-card p-2 flex flex-col justify-between">
-          <div class="text-[8px] font-mono text-slate-400 uppercase">CRITICAL ASSETS</div>
-          <div class="flex items-baseline space-x-1.5">
-            <span class="orbitron text-lg font-black text-red-400">07</span>
-            <span class="text-[7px] font-mono text-red-400 font-bold">! 2 at risk</span>
-          </div>
-          <div class="text-[7px] text-slate-400">Customer DB & Vault</div>
-        </div>
-
-        <!-- 5. AI Confidence -->
-        <div class="cyber-card p-2 flex flex-col justify-between">
-          <div class="text-[8px] font-mono text-slate-400 uppercase">AI CONFIDENCE</div>
-          <div class="flex items-baseline space-x-1.5">
-            <span class="orbitron text-lg font-black text-emerald-400 glow-green">94%</span>
-            <span class="text-[8px] font-mono text-emerald-400 font-bold">↑ +5%</span>
-          </div>
-          <div class="text-[7px] text-slate-400">Bayesian Corroboration</div>
-        </div>
-
-        <!-- 6. Global Threat Intel + Rotating Globe Icon -->
-        <div class="cyber-card p-2 flex items-center justify-between space-x-2">
-          <!-- Globe Wireframe Canvas -->
-          <canvas id="globeCanvas" class="w-8 h-8 shrink-0"></canvas>
-          <div>
-            <div class="text-[7px] font-mono text-slate-400 leading-tight uppercase">GLOBAL THREAT INTEL</div>
-            <div class="orbitron text-xs font-bold text-slate-100">1,248,931</div>
-            <div class="text-[6px] text-slate-400 font-mono">Threats analyzed today</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- MIDDLE ROW: LIVE CYBER MAP + TOP THREATS / ORIGINS / SEVERITY -->
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-2.5">
+      <!-- ==================================================================== -->
+      <!-- SCREEN 1: COMMAND (MAIN OVERVIEW MOCKUP)                             -->
+      <!-- ==================================================================== -->
+      <div id="screen-command" class="app-screen active space-y-2.5">
         
-        <!-- LIVE CYBER MAP (3 cols) -->
-        <div class="lg:col-span-3 cyber-card p-3 relative flex flex-col justify-between overflow-hidden min-h-[260px]">
-          <!-- Map Header & Legend -->
-          <div class="flex justify-between items-center z-10">
-            <div class="orbitron text-xs font-bold text-slate-100 flex items-center space-x-2">
-              <span>LIVE CYBER MAP</span>
-            </div>
-            <!-- Legend items -->
-            <div class="flex items-center space-x-3 font-mono text-[8px]">
-              <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span><span>Incoming Attack</span></span>
-              <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span><span>Suspicious Activity</span></span>
-              <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-cyan-400"></span><span>Normal Traffic</span></span>
-              <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Protected</span></span>
-            </div>
-          </div>
-
-          <!-- HTML5 Animated Cyber World Map Canvas -->
-          <div class="relative w-full h-48 my-1">
-            <canvas id="cyberMapCanvas" class="w-full h-full"></canvas>
-            
-            <!-- Floating Live Target Tags -->
-            <div class="absolute top-8 left-16 px-2 py-0.5 rounded bg-red-950/80 border border-red-500 text-[8px] font-mono text-red-300 pointer-events-none">
-              <strong class="block text-[7px] text-red-400 uppercase">ATTACK ORIGIN</strong>
-              185.220.101.3 (Unknown)
-            </div>
-            <div class="absolute top-20 left-1/3 px-2 py-0.5 rounded bg-amber-950/80 border border-amber-500 text-[8px] font-mono text-amber-300 pointer-events-none">
-              <strong class="block text-[7px] text-amber-400">SRV-02</strong>
-              Under Attack
-            </div>
-            <div class="absolute top-12 left-1/2 px-2 py-0.5 rounded bg-red-950/80 border border-red-500 text-[8px] font-mono text-red-300 pointer-events-none">
-              <strong class="block text-[7px] text-red-400">WEB-01</strong>
-              Compromised
-            </div>
-            <div class="absolute top-24 left-[58%] px-2 py-0.5 rounded bg-red-950/90 border border-red-500 text-[8px] font-mono text-red-200 pointer-events-none animate-pulse">
-              <strong class="block text-[7px] text-red-400">DB-01 🔴</strong>
-              Critical Asset
-            </div>
-            <div class="absolute top-14 right-12 px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500 text-[8px] font-mono text-emerald-300 pointer-events-none">
-              <strong class="block text-[7px] text-emerald-400">OFFICE-NET</strong>
-              Protected
+        <!-- Top 6 Metric Cards Row -->
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-2">
+          <!-- 1. Threat Level -->
+          <div class="cyber-card p-2 border-l-4 border-l-red-500 flex flex-col justify-between cursor-pointer" onclick="showScreen('threats')">
+            <div class="text-[8px] font-mono text-slate-400 uppercase">THREAT LEVEL</div>
+            <div class="text-base font-black text-red-500 glow-red" style="font-family: 'Orbitron', sans-serif;">HIGH</div>
+            <div class="flex space-x-0.5 mt-1">
+              <div class="h-1.5 flex-1 bg-red-500 rounded-sm"></div>
+              <div class="h-1.5 flex-1 bg-red-500 rounded-sm"></div>
+              <div class="h-1.5 flex-1 bg-red-500 rounded-sm"></div>
+              <div class="h-1.5 flex-1 bg-red-500 rounded-sm"></div>
+              <div class="h-1.5 flex-1 bg-red-500/30 rounded-sm"></div>
             </div>
           </div>
 
-          <!-- Bottom Live Traffic Waveform Strip inside Map -->
-          <div class="flex justify-between items-center z-10 pt-1 border-t border-[#112642]/60 font-mono text-[8px]">
-            <div class="flex items-center space-x-3">
-              <span class="text-slate-400 uppercase font-bold">LIVE TRAFFIC</span>
-              <!-- Mini Audio Waveform -->
-              <div class="flex items-center space-x-0.5 h-3">
-                <span class="w-0.5 bg-cyan-400 h-2 animate-pulse"></span>
-                <span class="w-0.5 bg-cyan-400 h-3 animate-pulse"></span>
-                <span class="w-0.5 bg-cyan-400 h-1.5"></span>
-                <span class="w-0.5 bg-cyan-400 h-3"></span>
-                <span class="w-0.5 bg-cyan-400 h-2"></span>
-              </div>
-              <span class="text-red-400">↑ 2.4 Gbps</span>
-              <span class="text-cyan-400">↓ 1.8 Gbps</span>
+          <!-- 2. Active Incidents -->
+          <div class="cyber-card p-2 flex flex-col justify-between cursor-pointer" onclick="showScreen('threats')">
+            <div class="text-[8px] font-mono text-slate-400 uppercase">ACTIVE INCIDENTS</div>
+            <div class="flex items-baseline space-x-1.5">
+              <span class="text-lg font-black text-slate-100" style="font-family: 'Orbitron', sans-serif;">03</span>
+              <span class="text-[8px] font-mono text-red-400 font-bold">↑ +2</span>
             </div>
-            <div class="text-slate-400">
-              Correlating <strong>9 telemetry streams</strong> in real-time
+            <div class="text-[7px] text-slate-400">Critical investigation</div>
+          </div>
+
+          <!-- 3. Monitored Assets -->
+          <div class="cyber-card p-2 flex flex-col justify-between cursor-pointer" onclick="showScreen('live-operations')">
+            <div class="text-[8px] font-mono text-slate-400 uppercase">MONITORED ASSETS</div>
+            <div class="flex items-baseline space-x-1.5">
+              <span class="text-lg font-black text-cyan-300" style="font-family: 'Orbitron', sans-serif;">127</span>
+              <span class="text-[8px] font-mono text-cyan-400 font-bold">↑ +12</span>
+            </div>
+            <div class="text-[7px] text-slate-400">Perimeter + Enclaves</div>
+          </div>
+
+          <!-- 4. Critical Assets -->
+          <div class="cyber-card p-2 flex flex-col justify-between cursor-pointer" onclick="showScreen('live-operations')">
+            <div class="text-[8px] font-mono text-slate-400 uppercase">CRITICAL ASSETS</div>
+            <div class="flex items-baseline space-x-1.5">
+              <span class="text-lg font-black text-red-400" style="font-family: 'Orbitron', sans-serif;">07</span>
+              <span class="text-[7px] font-mono text-red-400 font-bold">! 2 at risk</span>
+            </div>
+            <div class="text-[7px] text-slate-400">Customer DB & Vault</div>
+          </div>
+
+          <!-- 5. AI Confidence -->
+          <div class="cyber-card p-2 flex flex-col justify-between cursor-pointer" onclick="showScreen('threats')">
+            <div class="text-[8px] font-mono text-slate-400 uppercase">AI CONFIDENCE</div>
+            <div class="flex items-baseline space-x-1.5">
+              <span class="text-lg font-black text-emerald-400 glow-green" style="font-family: 'Orbitron', sans-serif;">94%</span>
+              <span class="text-[8px] font-mono text-emerald-400 font-bold">↑ +5%</span>
+            </div>
+            <div class="text-[7px] text-slate-400">Bayesian Corroboration</div>
+          </div>
+
+          <!-- 6. Global Threat Intel + Rotating Globe Icon -->
+          <div class="cyber-card p-2 flex items-center justify-between space-x-2 cursor-pointer" onclick="showScreen('research')">
+            <canvas id="globeCanvas" class="w-8 h-8 shrink-0"></canvas>
+            <div>
+              <div class="text-[7px] font-mono text-slate-400 leading-tight uppercase">GLOBAL THREAT INTEL</div>
+              <div class="text-xs font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">1,248,931</div>
+              <div class="text-[6px] text-slate-400 font-mono">Threats analyzed today</div>
             </div>
           </div>
         </div>
 
-        <!-- RIGHT METRIC STRIP (1 col: Top Threats + Attack Origins + Donut) -->
-        <div class="cyber-card p-3 flex flex-col justify-between space-y-2 text-[8px] font-mono">
+        <!-- Middle Row: Live Cyber Map + Top Threats / Origins / Severity -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-2.5">
           
-          <!-- TOP THREATS (24h) -->
+          <!-- LIVE CYBER MAP (3 cols) -->
+          <div class="lg:col-span-3 cyber-card p-3 relative flex flex-col justify-between overflow-hidden min-h-[260px]">
+            <div class="flex justify-between items-center z-10">
+              <div class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+                <span>LIVE CYBER MAP</span>
+              </div>
+              <div class="flex items-center space-x-3 font-mono text-[8px]">
+                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span><span>Incoming Attack</span></span>
+                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span><span>Suspicious Activity</span></span>
+                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-cyan-400"></span><span>Normal Traffic</span></span>
+                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Protected</span></span>
+              </div>
+            </div>
+
+            <!-- HTML5 Animated Cyber World Map Canvas -->
+            <div class="relative w-full h-48 my-1">
+              <canvas id="cyberMapCanvas" class="w-full h-full"></canvas>
+              
+              <!-- Floating Live Target Tags -->
+              <div class="absolute top-8 left-16 px-2 py-0.5 rounded bg-red-950/80 border border-red-500 text-[8px] font-mono text-red-300 pointer-events-none">
+                <strong class="block text-[7px] text-red-400 uppercase">ATTACK ORIGIN</strong>
+                185.220.101.3 (Unknown)
+              </div>
+              <div class="absolute top-20 left-1/3 px-2 py-0.5 rounded bg-amber-950/80 border border-amber-500 text-[8px] font-mono text-amber-300 pointer-events-none">
+                <strong class="block text-[7px] text-amber-400">SRV-02</strong>
+                Under Attack
+              </div>
+              <div class="absolute top-12 left-1/2 px-2 py-0.5 rounded bg-red-950/80 border border-red-500 text-[8px] font-mono text-red-300 pointer-events-none">
+                <strong class="block text-[7px] text-red-400">WEB-01</strong>
+                Compromised
+              </div>
+              <div class="absolute top-24 left-[58%] px-2 py-0.5 rounded bg-red-950/90 border border-red-500 text-[8px] font-mono text-red-200 pointer-events-none animate-pulse">
+                <strong class="block text-[7px] text-red-400">DB-01 🔴</strong>
+                Critical Asset
+              </div>
+              <div class="absolute top-14 right-12 px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500 text-[8px] font-mono text-emerald-300 pointer-events-none">
+                <strong class="block text-[7px] text-emerald-400">OFFICE-NET</strong>
+                Protected
+              </div>
+            </div>
+
+            <!-- Bottom Live Traffic Strip -->
+            <div class="flex justify-between items-center z-10 pt-1 border-t border-[#112642]/60 font-mono text-[8px]">
+              <div class="flex items-center space-x-3">
+                <span class="text-slate-400 uppercase font-bold">LIVE TRAFFIC</span>
+                <div class="flex items-center space-x-0.5 h-3">
+                  <span class="w-0.5 bg-cyan-400 h-2 animate-pulse"></span>
+                  <span class="w-0.5 bg-cyan-400 h-3 animate-pulse"></span>
+                  <span class="w-0.5 bg-cyan-400 h-1.5"></span>
+                  <span class="w-0.5 bg-cyan-400 h-3"></span>
+                  <span class="w-0.5 bg-cyan-400 h-2"></span>
+                </div>
+                <span class="text-red-400 font-bold">↑ 2.4 Gbps</span>
+                <span class="text-cyan-400 font-bold">↓ 1.8 Gbps</span>
+              </div>
+              <div class="text-slate-400">
+                Correlating <strong class="text-cyan-300">9 telemetry streams</strong> in real-time
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Metric Strip (Top Threats + Attack Origins + Donut) -->
+          <div class="cyber-card p-3 flex flex-col justify-between space-y-2 text-[8px] font-mono">
+            <div>
+              <div class="text-[9px] font-bold text-slate-200 mb-1" style="font-family: 'Orbitron', sans-serif;">TOP THREATS (24h)</div>
+              <div class="space-y-0.5 text-slate-300">
+                <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-red-950 text-red-400 text-[7px] flex items-center justify-center font-bold">1</span><span>Brute Force Attack</span></span><strong class="text-slate-200">24</strong></div>
+                <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-red-950 text-red-400 text-[7px] flex items-center justify-center font-bold">2</span><span>Malware Activity</span></span><strong class="text-slate-200">17</strong></div>
+                <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-amber-950 text-amber-400 text-[7px] flex items-center justify-center font-bold">3</span><span>Suspicious Login</span></span><strong class="text-slate-200">14</strong></div>
+                <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-slate-800 text-slate-400 text-[7px] flex items-center justify-center font-bold">4</span><span>Port Scan</span></span><strong class="text-slate-200">11</strong></div>
+                <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-slate-800 text-slate-400 text-[7px] flex items-center justify-center font-bold">5</span><span>Data Exfiltration</span></span><strong class="text-slate-200">9</strong></div>
+              </div>
+            </div>
+
+            <div class="border-t border-[#112642] pt-1">
+              <div class="text-[9px] font-bold text-slate-200 mb-1" style="font-family: 'Orbitron', sans-serif;">ATTACK ORIGINS</div>
+              <div class="space-y-0.5 text-slate-300">
+                <div class="flex justify-between"><span>🇷🇺 Russia</span><strong>28%</strong></div>
+                <div class="flex justify-between"><span>🇨🇳 China</span><strong>18%</strong></div>
+                <div class="flex justify-between"><span>🇺🇸 United States</span><strong>14%</strong></div>
+                <div class="flex justify-between"><span>🌐 Unknown</span><strong>22%</strong></div>
+                <div class="flex justify-between"><span>🏳️ Others</span><strong>18%</strong></div>
+              </div>
+            </div>
+
+            <div class="border-t border-[#112642] pt-1 flex items-center justify-between">
+              <div class="relative w-12 h-12">
+                <svg class="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="14" fill="none" stroke="#ff2a55" stroke-width="4" stroke-dasharray="28 72" stroke-dashoffset="0"/>
+                  <circle cx="18" cy="18" r="14" fill="none" stroke="#ffaa00" stroke-width="4" stroke-dasharray="38 62" stroke-dashoffset="-28"/>
+                  <circle cx="18" cy="18" r="14" fill="none" stroke="#0088ff" stroke-width="4" stroke-dasharray="22 78" stroke-dashoffset="-66"/>
+                  <circle cx="18" cy="18" r="14" fill="none" stroke="#00ff88" stroke-width="4" stroke-dasharray="12 88" stroke-dashoffset="-88"/>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-[7px] font-bold text-slate-200">
+                  <span>127</span>
+                  <span class="text-[5px] text-slate-400">Total</span>
+                </div>
+              </div>
+              <div class="space-y-0.5 text-[7px]">
+                <div class="flex items-center space-x-1"><span class="w-1.5 h-1.5 bg-red-500 rounded-sm"></span><span>Critical 12%</span></div>
+                <div class="flex items-center space-x-1"><span class="w-1.5 h-1.5 bg-amber-400 rounded-sm"></span><span>High 28%</span></div>
+                <div class="flex items-center space-x-1"><span class="w-1.5 h-1.5 bg-blue-500 rounded-sm"></span><span>Medium 38%</span></div>
+                <div class="flex items-center space-x-1"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-sm"></span><span>Low 22%</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Lower 4-Panel Matrix Row -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 font-mono text-[8px]">
+          
+          <!-- 1. ACTIVE INCIDENTS -->
+          <div class="cyber-card p-2.5 flex flex-col justify-between cursor-pointer" onclick="showScreen('threats')">
+            <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
+              <span class="text-[9px] font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">ACTIVE INCIDENTS</span>
+              <span class="text-[7px] text-cyan-400 hover:underline">View All ➔</span>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="p-1.5 bg-[#120408] border border-red-500/30 rounded">
+                <div class="flex justify-between items-center">
+                  <span class="text-red-400 font-bold">NX-2024-00127</span>
+                  <span class="px-1 py-0.2 bg-red-950 text-red-300 font-bold text-[6px] rounded">HIGH</span>
+                  <span class="text-slate-400 text-[7px]">22:14:31</span>
+                </div>
+                <div class="text-slate-200 text-[8px]">Credential Compromise</div>
+                <div class="text-amber-400 text-[7px]">Investigating</div>
+              </div>
+
+              <div class="p-1.5 bg-[#120e04] border border-amber-500/30 rounded">
+                <div class="flex justify-between items-center">
+                  <span class="text-amber-400 font-bold">NX-2024-00126</span>
+                  <span class="px-1 py-0.2 bg-amber-950 text-amber-300 font-bold text-[6px] rounded">MEDIUM</span>
+                  <span class="text-slate-400 text-[7px]">21:48:17</span>
+                </div>
+                <div class="text-slate-200 text-[8px]">Malware Activity</div>
+                <div class="text-cyan-400 text-[7px]">Analyzing</div>
+              </div>
+
+              <div class="p-1.5 bg-[#120e04] border border-amber-500/30 rounded">
+                <div class="flex justify-between items-center">
+                  <span class="text-amber-400 font-bold">NX-2024-00125</span>
+                  <span class="px-1 py-0.2 bg-amber-950 text-amber-300 font-bold text-[6px] rounded">MEDIUM</span>
+                  <span class="text-slate-400 text-[7px]">21:32:04</span>
+                </div>
+                <div class="text-slate-200 text-[8px]">Port Scanning</div>
+                <div class="text-amber-400 text-[7px]">Investigating</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. AI REASONING ("Why is this happening?") -->
+          <div class="cyber-card p-2.5 flex flex-col justify-between cursor-pointer" onclick="showScreen('threats')">
+            <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
+              <span class="text-[9px] font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">AI REASONING</span>
+              <span class="text-[7px] text-cyan-400 hover:underline">Why is this happening? ➔</span>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex items-center space-x-1"><span class="text-cyan-400">1</span><span>Abnormal login attempts detected</span><span class="ml-auto text-slate-500">22:14:31</span></div>
+              <div class="flex items-center space-x-1"><span class="text-cyan-400">2</span><span>Successful privileged login</span><span class="ml-auto text-slate-500">22:14:52</span></div>
+              <div class="flex items-center space-x-1"><span class="text-cyan-400">3</span><span>Unusual process execution</span><span class="ml-auto text-slate-500">21:15:17</span></div>
+              <div class="flex items-center space-x-1"><span class="text-red-400">4</span><span>Outbound network connection</span><span class="ml-auto text-slate-500">21:15:41</span></div>
+            </div>
+
+            <div class="p-1.5 bg-[#040c18] border border-cyan-500/20 rounded mt-1">
+              <div>Hypothesis: <strong class="text-red-400">Credential compromise</strong></div>
+              <div>Confidence: <strong class="text-emerald-400">94%</strong></div>
+              <div class="flex justify-between text-[7px] text-slate-400 mt-0.5">
+                <span>Supporting: 7 | Contradicting: 1</span>
+                <span class="text-cyan-400 hover:underline">View Details</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. ATTACK GRAPH -->
+          <div class="cyber-card p-2.5 flex flex-col justify-between cursor-pointer" onclick="showScreen('attack-graph')">
+            <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
+              <span class="text-[9px] font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">ATTACK GRAPH</span>
+              <span class="text-[7px] text-cyan-400 hover:underline">View Full Graph ➔</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-1 my-1">
+              <div class="px-2 py-0.5 bg-red-950 border border-red-500 text-red-300 rounded text-[7px]">Attacker (185.220.101.3)</div>
+              <span class="text-slate-500 leading-none">↓</span>
+              <div class="px-2 py-0.5 bg-red-950 border border-red-500 text-red-300 rounded text-[7px]">WEB-01 (Compromised)</div>
+              <span class="text-slate-500 leading-none">↓</span>
+              <div class="flex space-x-1">
+                <span class="px-1.5 py-0.2 bg-emerald-950 border border-emerald-500 text-emerald-300 rounded text-[6px]">User-023</span>
+                <span class="px-1.5 py-0.2 bg-blue-950 border border-blue-500 text-blue-300 rounded text-[6px]">API-01</span>
+              </div>
+              <span class="text-slate-500 leading-none">↓</span>
+              <div class="px-2 py-0.5 bg-amber-950 border border-amber-500 text-amber-300 rounded text-[7px]">SRV-02 (Privilege Escalation)</div>
+              <span class="text-slate-500 leading-none">↓</span>
+              <div class="px-2 py-0.5 bg-red-950 border-2 border-red-500 text-red-200 rounded text-[7px] font-bold animate-pulse">DB-01 (Critical Asset)</div>
+            </div>
+          </div>
+
+          <!-- 4. DIGITAL TWIN SIMULATION -->
+          <div class="cyber-card p-2.5 flex flex-col justify-between cursor-pointer" onclick="showScreen('digital-twin')">
+            <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
+              <span class="text-[9px] font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">DIGITAL TWIN</span>
+              <span class="px-1.5 py-0.2 bg-purple-900 hover:bg-purple-800 text-purple-200 rounded text-[7px] font-bold">SANDBOX</span>
+            </div>
+
+            <div class="p-1 bg-[#040814] border border-purple-500/20 rounded flex flex-col items-center space-y-1">
+              <div class="px-2 py-0.5 bg-[#09152a] text-cyan-300 rounded text-[7px]">Internet (185.220.101.3)</div>
+              <span class="text-slate-600 leading-none">↓</span>
+              <div class="px-2 py-0.5 bg-[#09152a] text-amber-300 rounded text-[7px]">Firewall (Edge Rule)</div>
+              <span class="text-slate-600 leading-none">↓</span>
+              <div class="grid grid-cols-3 gap-1 w-full text-center text-[6px]">
+                <span class="p-0.5 bg-red-950/80 border border-red-500/40 rounded text-red-200">WEB-01</span>
+                <span class="p-0.5 bg-cyan-950 rounded text-cyan-200">API-01</span>
+                <span class="p-0.5 bg-cyan-950 rounded text-cyan-200">MAIL-01</span>
+              </div>
+              <span class="text-slate-600 leading-none">↓</span>
+              <div class="px-2 py-0.5 bg-red-950 border border-red-500 text-red-200 rounded text-[7px] font-bold">DB-01 (Internal Network)</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Row: Red vs Blue AI + Operation Timeline -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 font-mono text-[8px]">
+          
+          <!-- RED vs BLUE AI ADVERSARIAL SIMULATION -->
+          <div class="cyber-card p-2.5 flex flex-col justify-between cursor-pointer" onclick="showScreen('red-blue')">
+            <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
+              <span class="text-[9px] font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">RED vs BLUE AI</span>
+              <span class="text-purple-400">Adversarial Simulation</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 my-1">
+              <div class="p-1.5 bg-[#140408] border border-red-500/30 rounded">
+                <div class="flex items-center space-x-1 text-red-400 font-bold"><span>🔴</span><span>RED AGENT</span></div>
+                <div class="text-slate-400 text-[7px]">Objective: Reach critical asset</div>
+                <div class="text-slate-300">Success Probability: <strong class="text-red-400">67%</strong></div>
+                <div class="text-amber-400 text-[7px]">State: PLANNING</div>
+                <span class="text-cyan-400 text-[6px] underline mt-0.5 block">Launch Strategy ➔</span>
+              </div>
+
+              <div class="p-1.5 bg-[#041220] border border-blue-500/30 rounded">
+                <div class="flex items-center space-x-1 text-blue-400 font-bold"><span>🔵</span><span>BLUE AGENT</span></div>
+                <div class="text-slate-400 text-[7px]">Objective: Protect critical asset</div>
+                <div class="text-slate-300">Protection Probability: <strong class="text-emerald-400">81%</strong></div>
+                <div class="text-emerald-400 text-[7px]">State: DEFENDING</div>
+                <span class="text-cyan-400 text-[6px] underline mt-0.5 block">View Countermeasures ➔</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPERATION TIMELINE -->
+          <div class="cyber-card p-2.5 flex flex-col justify-between">
+            <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
+              <span class="text-[9px] font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">OPERATION TIMELINE</span>
+              <span class="text-cyan-400 cursor-pointer hover:underline" onclick="showScreen('reports')">View Full Timeline ➔</span>
+            </div>
+
+            <div class="flex items-center justify-between px-2 my-2 text-[7px] text-slate-400 relative">
+              <div class="absolute left-3 right-3 top-1.5 h-0.5 bg-slate-700 -z-0"></div>
+              
+              <div class="flex flex-col items-center z-10"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-cyan mb-1"></span><span>Detection</span><span class="text-slate-500">22:14</span></div>
+              <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-cyan-400 mb-1"></span><span>Reasoning</span><span class="text-slate-500">22:15</span></div>
+              <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-cyan-400 mb-1"></span><span>Research</span><span class="text-slate-500">22:16</span></div>
+              <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-cyan-400 mb-1"></span><span>Simulation</span><span class="text-slate-500">22:18</span></div>
+              <div class="flex flex-col items-center z-10"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-amber mb-1 animate-ping"></span><span>Approval</span><span class="text-amber-400 font-bold">22:20</span></div>
+              <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-slate-600 mb-1"></span><span>Execution</span><span class="text-slate-500">22:20</span></div>
+              <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-slate-600 mb-1"></span><span>Verification</span><span class="text-slate-500">22:22</span></div>
+              <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-red-500 mb-1"></span><span>Report</span><span class="text-slate-500">22:22</span></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 2: LIVE OPERATIONS                                            -->
+      <!-- ==================================================================== -->
+      <div id="screen-live-operations" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
           <div>
-            <div class="orbitron text-[9px] font-bold text-slate-200 mb-1">TOP THREATS (24h)</div>
-            <div class="space-y-0.5 text-slate-300">
-              <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-red-950 text-red-400 text-[7px] flex items-center justify-center font-bold">1</span><span>Brute Force Attack</span></span><strong class="text-slate-200">24</strong></div>
-              <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-red-950 text-red-400 text-[7px] flex items-center justify-center font-bold">2</span><span>Malware Activity</span></span><strong class="text-slate-200">17</strong></div>
-              <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-amber-950 text-amber-400 text-[7px] flex items-center justify-center font-bold">3</span><span>Suspicious Login</span></span><strong class="text-slate-200">14</strong></div>
-              <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-slate-800 text-slate-400 text-[7px] flex items-center justify-center font-bold">4</span><span>Port Scan</span></span><strong class="text-slate-200">11</strong></div>
-              <div class="flex justify-between items-center"><span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-slate-800 text-slate-400 text-[7px] flex items-center justify-center font-bold">5</span><span>Data Exfiltration</span></span><strong class="text-slate-200">9</strong></div>
-            </div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-cyan-400">🛡️</span><span>LIVE OPERATIONS & TELEMETRY</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Streaming 9 Telemetry Sensors Across 127 Monitored Enterprise Endpoints</div>
           </div>
-
-          <!-- ATTACK ORIGINS -->
-          <div class="border-t border-[#112642] pt-1">
-            <div class="orbitron text-[9px] font-bold text-slate-200 mb-1">ATTACK ORIGINS</div>
-            <div class="space-y-0.5 text-slate-300">
-              <div class="flex justify-between"><span>🇷🇺 Russia</span><strong>28%</strong></div>
-              <div class="flex justify-between"><span>🇨🇳 China</span><strong>18%</strong></div>
-              <div class="flex justify-between"><span>🇺🇸 United States</span><strong>14%</strong></div>
-              <div class="flex justify-between"><span>🌐 Unknown</span><strong>22%</strong></div>
-              <div class="flex justify-between"><span>🏳️ Others</span><strong>18%</strong></div>
-            </div>
+          <div class="flex space-x-2">
+            <span class="px-2 py-1 bg-emerald-950 border border-emerald-500 text-emerald-300 rounded text-[8px] flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span><span>ALL SENSORS LIVE</span>
+            </span>
+            <button onclick="alert('Triggering full network sync probe...')" class="px-2.5 py-1 bg-cyan-700 hover:bg-cyan-600 text-slate-950 font-bold rounded text-[8px]">PROBE ALL</button>
           </div>
-
-          <!-- SEVERITY DISTRIBUTION DONUT -->
-          <div class="border-t border-[#112642] pt-1 flex items-center justify-between">
-            <div class="relative w-12 h-12">
-              <!-- SVG Donut -->
-              <svg class="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
-                <circle cx="18" cy="18" r="14" fill="none" stroke="#ff2a55" stroke-width="4" stroke-dasharray="28 72" stroke-dashoffset="0"/>
-                <circle cx="18" cy="18" r="14" fill="none" stroke="#ffaa00" stroke-width="4" stroke-dasharray="38 62" stroke-dashoffset="-28"/>
-                <circle cx="18" cy="18" r="14" fill="none" stroke="#0088ff" stroke-width="4" stroke-dasharray="22 78" stroke-dashoffset="-66"/>
-                <circle cx="18" cy="18" r="14" fill="none" stroke="#00ff88" stroke-width="4" stroke-dasharray="12 88" stroke-dashoffset="-88"/>
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center text-[7px] font-bold text-slate-200">
-                <span>127</span>
-                <span class="text-[5px] text-slate-400">Total</span>
-              </div>
-            </div>
-            <div class="space-y-0.5 text-[7px]">
-              <div class="flex items-center space-x-1"><span class="w-1.5 h-1.5 bg-red-500 rounded-sm"></span><span>Critical 12%</span></div>
-              <div class="flex items-center space-x-1"><span class="w-1.5 h-1.5 bg-amber-400 rounded-sm"></span><span>High 28%</span></div>
-              <div class="flex items-center space-x-1"><span class="w-1.5 h-1.5 bg-blue-500 rounded-sm"></span><span>Medium 38%</span></div>
-              <div class="flex items-center space-x-1"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-sm"></span><span>Low 22%</span></div>
-            </div>
-          </div>
-
         </div>
 
+        <!-- Telemetry Streams Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+          <div class="cyber-card p-2.5">
+            <div class="flex justify-between text-[8px] text-slate-400 border-b border-[#112642] pb-1 mb-1.5">
+              <span>ENDPOINT EDR (CROWDSTRIKE/FALCON)</span>
+              <span class="text-emerald-400">127 / 127 HEALTHY</span>
+            </div>
+            <div class="space-y-1 text-[8px]">
+              <div class="flex justify-between text-red-300 bg-red-950/40 p-1 rounded"><span>WEB-01 (10.0.4.50)</span><span class="font-bold">LSASS DUMP ATTEMPT</span></div>
+              <div class="flex justify-between text-amber-300 bg-amber-950/40 p-1 rounded"><span>SRV-02 (10.0.4.52)</span><span>Unusual PowerShell -Enc</span></div>
+              <div class="flex justify-between text-slate-300 p-1"><span>DC-01 (10.0.1.10)</span><span class="text-emerald-400">Kerberos Ticket OK</span></div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-2.5">
+            <div class="flex justify-between text-[8px] text-slate-400 border-b border-[#112642] pb-1 mb-1.5">
+              <span>NETWORK & FLOW TELEMETRY (ZEEK/SURICATA)</span>
+              <span class="text-cyan-400">2.4 Gbps PEAK</span>
+            </div>
+            <div class="space-y-1 text-[8px]">
+              <div class="flex justify-between text-red-300 bg-red-950/40 p-1 rounded"><span>185.220.101.3 ➔ 10.0.4.50:443</span><span class="font-bold">CVE-2024-3400 PAYLOAD</span></div>
+              <div class="flex justify-between text-slate-300 p-1"><span>10.0.4.50 ➔ 10.0.4.51:5432</span><span class="text-amber-400">DB Lateral Query</span></div>
+              <div class="flex justify-between text-slate-300 p-1"><span>10.0.2.14 ➔ 8.8.8.8:53</span><span class="text-emerald-400">Normal DNS</span></div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-2.5">
+            <div class="flex justify-between text-[8px] text-slate-400 border-b border-[#112642] pb-1 mb-1.5">
+              <span>AUTHENTICATION & IDENTITY (OKTA/AD)</span>
+              <span class="text-amber-400">3 SUSPICIOUS</span>
+            </div>
+            <div class="space-y-1 text-[8px]">
+              <div class="flex justify-between text-red-300 bg-red-950/40 p-1 rounded"><span>admin_svc (Tor Exit 185.220.101.3)</span><span class="font-bold">47 FAILED ➔ SUCCESS</span></div>
+              <div class="flex justify-between text-slate-300 p-1"><span>j.doe@corp.nexus</span><span class="text-emerald-400">FIDO2 MFA OK</span></div>
+              <div class="flex justify-between text-slate-300 p-1"><span>deploy_bot</span><span class="text-emerald-400">mTLS Handshake OK</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Asset Inventory Table -->
+        <div class="cyber-card p-3">
+          <div class="flex justify-between items-center mb-2 border-b border-[#112642] pb-2">
+            <span class="text-[10px] font-bold text-slate-100" style="font-family: 'Orbitron', sans-serif;">ASSET INVENTORY & REAL-TIME STATUS</span>
+            <input type="text" placeholder="Filter by host, IP, or role..." class="bg-[#040a14] border border-[#112642] rounded px-2 py-0.5 text-[8px] text-slate-200">
+          </div>
+          <table class="w-full text-left text-[8px]">
+            <thead class="text-slate-500 border-b border-[#112642]/60">
+              <tr>
+                <th class="py-1">HOST NAME</th>
+                <th>IP ADDRESS</th>
+                <th>ROLE / ENCLAVE</th>
+                <th>RISK SCORE</th>
+                <th>ACTIVE STATUS</th>
+                <th>CONTAINMENT</th>
+                <th class="text-right">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#112642]/30 text-slate-300">
+              <tr class="bg-red-950/20">
+                <td class="py-1.5 font-bold text-red-400">WEB-01</td>
+                <td>10.0.4.50</td>
+                <td>Public Web Perimeter</td>
+                <td><span class="px-1.5 py-0.2 bg-red-950 text-red-300 border border-red-500 rounded font-bold">94 / 100 CRITICAL</span></td>
+                <td class="text-red-400 font-bold">COMPROMISED (APT-41)</td>
+                <td><span class="text-amber-400">Pending Approval</span></td>
+                <td class="text-right"><button onclick="copilotPrompt('Defend - Isolate WEB-01')" class="px-2 py-0.5 bg-red-700 hover:bg-red-600 text-slate-100 rounded">ISOLATE HOST</button></td>
+              </tr>
+              <tr class="bg-amber-950/20">
+                <td class="py-1.5 font-bold text-amber-400">SRV-02</td>
+                <td>10.0.4.52</td>
+                <td>Application Processing</td>
+                <td><span class="px-1.5 py-0.2 bg-amber-950 text-amber-300 border border-amber-500 rounded font-bold">68 / 100 HIGH</span></td>
+                <td class="text-amber-400">Suspicious Token Replay</td>
+                <td><span class="text-slate-400">Monitored</span></td>
+                <td class="text-right"><button onclick="copilotPrompt('Investigate SRV-02')" class="px-2 py-0.5 bg-amber-700 hover:bg-amber-600 text-slate-100 rounded">DEEP SCAN</button></td>
+              </tr>
+              <tr class="bg-red-950/10">
+                <td class="py-1.5 font-bold text-red-300">DB-01 🔴</td>
+                <td>10.0.4.51</td>
+                <td>Core Customer Database</td>
+                <td><span class="px-1.5 py-0.2 bg-red-950 text-red-300 border border-red-500 rounded font-bold">89 / 100 HIGH RISK</span></td>
+                <td class="text-red-300">Target of Lateral Hop</td>
+                <td><span class="text-emerald-400">Shield Engaged</span></td>
+                <td class="text-right"><button onclick="alert('DB-01 Vault Protection Locked')" class="px-2 py-0.5 bg-blue-800 hover:bg-blue-700 text-slate-100 rounded">LOCKDOWN</button></td>
+              </tr>
+              <tr>
+                <td class="py-1.5 font-bold text-slate-200">DC-01</td>
+                <td>10.0.1.10</td>
+                <td>Primary Domain Controller</td>
+                <td><span class="px-1.5 py-0.2 bg-emerald-950 text-emerald-300 border border-emerald-500 rounded">12 / 100 LOW</span></td>
+                <td class="text-emerald-400">HEALTHY</td>
+                <td><span class="text-slate-400">Normal</span></td>
+                <td class="text-right"><button onclick="alert('DC-01 Audited: No Golden Ticket present')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded">AUDIT</button></td>
+              </tr>
+              <tr>
+                <td class="py-1.5 font-bold text-slate-200">API-01</td>
+                <td>10.0.3.15</td>
+                <td>Customer REST Gateway</td>
+                <td><span class="px-1.5 py-0.2 bg-emerald-950 text-emerald-300 border border-emerald-500 rounded">18 / 100 LOW</span></td>
+                <td class="text-emerald-400">HEALTHY</td>
+                <td><span class="text-slate-400">Normal</span></td>
+                <td class="text-right"><button class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded">AUDIT</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <!-- LOWER 4-PANEL MATRIX ROW (ACTIVE INCIDENTS + AI REASONING + ATTACK GRAPH + DIGITAL TWIN) -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 font-mono text-[8px]">
-        
-        <!-- 1. ACTIVE INCIDENTS -->
-        <div class="cyber-card p-2.5 flex flex-col justify-between">
-          <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
-            <span class="orbitron text-[9px] font-bold text-slate-100">ACTIVE INCIDENTS</span>
-            <span class="text-[7px] text-cyan-400 cursor-pointer hover:underline">View All ➔</span>
+      <!-- ==================================================================== -->
+      <!-- SCREEN 3: THREATS (INCIDENTS & CAUSAL REASONING)                     -->
+      <!-- ==================================================================== -->
+      <div id="screen-threats" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3 border-l-4 border-l-red-500">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold text-red-400" style="font-family: 'Orbitron', sans-serif;">INCIDENT #NX-2024-00127: APT-41 MULTI-STAGE INTRUSION</span>
+              <span class="px-2 py-0.2 bg-red-950 text-red-300 font-bold border border-red-500 rounded text-[7px]">CRITICAL SEVERITY</span>
+            </div>
+            <div class="text-[8px] text-slate-400 mt-0.5">First Detected: 22:14:31 | Target: Core Database (10.0.4.51) | Origin: 185.220.101.3</div>
           </div>
-
-          <div class="space-y-1.5">
-            <!-- Inc 1 -->
-            <div class="p-1.5 bg-[#120408] border border-red-500/30 rounded">
-              <div class="flex justify-between items-center">
-                <span class="text-red-400 font-bold">NX-2024-00127</span>
-                <span class="px-1 py-0.2 bg-red-950 text-red-300 font-bold text-[6px] rounded">HIGH</span>
-                <span class="text-slate-400 text-[7px]">22:14:31</span>
-              </div>
-              <div class="text-slate-200 text-[8px]">Credential Compromise</div>
-              <div class="text-amber-400 text-[7px]">Investigating</div>
-            </div>
-
-            <!-- Inc 2 -->
-            <div class="p-1.5 bg-[#120e04] border border-amber-500/30 rounded">
-              <div class="flex justify-between items-center">
-                <span class="text-amber-400 font-bold">NX-2024-00126</span>
-                <span class="px-1 py-0.2 bg-amber-950 text-amber-300 font-bold text-[6px] rounded">MEDIUM</span>
-                <span class="text-slate-400 text-[7px]">21:48:17</span>
-              </div>
-              <div class="text-slate-200 text-[8px]">Malware Activity</div>
-              <div class="text-cyan-400 text-[7px]">Analyzing</div>
-            </div>
-
-            <!-- Inc 3 -->
-            <div class="p-1.5 bg-[#120e04] border border-amber-500/30 rounded">
-              <div class="flex justify-between items-center">
-                <span class="text-amber-400 font-bold">NX-2024-00125</span>
-                <span class="px-1 py-0.2 bg-amber-950 text-amber-300 font-bold text-[6px] rounded">MEDIUM</span>
-                <span class="text-slate-400 text-[7px]">21:32:04</span>
-              </div>
-              <div class="text-slate-200 text-[8px]">Port Scanning</div>
-              <div class="text-amber-400 text-[7px]">Investigating</div>
-            </div>
-          </div>
+          <button onclick="showScreen('policy')" class="px-3 py-1 bg-red-600 hover:bg-red-500 text-slate-950 font-bold rounded text-[9px] orbitron">AUTHORIZE REMEDIATION</button>
         </div>
 
-        <!-- 2. AI REASONING ("Why is this happening?") -->
-        <div class="cyber-card p-2.5 flex flex-col justify-between">
-          <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
-            <span class="orbitron text-[9px] font-bold text-slate-100">AI REASONING</span>
-            <span class="text-[7px] text-cyan-400 cursor-pointer hover:underline">Why is this happening? ➔</span>
-          </div>
-
-          <div class="space-y-1">
-            <div class="flex items-center space-x-1"><span class="text-cyan-400">1</span><span>Abnormal login attempts detected</span><span class="ml-auto text-slate-500">22:14:31</span></div>
-            <div class="flex items-center space-x-1"><span class="text-cyan-400">2</span><span>Successful privileged login</span><span class="ml-auto text-slate-500">22:14:52</span></div>
-            <div class="flex items-center space-x-1"><span class="text-cyan-400">3</span><span>Unusual process execution</span><span class="ml-auto text-slate-500">21:15:17</span></div>
-            <div class="flex items-center space-x-1"><span class="text-red-400">4</span><span>Outbound network connection</span><span class="ml-auto text-slate-500">21:15:41</span></div>
-          </div>
-
-          <div class="p-1.5 bg-[#040c18] border border-cyan-500/20 rounded mt-1">
-            <div>Hypothesis: <strong class="text-red-400">Credential compromise</strong></div>
-            <div>Confidence: <strong class="text-emerald-400">94%</strong></div>
-            <div class="flex justify-between text-[7px] text-slate-400 mt-0.5">
-              <span>Supporting: 7 | Contradicting: 1</span>
-              <button onclick="setPipelineStep(2)" class="text-cyan-400 hover:underline">View Details</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. ATTACK GRAPH -->
-        <div class="cyber-card p-2.5 flex flex-col justify-between">
-          <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
-            <span class="orbitron text-[9px] font-bold text-slate-100">ATTACK GRAPH</span>
-            <span class="text-[7px] text-cyan-400 cursor-pointer hover:underline">View Full Graph ➔</span>
-          </div>
-
-          <!-- Vertical Node Chain Graphic -->
-          <div class="flex flex-col items-center space-y-1 my-1">
-            <div class="px-2 py-0.5 bg-red-950 border border-red-500 text-red-300 rounded text-[7px]">Attacker (185.220.101.3)</div>
-            <span class="text-slate-500 leading-none">↓</span>
-            <div class="px-2 py-0.5 bg-red-950 border border-red-500 text-red-300 rounded text-[7px]">WEB-01 (Compromised)</div>
-            <span class="text-slate-500 leading-none">↓</span>
-            <div class="flex space-x-1">
-              <span class="px-1.5 py-0.2 bg-emerald-950 border border-emerald-500 text-emerald-300 rounded text-[6px]">User-023</span>
-              <span class="px-1.5 py-0.2 bg-blue-950 border border-blue-500 text-blue-300 rounded text-[6px]">API-01</span>
-            </div>
-            <span class="text-slate-500 leading-none">↓</span>
-            <div class="px-2 py-0.5 bg-amber-950 border border-amber-500 text-amber-300 rounded text-[7px]">SRV-02 (Privilege Escalation)</div>
-            <span class="text-slate-500 leading-none">↓</span>
-            <div class="px-2 py-0.5 bg-red-950 border-2 border-red-500 text-red-200 rounded text-[7px] font-bold animate-pulse">DB-01 (Critical Asset)</div>
-          </div>
-        </div>
-
-        <!-- 4. DIGITAL TWIN SIMULATION -->
-        <div class="cyber-card p-2.5 flex flex-col justify-between">
-          <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
-            <span class="orbitron text-[9px] font-bold text-slate-100">DIGITAL TWIN</span>
-            <button onclick="triggerDigitalTwinSim()" class="px-1.5 py-0.2 bg-purple-900 hover:bg-purple-800 text-purple-200 rounded text-[7px] font-bold">RUN SIMULATION</button>
-          </div>
-
-          <div class="p-1 bg-[#040814] border border-purple-500/20 rounded flex flex-col items-center space-y-1">
-            <div class="px-2 py-0.5 bg-[#09152a] text-cyan-300 rounded text-[7px]">Internet</div>
-            <span class="text-slate-600 leading-none">↓</span>
-            <div class="px-2 py-0.5 bg-[#09152a] text-amber-300 rounded text-[7px]">Firewall</div>
-            <span class="text-slate-600 leading-none">↓</span>
-            <div class="grid grid-cols-3 gap-1 w-full text-center text-[6px]">
-              <span class="p-0.5 bg-cyan-950 rounded text-cyan-200">WEB-01</span>
-              <span class="p-0.5 bg-cyan-950 rounded text-cyan-200">API-01</span>
-              <span class="p-0.5 bg-cyan-950 rounded text-cyan-200">MAIL-01</span>
-            </div>
-            <span class="text-slate-600 leading-none">↓</span>
-            <div class="px-2 py-0.5 bg-red-950 border border-red-500 text-red-200 rounded text-[7px] font-bold">DB-01 (Internal Network)</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- BOTTOM ROW: RED vs BLUE AI + OPERATION TIMELINE -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 font-mono text-[8px]">
-        
-        <!-- RED vs BLUE AI ADVERSARIAL SIMULATION -->
-        <div class="cyber-card p-2.5 flex flex-col justify-between">
-          <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
-            <span class="orbitron text-[9px] font-bold text-slate-100">RED vs BLUE AI</span>
-            <span class="text-purple-400">Adversarial Simulation</span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2 my-1">
-            <div class="p-1.5 bg-[#140408] border border-red-500/30 rounded">
-              <div class="flex items-center space-x-1 text-red-400 font-bold"><span>🔴</span><span>RED AGENT</span></div>
-              <div class="text-slate-400 text-[7px]">Objective: Reach critical asset</div>
-              <div class="text-slate-300">Success Probability: <strong class="text-red-400">67%</strong></div>
-              <div class="text-amber-400 text-[7px]">State: PLANNING</div>
-              <button onclick="alert('Viewing Red Agent Attack Matrix')" class="text-cyan-400 text-[6px] underline mt-0.5">View Strategy</button>
-            </div>
-
-            <div class="p-1.5 bg-[#041220] border border-blue-500/30 rounded">
-              <div class="flex items-center space-x-1 text-blue-400 font-bold"><span>🔵</span><span>BLUE AGENT</span></div>
-              <div class="text-slate-400 text-[7px]">Objective: Protect critical asset</div>
-              <div class="text-slate-300">Protection Probability: <strong class="text-emerald-400">81%</strong></div>
-              <div class="text-emerald-400 text-[7px]">State: DEFENDING</div>
-              <button onclick="alert('Viewing Blue Agent Defense Matrix')" class="text-cyan-400 text-[6px] underline mt-0.5">View Strategy</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- OPERATION TIMELINE -->
-        <div class="cyber-card p-2.5 flex flex-col justify-between">
-          <div class="flex justify-between items-center border-b border-[#112642] pb-1 mb-1">
-            <span class="orbitron text-[9px] font-bold text-slate-100">OPERATION TIMELINE</span>
-            <span class="text-cyan-400 cursor-pointer hover:underline">View Full Timeline ➔</span>
-          </div>
-
-          <div class="flex items-center justify-between px-2 my-2 text-[7px] text-slate-400 relative">
-            <div class="absolute left-3 right-3 top-1.5 h-0.5 bg-slate-700 -z-0"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+          <!-- Causal Hypothesis -->
+          <div class="cyber-card p-3 space-y-2">
+            <div class="text-[9px] font-bold text-slate-100 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">AI CAUSAL HYPOTHESES</div>
             
-            <div class="flex flex-col items-center z-10"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-cyan mb-1"></span><span>Detection</span><span class="text-slate-500">22:14</span></div>
-            <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-cyan-400 mb-1"></span><span>Reasoning</span><span class="text-slate-500">22:15</span></div>
-            <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-cyan-400 mb-1"></span><span>Research</span><span class="text-slate-500">22:16</span></div>
-            <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-cyan-400 mb-1"></span><span>Simulation</span><span class="text-slate-500">22:18</span></div>
-            <div class="flex flex-col items-center z-10"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-amber mb-1 animate-ping"></span><span>Approval</span><span class="text-amber-400 font-bold">22:20</span></div>
-            <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-slate-600 mb-1"></span><span>Execution</span><span class="text-slate-500">22:20</span></div>
-            <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-slate-600 mb-1"></span><span>Verification</span><span class="text-slate-500">22:22</span></div>
-            <div class="flex flex-col items-center z-10"><span class="w-2 h-2 rounded-full bg-red-500 mb-1"></span><span>Report</span><span class="text-slate-500">22:22</span></div>
+            <div class="p-2 bg-[#120408] border border-red-500/40 rounded">
+              <div class="flex justify-between text-[8px]">
+                <strong class="text-red-400">1. Credential Compromise & Pass-the-Hash</strong>
+                <span class="text-emerald-400 font-bold">94% CONFIDENCE</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded mt-1 overflow-hidden">
+                <div class="bg-red-500 h-full" style="width: 94%"></div>
+              </div>
+              <div class="text-[7px] text-slate-400 mt-1">23 Corroborating events across 9 telemetry streams.</div>
+            </div>
+
+            <div class="p-2 bg-[#0a0f1d] border border-[#112642] rounded">
+              <div class="flex justify-between text-[8px]">
+                <strong class="text-amber-300">2. Insider Threat Recon</strong>
+                <span class="text-slate-400">57% CONFIDENCE</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded mt-1 overflow-hidden">
+                <div class="bg-amber-500 h-full" style="width: 57%"></div>
+              </div>
+              <div class="text-[7px] text-slate-500 mt-1">4 Contradicting indicators (External ASN geolocation).</div>
+            </div>
+
+            <div class="p-2 bg-[#0a0f1d] border border-[#112642] rounded">
+              <div class="flex justify-between text-[8px]">
+                <strong class="text-slate-300">3. Admin Misconfiguration</strong>
+                <span class="text-slate-400">18% CONFIDENCE</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded mt-1 overflow-hidden">
+                <div class="bg-blue-500 h-full" style="width: 18%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Why is this happening? Causal Chain -->
+          <div class="cyber-card p-3 space-y-2 md:col-span-2">
+            <div class="text-[9px] font-bold text-slate-100 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">STEP-BY-STEP RECONSTRUCTION (WHY IS THIS HAPPENING?)</div>
+            
+            <div class="space-y-2">
+              <div class="flex items-start space-x-2 p-1.5 bg-[#081222] rounded border border-cyan-800/30">
+                <span class="w-4 h-4 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-500 flex items-center justify-center font-bold text-[8px]">1</span>
+                <div class="flex-1">
+                  <div class="flex justify-between text-slate-200"><strong>Initial Recon & Password Spray</strong><span class="text-slate-500">22:14:31</span></div>
+                  <div class="text-slate-400 text-[8px]">Adversary routed through Tor Node 185.220.101.3 attempting 47 logins against service account `admin_svc`.</div>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-2 p-1.5 bg-[#081222] rounded border border-cyan-800/30">
+                <span class="w-4 h-4 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-500 flex items-center justify-center font-bold text-[8px]">2</span>
+                <div class="flex-1">
+                  <div class="flex justify-between text-slate-200"><strong>Exploitation of CVE-2024-3400 (Palo Alto GlobalProtect RCE)</strong><span class="text-slate-500">22:14:52</span></div>
+                  <div class="text-slate-400 text-[8px]">Unauthenticated remote code execution payload delivered to Edge Gateway on WEB-01.</div>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-2 p-1.5 bg-[#14060c] rounded border border-red-800/30">
+                <span class="w-4 h-4 rounded-full bg-red-950 text-red-400 border border-red-500 flex items-center justify-center font-bold text-[8px]">3</span>
+                <div class="flex-1">
+                  <div class="flex justify-between text-red-300"><strong>In-Memory Credential Dumping (LSASS)</strong><span class="text-slate-500">22:15:17</span></div>
+                  <div class="text-slate-400 text-[8px]">Process `svchost.exe` executed unmanaged reflective DLL injection extracting NTLM hashes.</div>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-2 p-1.5 bg-[#14060c] rounded border border-red-800/30">
+                <span class="w-4 h-4 rounded-full bg-red-950 text-red-400 border border-red-500 flex items-center justify-center font-bold text-[8px]">4</span>
+                <div class="flex-1">
+                  <div class="flex justify-between text-red-300"><strong>Lateral Replay to Customer Database (DB-01 🔴)</strong><span class="text-slate-500">22:15:41</span></div>
+                  <div class="text-slate-400 text-[8px]">Pass-the-Hash token injected into PostgreSQL admin session on internal subnet 10.0.4.51.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 4: ATTACK GRAPH                                               -->
+      <!-- ==================================================================== -->
+      <div id="screen-attack-graph" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
+          <div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-purple-400">🕸️</span><span>MULTI-HOP ATTACK GRAPH NAVIGATOR</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Shortest Path Analysis, Choke Point Identification & Blast Radius Simulation</div>
+          </div>
+          <div class="flex space-x-2">
+            <button onclick="alert('Recalculating Minimum Cut Choke Points...')" class="px-2.5 py-1 bg-purple-900 hover:bg-purple-800 text-purple-200 rounded text-[8px]">FIND CHOKE POINTS</button>
+            <button onclick="showScreen('digital-twin')" class="px-2.5 py-1 bg-cyan-700 hover:bg-cyan-600 text-slate-950 font-bold rounded text-[8px]">SIMULATE IN TWIN</button>
           </div>
         </div>
 
+        <!-- Attack Graph Interactive Visualizer -->
+        <div class="cyber-card p-4 min-h-[360px] flex flex-col justify-between">
+          <div class="flex justify-between items-center text-[8px] text-slate-400 border-b border-[#112642] pb-2">
+            <span>GRAPH TOPOLOGY: 185.220.101.3 ➔ WEB-01 ➔ SRV-02 ➔ DB-01</span>
+            <span class="text-emerald-400 font-bold">OPTIMAL CHOKE: ENABLE CREDENTIAL GUARD ON WEB-01</span>
+          </div>
+
+          <!-- Graph Nodes Layout -->
+          <div class="flex flex-wrap items-center justify-around py-8 gap-4">
+            
+            <!-- Node 1: Attacker -->
+            <div class="p-3 bg-red-950/80 border-2 border-red-500 rounded-lg text-center w-40">
+              <div class="text-red-400 font-bold text-[9px]">ATTACKER</div>
+              <div class="text-slate-300 text-[8px]">185.220.101.3</div>
+              <div class="text-red-300 text-[7px] mt-1">Tor Exit Node</div>
+              <div class="text-[7px] text-slate-400 mt-0.5">Initial Hop (External)</div>
+            </div>
+
+            <div class="text-red-400 font-bold text-lg animate-pulse">➔ ➔ ➔</div>
+
+            <!-- Node 2: WEB-01 -->
+            <div class="p-3 bg-red-950/80 border-2 border-red-500 rounded-lg text-center w-44">
+              <div class="flex justify-center items-center space-x-1">
+                <span class="text-red-400 font-bold text-[9px]">WEB-01</span>
+                <span class="px-1 bg-red-800 text-slate-100 text-[6px] rounded">COMPROMISED</span>
+              </div>
+              <div class="text-slate-300 text-[8px]">10.0.4.50:443</div>
+              <div class="text-red-300 text-[7px] mt-1">CVE-2024-3400 RCE</div>
+              <div class="text-[7px] text-amber-400 mt-0.5 font-bold">★ CHOKE POINT 1</div>
+            </div>
+
+            <div class="text-amber-400 font-bold text-lg">➔ ➔ ➔</div>
+
+            <!-- Node 3: SRV-02 -->
+            <div class="p-3 bg-amber-950/80 border-2 border-amber-500 rounded-lg text-center w-44">
+              <div class="flex justify-center items-center space-x-1">
+                <span class="text-amber-400 font-bold text-[9px]">SRV-02</span>
+                <span class="px-1 bg-amber-800 text-slate-100 text-[6px] rounded">PIVOT HOP</span>
+              </div>
+              <div class="text-slate-300 text-[8px]">10.0.4.52</div>
+              <div class="text-amber-300 text-[7px] mt-1">LSASS Token Dump</div>
+              <div class="text-[7px] text-amber-400 mt-0.5 font-bold">★ CHOKE POINT 2</div>
+            </div>
+
+            <div class="text-red-500 font-bold text-lg animate-pulse">➔ ➔ ➔</div>
+
+            <!-- Node 4: DB-01 -->
+            <div class="p-3 bg-red-950/90 border-2 border-red-500 rounded-lg text-center w-48 shadow-red">
+              <div class="flex justify-center items-center space-x-1">
+                <span class="text-red-300 font-black text-[10px]">DB-01 🔴</span>
+                <span class="px-1 bg-red-600 text-slate-950 text-[6px] font-bold rounded">CROWN JEWEL</span>
+              </div>
+              <div class="text-slate-200 text-[8px]">10.0.4.51:5432</div>
+              <div class="text-red-200 text-[7px] mt-1">1.2M Customer Records</div>
+              <div class="text-[7px] text-red-400 mt-0.5 font-bold animate-pulse">IMMINENT EXFILTRATION</div>
+            </div>
+
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 border-t border-[#112642] pt-2 text-[8px]">
+            <div class="p-1.5 bg-[#040c18] rounded"><strong>Total Path Length:</strong> 3 Hops</div>
+            <div class="p-1.5 bg-[#040c18] rounded"><strong>Estimated Time-to-Compromise:</strong> 4.2 Minutes</div>
+            <div class="p-1.5 bg-[#040c18] rounded"><strong>Choke Efficiency:</strong> 94% Attack Blocked at WEB-01</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 5: DIGITAL TWIN                                               -->
+      <!-- ==================================================================== -->
+      <div id="screen-digital-twin" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
+          <div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-cyan-400">🌐</span><span>SHADOW-TWIN SIMULATION SANDBOX</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Zero-Risk Virtual Mirror of Production Topology for Adversarial Stress Testing</div>
+          </div>
+          <button onclick="alert('Running Shadow Twin Full Kill Chain Simulation...')" class="px-3 py-1 bg-purple-700 hover:bg-purple-600 text-slate-100 font-bold rounded text-[8px]">EXECUTE DRILL</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="cyber-card p-3 space-y-2">
+            <div class="text-[9px] font-bold text-purple-300 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">DRILL CONTROLS & SCENARIO SELECTION</div>
+            <div class="space-y-1.5">
+              <label class="block text-slate-400 text-[8px]">Adversary Profile:</label>
+              <select class="w-full bg-[#040a14] border border-[#112642] rounded p-1 text-slate-200 text-[8px]">
+                <option>APT-41 (Credential Replay + CVE-2024-3400)</option>
+                <option>LockBit 3.0 (Ransomware Lateral Encryption)</option>
+                <option>Volt Typhoon (Living-Off-The-Land WMI / PowerShell)</option>
+              </select>
+
+              <label class="block text-slate-400 text-[8px] mt-2">Remediation Policy to Test:</label>
+              <select class="w-full bg-[#040a14] border border-[#112642] rounded p-1 text-slate-200 text-[8px]">
+                <option>Isolate Host 10.0.4.50 + Evict Active Tokens</option>
+                <option>Dynamic Honey-Token Injection on DB-01</option>
+                <option>Emergency Zero-Trust Microsegmentation</option>
+              </select>
+
+              <div class="pt-2 flex space-x-2">
+                <button onclick="alert('Simulation running: 100% containment achieved with 0 service disruption.')" class="flex-1 py-1.5 bg-cyan-700 hover:bg-cyan-600 text-slate-950 font-bold rounded text-[8px]">RUN TWIN REPLAY</button>
+                <button onclick="alert('Twin Reset to Current Production Snapshot.')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[8px]">RESET SNAPSHOT</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-3 space-y-2">
+            <div class="text-[9px] font-bold text-emerald-300 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">SIMULATION OUTCOME METRICS</div>
+            <div class="space-y-2 text-[8px]">
+              <div class="flex justify-between p-1.5 bg-[#041220] rounded border border-blue-500/20">
+                <span>Blast Radius Containment:</span><strong class="text-emerald-400">98.5% CONTAINED</strong>
+              </div>
+              <div class="flex justify-between p-1.5 bg-[#041220] rounded border border-blue-500/20">
+                <span>Production Service Availability:</span><strong class="text-emerald-400">99.98% (NO OUTAGE)</strong>
+              </div>
+              <div class="flex justify-between p-1.5 bg-[#041220] rounded border border-blue-500/20">
+                <span>Data Exfiltration Risk:</span><strong class="text-emerald-400">0.0% (ZERO BYTES LOST)</strong>
+              </div>
+              <div class="flex justify-between p-1.5 bg-[#041220] rounded border border-blue-500/20">
+                <span>Quantum Optimization Score:</span><strong class="text-purple-300">-2.208 H (GLOBAL MINIMA)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 6: RED vs BLUE                                                -->
+      <!-- ==================================================================== -->
+      <div id="screen-red-blue" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
+          <div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-purple-400">⚔️</span><span>RED vs BLUE AI ADVERSARIAL ARENA</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Continuous Autonomous Red-Team Exploit vs Blue-Team Real-Time Self-Healing Defense</div>
+          </div>
+          <button onclick="alert('New Adversarial Round Engaged!')" class="px-3 py-1 bg-purple-700 hover:bg-purple-600 text-slate-100 font-bold rounded text-[8px]">ENGAGE BATTLE ROUND</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Red Agent -->
+          <div class="cyber-card p-3 space-y-2 border-t-2 border-t-red-500">
+            <div class="flex justify-between items-center text-[9px] font-bold text-red-400 border-b border-[#112642] pb-1">
+              <span>🔴 RED TEAM AGENT (AUTONOMOUS EXPLOIT)</span>
+              <span class="text-[8px] bg-red-950 px-1.5 py-0.2 rounded text-red-300">WIN RATE: 19%</span>
+            </div>
+            <div class="text-[8px] text-slate-400">Active Engine: <strong>Hadrian + XBOW + NodeZero</strong></div>
+            <div class="space-y-1.5">
+              <div class="p-1.5 bg-[#140608] rounded border border-red-500/30">
+                <div class="font-bold text-red-300">Phase 1: External Recon (Hadrian)</div>
+                <div class="text-[7px] text-slate-400">Discovered 14 open ports, 1 unpatched GlobalProtect endpoint.</div>
+              </div>
+              <div class="p-1.5 bg-[#140608] rounded border border-red-500/30">
+                <div class="font-bold text-red-300">Phase 2: Weaponized Exploit (XBOW)</div>
+                <div class="text-[7px] text-slate-400">Injected CVE-2024-3400 crafted payload gaining non-root shell.</div>
+              </div>
+              <div class="p-1.5 bg-[#140608] rounded border border-red-500/30">
+                <div class="font-bold text-red-300">Phase 3: Lateral Pivot (NodeZero)</div>
+                <div class="text-[7px] text-slate-400">Calculated 12 shortest paths to DB-01; executing Pass-the-Hash.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blue Agent -->
+          <div class="cyber-card p-3 space-y-2 border-t-2 border-t-blue-500">
+            <div class="flex justify-between items-center text-[9px] font-bold text-blue-400 border-b border-[#112642] pb-1">
+              <span>🔵 BLUE TEAM AGENT (SELF-HEALING DEFENSE)</span>
+              <span class="text-[8px] bg-blue-950 px-1.5 py-0.2 rounded text-emerald-300 font-bold">WIN RATE: 81%</span>
+            </div>
+            <div class="text-[8px] text-slate-400">Active Engine: <strong>Sentinel-X + Q-Reason + QAOA Quantum</strong></div>
+            <div class="space-y-1.5">
+              <div class="p-1.5 bg-[#041220] rounded border border-blue-500/30">
+                <div class="font-bold text-emerald-300">Countermeasure 1: Anomaly Interception</div>
+                <div class="text-[7px] text-slate-400">Bayesian engine flagged 47 spray attempts within 320ms.</div>
+              </div>
+              <div class="p-1.5 bg-[#041220] rounded border border-blue-500/30">
+                <div class="font-bold text-emerald-300">Countermeasure 2: Dynamic WAF Patching</div>
+                <div class="text-[7px] text-slate-400">Synthesized and deployed rule R-9901 blocking Tor IP range.</div>
+              </div>
+              <div class="p-1.5 bg-[#041220] rounded border border-blue-500/30">
+                <div class="font-bold text-emerald-300">Countermeasure 3: Quantum Microsegmentation</div>
+                <div class="text-[7px] text-slate-400">QAOA severed lateral route to DB-01 while maintaining customer traffic.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 7: AI CHAT (COPILOT WORKSPACE)                                -->
+      <!-- ==================================================================== -->
+      <div id="screen-ai-chat" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
+          <div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-purple-400">💬</span><span>NEXUS-X COPILOT FULL WORKSTATION</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Interactive SecOps Conversational Analyst with Direct Execution Capabilities</div>
+          </div>
+          <span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-500 rounded text-[8px] font-bold">ALL 8 LLMs ONLINE</span>
+        </div>
+
+        <div class="cyber-card p-3 space-y-3 min-h-[380px] flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="p-2 bg-[#081324] border border-[#112642] rounded text-slate-200">
+              <strong class="text-purple-300 block mb-1">🤖 NEXUS-X Copilot:</strong>
+              Greetings Commander. I am continuously monitoring your 127 assets. Active Incident <strong>#NX-2024-00127</strong> requires your attention. Would you like me to execute autonomous containment, run an offensive validation drill in the Shadow Twin, or provide MITRE research?
+            </div>
+            
+            <div class="flex flex-wrap gap-1.5 pt-2">
+              <button onclick="copilotPrompt('Validate (Attack)')" class="px-2.5 py-1 bg-red-950/80 hover:bg-red-900 border border-red-500 text-red-300 rounded text-[8px]">🔴 Run Offensive Validation</button>
+              <button onclick="copilotPrompt('Defend')" class="px-2.5 py-1 bg-blue-950/80 hover:bg-blue-900 border border-blue-500 text-blue-300 rounded text-[8px]">🔵 Authorize Defense Shield</button>
+              <button onclick="copilotPrompt('View Evidence')" class="px-2.5 py-1 bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500 text-cyan-300 rounded text-[8px]">🔬 Inspect 23 Corroborating Evidence</button>
+              <button onclick="showScreen('attack-graph')" class="px-2.5 py-1 bg-purple-950/80 hover:bg-purple-900 border border-purple-500 text-purple-300 rounded text-[8px]">🕸️ Trace Attack Graph</button>
+            </div>
+          </div>
+
+          <div class="flex space-x-2 pt-4 border-t border-[#112642]">
+            <input type="text" id="copilotMainInput" onkeydown="if(event.key==='Enter') { copilotPrompt(this.value); this.value=''; }" placeholder="Ask NEXUS-X copilot anything..." class="flex-1 bg-[#040a14] border border-[#112642] rounded px-3 py-1.5 text-[9px] text-slate-100">
+            <button onclick="const el = document.getElementById('copilotMainInput'); copilotPrompt(el.value); el.value='';" class="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold rounded text-[9px] orbitron">SEND</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 8: RESEARCH (THREAT INTEL & CVE ENGINE)                       -->
+      <!-- ==================================================================== -->
+      <div id="screen-research" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
+          <div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-cyan-400">🔬</span><span>AUTONOMOUS THREAT RESEARCH ENGINE</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Real-Time Corroboration from NVD, MITRE ATT&CK, CISA Advisories & Dark Web Monitors</div>
+          </div>
+          <button onclick="alert('Synchronizing global threat feeds...')" class="px-2.5 py-1 bg-cyan-700 hover:bg-cyan-600 text-slate-950 font-bold rounded text-[8px]">SYNC FEEDS</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="cyber-card p-3 space-y-2">
+            <div class="text-[9px] font-bold text-red-400 border-b border-[#112642] pb-1">CVE-2024-3400 (CRITICAL 9.8)</div>
+            <div class="text-slate-300 text-[8px]"><strong>Vulnerability:</strong> Palo Alto GlobalProtect Command Injection</div>
+            <div class="text-slate-400 text-[8px]">Exploitation observed in wild by APT-41. Creates reverse web-shell via unvalidated telemetry payload.</div>
+            <div class="p-1.5 bg-[#140608] rounded border border-red-500/30 text-red-300 text-[7px]">
+              Status: Active in Incident #NX-2024-00127 (WEB-01)
+            </div>
+            <button onclick="alert('Added CVE-2024-3400 documentation to Incident Dossier!')" class="w-full py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[7px]">+ ADD TO INCIDENT</button>
+          </div>
+
+          <div class="cyber-card p-3 space-y-2">
+            <div class="text-[9px] font-bold text-amber-400 border-b border-[#112642] pb-1">MITRE ATT&CK MATRIX MAPPING</div>
+            <div class="space-y-1 text-[8px] text-slate-300">
+              <div>• <strong>T1078:</strong> Valid Accounts (Tor Login)</div>
+              <div>• <strong>T1003.001:</strong> OS Credential Dumping: LSASS</div>
+              <div>• <strong>T1556:</strong> Modify Authentication Process</div>
+              <div>• <strong>T1021.002:</strong> SMB/Windows Admin Shares</div>
+            </div>
+            <button onclick="alert('MITRE techniques mapped to response playbook.')" class="w-full py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[7px]">+ ATTACH PLAYBOOK</button>
+          </div>
+
+          <div class="cyber-card p-3 space-y-2">
+            <div class="text-[9px] font-bold text-cyan-400 border-b border-[#112642] pb-1">CISA ADVISORY AA26-081A</div>
+            <div class="text-slate-300 text-[8px]"><strong>Title:</strong> Threat Actors Chaining Edge Flaws with Token Replay</div>
+            <div class="text-slate-400 text-[8px]">Recommended Mitigations: Mandate FIDO2 hardware tokens, disable NTLM fallback, isolate compromised subnets.</div>
+            <button onclick="alert('CISA mitigations loaded into Policy engine.')" class="w-full py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[7px]">APPLY CISA MITIGATIONS</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 9: TOOLS (8 SPECIALIZED AI SECURITY ENGINES)                  -->
+      <!-- ==================================================================== -->
+      <div id="screen-tools" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
+          <div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-cyan-400">🛠️</span><span>SECURITY ENGINES & TOOLCHAIN ORCHESTRATOR</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">8 Specialized Security Models with Dynamic Selection & Target Understanding</div>
+          </div>
+          <span class="px-2 py-0.5 bg-cyan-950 text-cyan-300 border border-cyan-500 rounded text-[8px]">8 / 8 READY</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5">
+          <!-- 1. Hadrian -->
+          <div class="cyber-card p-2.5 space-y-1.5">
+            <div class="font-bold text-cyan-300 text-[9px]">1. HADRIAN</div>
+            <div class="text-slate-400 text-[7px]">Autonomous External Recon & Perimeter Mapping</div>
+            <button onclick="alert('Hadrian Recon: Found 14 assets, 3 exposed APIs')" class="w-full py-1 bg-cyan-800 hover:bg-cyan-700 text-slate-100 rounded text-[7px]">RUN RECON</button>
+          </div>
+
+          <!-- 2. XBOW -->
+          <div class="cyber-card p-2.5 space-y-1.5">
+            <div class="font-bold text-red-400 text-[9px]">2. XBOW</div>
+            <div class="text-slate-400 text-[7px]">Autonomous Web Exploitation & Logic Bug Reasoning</div>
+            <button onclick="alert('XBOW Web Audit: Verified CVE-2024-3400 vulnerability in sandbox')" class="w-full py-1 bg-red-800 hover:bg-red-700 text-slate-100 rounded text-[7px]">AUDIT WEB APPS</button>
+          </div>
+
+          <!-- 3. NodeZero -->
+          <div class="cyber-card p-2.5 space-y-1.5">
+            <div class="font-bold text-amber-400 text-[9px]">3. NODEZERO</div>
+            <div class="text-slate-400 text-[7px]">Autonomous Attack Paths & Multi-Hop Traversal</div>
+            <button onclick="alert('NodeZero Path: Shortest attack route to DB-01 mapped')" class="w-full py-1 bg-amber-800 hover:bg-amber-700 text-slate-100 rounded text-[7px]">FIND ATTACK PATHS</button>
+          </div>
+
+          <!-- 4. Pentera -->
+          <div class="cyber-card p-2.5 space-y-1.5">
+            <div class="font-bold text-purple-400 text-[9px]">4. PENTERA</div>
+            <div class="text-slate-400 text-[7px]">Continuous Automated Security Validation</div>
+            <button onclick="alert('Pentera: Continuous posture validation score: 87/100')" class="w-full py-1 bg-purple-800 hover:bg-purple-700 text-slate-100 rounded text-[7px]">VALIDATE POSTURE</button>
+          </div>
+
+          <!-- 5. Penligent -->
+          <div class="cyber-card p-2.5 space-y-1.5">
+            <div class="font-bold text-blue-400 text-[9px]">5. PENLIGENT</div>
+            <div class="text-slate-400 text-[7px]">Dynamic Tool Orchestration & Reactive Feedback Chaining</div>
+            <button onclick="alert('Penligent: Toolchain chained: Nmap ➔ Nuclei ➔ Mimikatz ➔ Sandbox')" class="w-full py-1 bg-blue-800 hover:bg-blue-700 text-slate-100 rounded text-[7px]">CHAIN TOOLS</button>
+          </div>
+
+          <!-- 6. Astra -->
+          <div class="cyber-card p-2.5 space-y-1.5">
+            <div class="font-bold text-emerald-400 text-[9px]">6. ASTRA</div>
+            <div class="text-slate-400 text-[7px]">Multi-Agent Architecture & Collaborative Defense</div>
+            <button onclick="alert('Astra: 4 sub-agents coordinated on incident resolution')" class="w-full py-1 bg-emerald-800 hover:bg-emerald-700 text-slate-100 rounded text-[7px]">COORDINATE AGENTS</button>
+          </div>
+
+          <!-- 7. PentestGPT -->
+          <div class="cyber-card p-2.5 space-y-1.5">
+            <div class="font-bold text-cyan-300 text-[9px]">7. PENTESTGPT</div>
+            <div class="text-slate-400 text-[7px]">LLM-Assisted Automated Penetration Testing</div>
+            <button onclick="alert('PentestGPT: Attack tree synthesized with 94% accuracy')" class="w-full py-1 bg-cyan-800 hover:bg-cyan-700 text-slate-100 rounded text-[7px]">SYNTHESIZE TREE</button>
+          </div>
+
+          <!-- 8. Garak -->
+          <div class="cyber-card p-2.5 space-y-1.5">
+            <div class="font-bold text-red-300 text-[9px]">8. GARAK</div>
+            <div class="text-slate-400 text-[7px]">LLM-Specific Vulnerability & Prompt Injection Scanner</div>
+            <button onclick="alert('Garak: LLM prompt injection test passed (0 leaks)')" class="w-full py-1 bg-red-800 hover:bg-red-700 text-slate-100 rounded text-[7px]">SCAN LLM SAFETY</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 10: REPORTS                                                   -->
+      <!-- ==================================================================== -->
+      <div id="screen-reports" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
+          <div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-cyan-400">📊</span><span>INCIDENT DOSSIER & COMPLIANCE REPORTS</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Cryptographically Verified SHA-256 Ledger & Executive Incident Summary</div>
+          </div>
+          <div class="flex space-x-2">
+            <button onclick="alert('Exporting PDF Incident Report #NX-2024-00127...')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[8px]">EXPORT PDF</button>
+            <button onclick="alert('Exporting STIX 2.1 Threat Intel Bundle...')" class="px-2.5 py-1 bg-cyan-700 hover:bg-cyan-600 text-slate-950 font-bold rounded text-[8px]">EXPORT STIX 2.1</button>
+          </div>
+        </div>
+
+        <div class="cyber-card p-3 space-y-2">
+          <div class="flex justify-between items-center text-slate-200 border-b border-[#112642] pb-1">
+            <strong>INCIDENT #NX-2024-00127 EXECUTIVE DOSSIER</strong>
+            <span class="text-emerald-400 font-bold">STATUS: CONTAINMENT READY</span>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-[8px]">
+            <div class="p-1.5 bg-[#040c18] rounded"><strong>Detection Time:</strong> 22:14:31</div>
+            <div class="p-1.5 bg-[#040c18] rounded"><strong>Target Host:</strong> WEB-01 ➔ DB-01</div>
+            <div class="p-1.5 bg-[#040c18] rounded"><strong>Adversary:</strong> APT-41 (185.220.101.3)</div>
+            <div class="p-1.5 bg-[#040c18] rounded"><strong>Confidence:</strong> 94% (Corroborated)</div>
+          </div>
+
+          <div class="p-2 bg-[#040814] rounded border border-cyan-800/30 text-[8px] text-slate-300">
+            <div class="text-cyan-400 font-bold mb-1">Cryptographic Evidence Ledger Block #48192:</div>
+            <div class="font-mono text-[7px] text-slate-400 break-all">
+              Merkle Root: 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069<br>
+              SHA-256 Chain Hash: a94a8fe5ccb19ba61c4c0873d391e987982fbbd3<br>
+              Signatures: Human Commander (Analyst) + Sentinel-X AI Guardian
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 11: POLICY                                                    -->
+      <!-- ==================================================================== -->
+      <div id="screen-policy" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3 border-l-4 border-l-amber-500">
+          <div>
+            <h2 class="text-xs font-bold text-amber-300 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span>⚠️</span><span>HUMAN APPROVAL & AUTONOMOUS POLICY CONTROLS</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Mandatory Human Sign-Off for Critical Infrastructure Interventions</div>
+          </div>
+          <span class="px-2 py-0.5 bg-amber-950 text-amber-300 border border-amber-500 rounded text-[8px] font-bold">1 ACTION PENDING</span>
+        </div>
+
+        <div class="cyber-card p-3 space-y-3">
+          <div class="p-2.5 bg-[#140608] border border-red-500/50 rounded space-y-1.5">
+            <div class="flex justify-between items-center text-red-300">
+              <strong class="text-[10px]">PENDING APPROVAL: IMMEDIATE ISOLATION OF WEB-01 (10.0.4.50)</strong>
+              <span class="text-[8px] bg-red-950 px-2 py-0.2 rounded text-red-200">RISK: HIGH</span>
+            </div>
+            <div class="text-slate-300 text-[8px]">
+              <strong>Proposed Action:</strong> Isolate network interface of WEB-01, invalidate all Active Directory Kerberos sessions for user `admin_svc`, deploy WAF Drop Rule R-9901 for 185.220.101.3.
+            </div>
+            <div class="text-emerald-400 text-[8px]">
+              <strong>Rollback Plan:</strong> Shadow Twin tested. Can restore interface within 15 seconds if false positive.
+            </div>
+            <div class="pt-2 flex space-x-2">
+              <button onclick="copilotPrompt('Defend - Approved'); alert('Host 10.0.4.50 ISOLATED! Active tokens evicted.'); showScreen('command');" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-slate-100 font-bold rounded text-[8px] orbitron">🔵 APPROVE DEFENSE REMEDIATION</button>
+              <button onclick="copilotPrompt('Validate - Approved'); alert('Offensive validation drill launched in sandbox.'); showScreen('digital-twin');" class="px-4 py-1.5 bg-red-700 hover:bg-red-600 text-slate-100 font-bold rounded text-[8px] orbitron">🔴 APPROVE VALIDATION</button>
+              <button onclick="alert('Action deferred by Analyst.')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[8px]">❌ REJECT</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- SCREEN 12: SETTINGS                                                  -->
+      <!-- ==================================================================== -->
+      <div id="screen-settings" class="app-screen space-y-3 font-mono text-[9px]">
+        <div class="flex justify-between items-center cyber-card p-3">
+          <div>
+            <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
+              <span class="text-cyan-400">🔧</span><span>SYSTEM CONFIGURATION & INTEGRATIONS</span>
+            </h2>
+            <div class="text-[8px] text-slate-400 mt-0.5">Quantum Engine Backends, Telemetry Ingestion Endpoints & Custom Parameters</div>
+          </div>
+          <button onclick="alert('Settings Saved!')" class="px-3 py-1 bg-cyan-700 hover:bg-cyan-600 text-slate-950 font-bold rounded text-[8px]">SAVE CHANGES</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="cyber-card p-3 space-y-2">
+            <div class="text-[9px] font-bold text-purple-300 border-b border-[#112642] pb-1">QUANTUM OPTIMIZATION ENGINE</div>
+            <div class="space-y-1 text-slate-300 text-[8px]">
+              <div>Backend: <strong>QAOA Classical Annealing Simulator (p=4)</strong></div>
+              <div>Hamiltonian Variables: 127 Asset Cost Functions</div>
+              <div>Convergence Tolerance: 1e-6</div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-3 space-y-2">
+            <div class="text-[9px] font-bold text-cyan-300 border-b border-[#112642] pb-1">TELEMETRY INGESTION ENDPOINTS</div>
+            <div class="space-y-1 text-slate-300 text-[8px]">
+              <div>• CrowdStrike Falcon EDR: Connected (Streaming)</div>
+              <div>• Zeek / Suricata IDS: Connected (2.4 Gbps)</div>
+              <div>• Splunk / Elastic SIEM: Connected (Forwarding)</div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </main>
@@ -635,7 +1345,7 @@
       <div class="flex-1 flex flex-col justify-between">
         <div>
           <div class="flex justify-between items-center border-b border-[#112642] pb-1.5 mb-1.5">
-            <span class="orbitron text-[10px] font-bold text-slate-100 flex items-center space-x-1.5">
+            <span class="text-[10px] font-bold text-slate-100 flex items-center space-x-1.5" style="font-family: 'Orbitron', sans-serif;">
               <span>🤖</span><span>NEXUS-X COPILOT</span>
             </span>
             <span class="text-emerald-400 text-[8px] font-bold flex items-center space-x-1">
@@ -645,7 +1355,6 @@
 
           <!-- Chat Transcript Stream -->
           <div id="copilotStream" class="space-y-2 overflow-y-auto max-h-[300px] pr-1">
-            <!-- Message 1 -->
             <div class="flex items-start space-x-1.5">
               <span class="w-5 h-5 rounded-full bg-purple-900 border border-purple-400 flex items-center justify-center text-[9px] text-purple-200 shrink-0 font-bold">A</span>
               <div class="p-2 bg-[#081324] border border-[#112642] rounded text-slate-300 text-[8px] leading-relaxed">
@@ -653,15 +1362,14 @@
                 I have detected a high-confidence security incident involving <strong>WEB-01</strong>. I've correlated 2,481 events and identified a probable credential-compromise sequence.<br><br>
                 I've completed initial research and simulation.<br>Would you like to:
                 <div class="grid grid-cols-2 gap-1 mt-1.5">
-                  <button onclick="copilotPrompt('View Evidence')" class="p-1 bg-[#040c18] hover:bg-cyan-950 border border-cyan-800/40 text-cyan-300 rounded text-[7px]">View Evidence</button>
-                  <button onclick="copilotPrompt('View Attack Path')" class="p-1 bg-[#040c18] hover:bg-cyan-950 border border-cyan-800/40 text-cyan-300 rounded text-[7px]">View Attack Path</button>
-                  <button onclick="copilotPrompt('Simulate')" class="p-1 bg-[#040c18] hover:bg-cyan-950 border border-cyan-800/40 text-cyan-300 rounded text-[7px]">Simulate</button>
-                  <button onclick="copilotPrompt('Research')" class="p-1 bg-[#040c18] hover:bg-cyan-950 border border-cyan-800/40 text-cyan-300 rounded text-[7px]">Research</button>
+                  <button onclick="copilotPrompt('View Evidence'); showScreen('threats');" class="p-1 bg-[#040c18] hover:bg-cyan-950 border border-cyan-800/40 text-cyan-300 rounded text-[7px]">View Evidence</button>
+                  <button onclick="copilotPrompt('View Attack Path'); showScreen('attack-graph');" class="p-1 bg-[#040c18] hover:bg-cyan-950 border border-cyan-800/40 text-cyan-300 rounded text-[7px]">View Attack Path</button>
+                  <button onclick="copilotPrompt('Simulate'); showScreen('digital-twin');" class="p-1 bg-[#040c18] hover:bg-cyan-950 border border-cyan-800/40 text-cyan-300 rounded text-[7px]">Simulate</button>
+                  <button onclick="copilotPrompt('Research'); showScreen('research');" class="p-1 bg-[#040c18] hover:bg-cyan-950 border border-cyan-800/40 text-cyan-300 rounded text-[7px]">Research</button>
                 </div>
               </div>
             </div>
 
-            <!-- Message 2 (User) -->
             <div class="flex items-start space-x-1.5 justify-end">
               <div class="p-1.5 bg-[#0e1e36] text-slate-200 rounded text-[8px]">
                 <span class="text-slate-400 font-bold block text-[7px]">You</span>
@@ -670,7 +1378,6 @@
               <span class="w-5 h-5 rounded-full bg-slate-700 flex items-center justify-center text-[8px] shrink-0">👤</span>
             </div>
 
-            <!-- Message 3 (AI Recommendation) -->
             <div class="flex items-start space-x-1.5">
               <span class="w-5 h-5 rounded-full bg-purple-900 border border-purple-400 flex items-center justify-center text-[9px] text-purple-200 shrink-0 font-bold">A</span>
               <div class="p-2 bg-[#081324] border border-[#112642] rounded text-slate-300 text-[8px]">
@@ -684,16 +1391,16 @@
         <!-- Copilot Action Decision Buttons -->
         <div class="pt-2 border-t border-[#112642] space-y-1.5">
           <div class="grid grid-cols-2 gap-1 font-mono text-[8px]">
-            <button onclick="copilotPrompt('Validate (Attack)')" class="py-1.5 bg-[#1e060d] hover:bg-red-500/30 text-red-300 border border-red-500/50 font-bold rounded">Validate (Attack)</button>
-            <button onclick="copilotPrompt('Defend')" class="py-1.5 bg-[#1e1606] hover:bg-amber-500/30 text-amber-300 border border-amber-500/50 font-bold rounded">Defend</button>
-            <button onclick="copilotPrompt('Investigate')" class="py-1.5 bg-[#061426] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/50 font-bold rounded">Investigate</button>
-            <button onclick="copilotPrompt('More Information')" class="py-1.5 bg-[#061426] hover:bg-slate-700 text-slate-300 border border-slate-600 rounded">More Information</button>
+            <button onclick="copilotPrompt('Validate (Attack)'); showScreen('digital-twin');" class="py-1.5 bg-[#1e060d] hover:bg-red-500/30 text-red-300 border border-red-500/50 font-bold rounded">Validate (Attack)</button>
+            <button onclick="copilotPrompt('Defend'); showScreen('policy');" class="py-1.5 bg-[#1e1606] hover:bg-amber-500/30 text-amber-300 border border-amber-500/50 font-bold rounded">Defend</button>
+            <button onclick="copilotPrompt('Investigate'); showScreen('threats');" class="py-1.5 bg-[#061426] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/50 font-bold rounded">Investigate</button>
+            <button onclick="copilotPrompt('More Information'); showScreen('live-operations');" class="py-1.5 bg-[#061426] hover:bg-slate-700 text-slate-300 border border-slate-600 rounded">More Information</button>
           </div>
 
           <!-- Input Bar -->
           <div class="flex space-x-1 pt-1">
             <input id="copilotInput" type="text" onkeydown="if(event.key==='Enter') sendCopilotMsg()" placeholder="Ask NEXUS-X anything..." class="flex-1 bg-[#040a14] border border-[#112642] rounded px-2 py-1 text-[8px] text-slate-200 focus:outline-none focus:border-cyan-500 font-mono">
-            <button onclick="sendCopilotMsg()" class="px-2 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold rounded text-[8px] orbitron">➤</button>
+            <button onclick="sendCopilotMsg()" class="px-2 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold rounded text-[8px]" style="font-family: 'Orbitron', sans-serif;">➤</button>
           </div>
         </div>
       </div>
@@ -701,13 +1408,12 @@
       <!-- QUANTUM OPTIMIZER CARD -->
       <div class="cyber-card p-2 space-y-1.5 border-t-2 border-t-purple-500">
         <div class="flex justify-between items-center">
-          <span class="orbitron text-[8px] font-bold text-purple-300 flex items-center space-x-1">
+          <span class="text-[8px] font-bold text-purple-300 flex items-center space-x-1" style="font-family: 'Orbitron', sans-serif;">
             <span>⚛️</span><span>QUANTUM OPTIMIZER</span>
           </span>
           <span class="text-[7px] text-slate-400">Optimizing defense strategies</span>
         </div>
 
-        <!-- Quantum Visualizer Curves -->
         <div class="grid grid-cols-2 gap-1.5 h-10">
           <canvas id="qCurve1" class="w-full h-full bg-[#030712] rounded border border-purple-500/20"></canvas>
           <canvas id="qCurve2" class="w-full h-full bg-[#030712] rounded border border-purple-500/20"></canvas>
@@ -733,7 +1439,7 @@
   </footer>
 
   <!-- ==================================================================== -->
-  <!-- JAVASCRIPT: CANVASES, COGNITIVE STATE & INTERACTION LOGIC            -->
+  <!-- JAVASCRIPT: SCREEN SWITCHING, CANVASES & DYNAMIC INTERACTION        -->
   <!-- ==================================================================== -->
   <script>
     // 1. Live Clock
@@ -741,13 +1447,43 @@
       const now = new Date();
       const timeStr = now.toTimeString().split(' ')[0];
       const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-      document.getElementById('liveClock').textContent = timeStr;
-      document.getElementById('liveDate').textContent = dateStr;
+      const clockEl = document.getElementById('liveClock');
+      const dateEl = document.getElementById('liveDate');
+      if (clockEl) clockEl.textContent = timeStr;
+      if (dateEl) dateEl.textContent = dateStr;
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // 2. Cognitive State Machine
+    // 2. Dynamic Screen Switching Logic
+    function showScreen(screenId) {
+      // Hide all screens
+      document.querySelectorAll('.app-screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+
+      // Show target screen
+      const target = document.getElementById('screen-' + screenId);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      // Update sidebar active buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeNav = document.getElementById('nav-' + screenId);
+      if (activeNav) {
+        activeNav.classList.add('active');
+      }
+
+      // If switching back to command, re-render canvases
+      if (screenId === 'command') {
+        setTimeout(initCyberMap, 50);
+      }
+    }
+
+    // 3. Cognitive State Machine
     function setPipelineStep(idx) {
       document.querySelectorAll('.pipe-step').forEach((el, i) => {
         const dot = el.querySelector('.step-dot');
@@ -764,12 +1500,7 @@
       });
     }
 
-    function setNavActive(btn) {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-
-    // 3. Cyber World Map Canvas Simulation
+    // 4. Cyber World Map Canvas Simulation
     function initCyberMap() {
       const canvas = document.getElementById('cyberMapCanvas');
       if (!canvas) return;
@@ -777,7 +1508,6 @@
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
 
-      // Simulated node points across map
       const nodes = [
         { x: canvas.width * 0.18, y: canvas.height * 0.35, label: 'Origin', color: '#ff2a55' },
         { x: canvas.width * 0.35, y: canvas.height * 0.45, label: 'SRV-02', color: '#ffaa00' },
@@ -792,10 +1522,11 @@
         t += 0.02;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw dotted network grid
-        ctx.fillStyle = '#0a1d36';
-        for (let x = 10; x < canvas.width; x += 25) {
-          for (let y = 10; y < canvas.height; y += 25) {
+        // Draw dotted world grid
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.08)';
+        const step = 14;
+        for (let x = 0; x < canvas.width; x += step) {
+          for (let y = 0; y < canvas.height; y += step) {
             ctx.beginPath();
             ctx.arc(x, y, 0.75, 0, Math.PI * 2);
             ctx.fill();
@@ -825,7 +1556,7 @@
         ctx.quadraticCurveTo((nodes[2].x + nodes[3].x) / 2, nodes[2].y + 20, nodes[3].x, nodes[3].y);
         ctx.stroke();
 
-        // Normal Traffic Line (DB-01 to Asia)
+        // Normal Traffic Line
         ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
         ctx.beginPath();
         ctx.moveTo(nodes[3].x, nodes[3].y);
@@ -839,7 +1570,6 @@
           ctx.fillStyle = n.color;
           ctx.fill();
 
-          // Pulse ring
           const ringR = 4 + (Math.sin(t * 3) + 1) * 3;
           ctx.beginPath();
           ctx.arc(n.x, n.y, ringR, 0, Math.PI * 2);
@@ -853,7 +1583,7 @@
       draw();
     }
 
-    // 4. Rotating Globe Canvas
+    // 5. Rotating Globe Canvas
     function initGlobe() {
       const canvas = document.getElementById('globeCanvas');
       if (!canvas) return;
@@ -866,20 +1596,17 @@
         angle += 0.03;
         ctx.clearRect(0, 0, 32, 32);
 
-        // Globe Circle
         ctx.beginPath();
         ctx.arc(16, 16, 14, 0, Math.PI * 2);
         ctx.strokeStyle = '#00f0ff';
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        // Latitude lines
         ctx.beginPath();
         ctx.ellipse(16, 16, 14, 5, 0, 0, Math.PI * 2);
         ctx.strokeStyle = '#0088ff55';
         ctx.stroke();
 
-        // Rotating Longitude ellipse
         const rotWidth = Math.abs(Math.cos(angle)) * 14;
         ctx.beginPath();
         ctx.ellipse(16, 16, rotWidth, 14, 0, 0, Math.PI * 2);
@@ -891,7 +1618,7 @@
       renderGlobe();
     }
 
-    // 5. Quantum Waveform Curves
+    // 6. Quantum Waveform Curves
     function initQuantumCurves() {
       const c1 = document.getElementById('qCurve1');
       const c2 = document.getElementById('qCurve2');
@@ -923,7 +1650,7 @@
       renderCurves();
     }
 
-    // 6. Interactive Copilot Actions
+    // 7. Interactive Copilot Actions
     function copilotPrompt(action) {
       appendCopilot('👤 You', action);
       setTimeout(() => {
@@ -965,11 +1692,6 @@
       `;
       stream.appendChild(div);
       stream.scrollTop = stream.scrollHeight;
-    }
-
-    function triggerDigitalTwinSim() {
-      setPipelineStep(3);
-      alert('Shadow Twin Simulation Started: Replaying APT-41 Adversary Drill in Sandbox.');
     }
 
     window.onload = () => {
