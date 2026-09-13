@@ -2,8 +2,9 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS-X // Live Workflow 3D Command View</title>
+  <title>NEXUS-X // 3D Cyber Workflow Command Center</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Three.js CDN -->
@@ -53,38 +54,34 @@
       background-color: #02060d;
       color: #cbd5e1;
       font-family: 'Rajdhani', sans-serif;
-      overflow-x: hidden;
+      overflow: hidden;
       user-select: none;
     }
     .orbitron { font-family: 'Orbitron', sans-serif; }
     .font-mono { font-family: 'Fira Code', monospace; }
 
-    /* CRT subtle scanline */
+    /* CRT scanline */
     .scanlines {
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 240, 255, 0.02) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 240, 255, 0.015) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
       background-size: 100% 3px, 6px 100%;
       pointer-events: none;
     }
 
-    /* Holographic border & panels */
-    .hud-panel {
-      background: rgba(5, 12, 24, 0.88);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(0, 240, 255, 0.22);
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(0, 240, 255, 0.03);
+    /* Holographic sleek HUD panels */
+    .hud-glass {
+      background: rgba(4, 10, 22, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), inset 0 0 15px rgba(0, 240, 255, 0.04);
     }
-    .hud-interactive {
-      transition: all 0.25s ease;
-    }
-    .hud-interactive:hover {
+    .hud-glass:hover {
       border-color: rgba(0, 240, 255, 0.45);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.12);
     }
 
-    .glow-cyan { text-shadow: 0 0 10px rgba(0, 240, 255, 0.6); }
-    .glow-emerald { text-shadow: 0 0 10px rgba(0, 255, 102, 0.6); }
-    .glow-amber { text-shadow: 0 0 10px rgba(255, 183, 0, 0.6); }
-    .glow-red { text-shadow: 0 0 10px rgba(255, 0, 60, 0.7); }
+    .glow-cyan { text-shadow: 0 0 10px rgba(0, 240, 255, 0.7); }
+    .glow-emerald { text-shadow: 0 0 10px rgba(0, 255, 102, 0.7); }
+    .glow-amber { text-shadow: 0 0 10px rgba(255, 183, 0, 0.7); }
+    .glow-red { text-shadow: 0 0 10px rgba(255, 0, 60, 0.8); }
 
     /* Scrollbars */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -92,422 +89,328 @@
     ::-webkit-scrollbar-thumb { background: #00f0ff44; border-radius: 2px; }
     ::-webkit-scrollbar-thumb:hover { background: #00f0ff88; }
 
-    /* HTML Node Label over 3D Canvas */
+    /* 3D Floating Node Labels (Lightweight, non-intrusive) */
     .node-label {
       position: absolute;
       transform: translate(-50%, -50%);
       pointer-events: auto;
       cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s;
+      transition: transform 0.2s ease, box-shadow 0.2s;
     }
     .node-label:hover {
-      transform: translate(-50%, -55%) scale(1.06);
+      transform: translate(-50%, -55%) scale(1.08);
       z-index: 50;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
     }
 
-    /* Pulse animation for active beam */
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 6px rgba(0,240,255,0.8)); }
-      50% { opacity: 1; filter: drop-shadow(0 0 14px rgba(0,240,255,1)); }
-    }
-    .active-beam {
-      animation: pulseGlow 1.2s infinite;
+    /* Slide drawers */
+    .drawer-panel {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
     }
   </style>
 </head>
 <body class="bg-[#02060d] text-slate-200 h-screen w-screen overflow-hidden flex flex-col relative">
 
-  <!-- 3D WebGL Canvas Layer -->
+  <!-- 3D WebGL Canvas Layer (Takes 100% screen) -->
   <div id="canvas-container" class="absolute inset-0 z-0 overflow-hidden"></div>
 
-  <!-- HTML Node Labels Overlay Container (Positioned precisely over 3D nodes) -->
+  <!-- HTML Node Labels Overlay Container -->
   <div id="labels-container" class="absolute inset-0 z-10 pointer-events-none overflow-hidden"></div>
 
   <!-- CRT Scanline Overlay -->
   <div class="scanlines absolute inset-0 z-20 pointer-events-none"></div>
 
-  <!-- UI HUD OVERLAY (Z-INDEX 30) -->
-  <div class="relative z-30 flex flex-col h-full p-2.5 space-y-2 pointer-events-none">
+  <!-- FLOATING MINIMAL HUD (Z-INDEX 30) -->
+  <div class="relative z-30 flex flex-col justify-between h-full p-3 pointer-events-none">
 
-    <!-- TOP BAR: WORKFLOW STATUS & DIRECT CONTROLS -->
-    <header class="hud-panel hud-interactive rounded-xl px-4 py-2 flex flex-wrap justify-between items-center pointer-events-auto border-b-2 border-cyan-500/40">
+    <!-- TOP BAR: WORKFLOW CONTROLS & STATUS -->
+    <header class="hud-glass rounded-xl px-4 py-2.5 flex flex-wrap justify-between items-center pointer-events-auto border-b-2 border-cyan-500/40 shadow-2xl">
+      <!-- Title & Live Badge -->
       <div class="flex items-center space-x-3">
         <div class="relative w-8 h-8 flex items-center justify-center">
           <div class="absolute inset-0 rounded-full border border-cyan-400 animate-ping opacity-60"></div>
-          <div class="w-7 h-7 rounded-lg border border-cyan-400 bg-cyan-950/80 flex items-center justify-center text-cyan-300 font-bold text-xs orbitron">NX</div>
+          <div class="w-7 h-7 rounded-lg border border-cyan-400 bg-cyan-950/90 flex items-center justify-center text-cyan-300 font-bold text-xs orbitron">NX</div>
         </div>
         <div>
           <div class="flex items-center space-x-2">
-            <h1 class="orbitron font-black text-sm tracking-wider text-cyan-400 glow-cyan">NEXUS-X // LIVE 3D WORKFLOW PIPELINE</h1>
-            <span id="workflowBadge" class="px-2 py-0.5 rounded text-[8px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 tracking-wider">STATE: POINT 1 IDLE</span>
+            <h1 class="orbitron font-black text-sm tracking-wider text-cyan-400 glow-cyan">NEXUS-X // 3D WORKFLOW PIPELINE</h1>
+            <span id="workflowBadge" class="px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 tracking-wider">POINT 1 READY</span>
           </div>
-          <div class="text-[9px] text-cyan-500/80 font-mono">STEP 1 (INGESTION) ➔ TRANSMIT TO 2 ➔ APPROVAL GATE ➔ TRANSMIT TO 3</div>
+          <div class="text-[9px] text-cyan-500/80 font-mono">1. INGESTION ➔ 2. PROPOSAL ➔ [APPROVAL GATE] ➔ 3. EXECUTION</div>
         </div>
       </div>
 
-      <!-- Quick Step Sequence Triggers -->
-      <div class="flex items-center space-x-1.5 text-[10px]">
-        <button onclick="step1_Ingest()" class="px-2.5 py-1 rounded bg-[#07182a] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono transition">
+      <!-- Central Execution Buttons -->
+      <div class="flex items-center space-x-2 text-[11px] my-1 sm:my-0">
+        <button onclick="runFullAutoWorkflow()" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 hover:from-cyan-500 hover:to-blue-500 text-slate-950 font-bold orbitron text-[10px] transition glow-cyan shadow-lg flex items-center space-x-1.5">
+          <span>▶</span><span>RUN LIVE WORKFLOW</span>
+        </button>
+        <button onclick="step1_Ingest()" class="px-3 py-1.5 rounded-lg bg-[#071d33] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/50 font-mono transition">
           1. START (① ➔ ②)
         </button>
-        <button id="btnApproval" onclick="step2_Approve()" class="px-3 py-1 rounded bg-[#18260b] hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/50 font-mono font-bold transition">
+        <button id="btnApprovalTop" onclick="step2_Approve()" class="px-3 py-1.5 rounded-lg bg-[#0d2a1a] hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/50 font-mono font-bold transition">
           2. APPROVE (② ➔ ③)
         </button>
-        <button onclick="runFullAutoWorkflow()" class="px-3 py-1 rounded bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-slate-950 font-bold orbitron text-[10px] transition glow-cyan">
-          ▶ RUN COMPLETE PIPELINE
+        <button onclick="resetWorkflow()" class="px-2 py-1.5 rounded-lg bg-[#141b26] hover:bg-slate-700 text-slate-300 border border-slate-600/40 font-mono text-[10px] transition" title="Reset Simulation">
+          ↺ RESET
         </button>
       </div>
 
-      <!-- Live Pipeline State -->
-      <div class="flex items-center space-x-2 text-[10px] font-mono">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span id="liveStatusText" class="text-emerald-400 font-bold">DAG TOPOLOGY READY</span>
+      <!-- Right HUD Panel Toggles -->
+      <div class="flex items-center space-x-1.5 text-[10px]">
+        <button onclick="togglePanel('agentDrawer')" class="px-2.5 py-1 rounded bg-[#06182e] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono transition flex items-center space-x-1">
+          <span>🤖</span><span>8-AI ENGINES</span>
+        </button>
+        <button onclick="togglePanel('scopeDrawer')" class="px-2.5 py-1 rounded bg-[#06182e] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono transition flex items-center space-x-1">
+          <span>🎯</span><span>SCOPE</span>
+        </button>
+        <button onclick="togglePanel('copilotDrawer')" class="px-2.5 py-1 rounded bg-[#06182e] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono transition flex items-center space-x-1">
+          <span>💬</span><span>COPILOT</span>
+        </button>
       </div>
     </header>
 
-    <!-- MAIN BODY GRID (3 COLUMNS OVER THE 3D WORKFLOW VIEW) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-2.5 flex-1 overflow-hidden pointer-events-none">
-
-      <!-- LEFT COLUMN: WORKFLOW STEP PROGRESSION & STATE TRACKER (3 COLS) -->
-      <div class="lg:col-span-3 space-y-2 flex flex-col justify-between overflow-y-auto pr-1 pointer-events-auto">
-        
-        <!-- Live Workflow Execution Timeline -->
-        <div class="hud-panel hud-interactive rounded-xl p-3 flex-1 flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1.5 mb-2">
-              <span class="orbitron text-xs font-bold text-cyan-400 flex items-center space-x-1.5">
-                <span>⚡</span><span>GRAPH STATE PIPELINE</span>
-              </span>
-              <span class="text-[8px] text-cyan-300 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-500/30 font-mono">3D ACTIVE</span>
-            </div>
-
-            <!-- Pipeline Step Progression -->
-            <div class="space-y-2 text-[10px] font-mono" id="pipeline-steps">
-              <!-- Point 1 -->
-              <div id="stepCard-1" class="p-2 rounded bg-cyan-950/60 border border-cyan-400 text-cyan-200 transition">
-                <div class="font-bold flex justify-between items-center">
-                  <span class="flex items-center space-x-1"><span>①</span><span>OBSERVATION / INGESTION</span></span>
-                  <span id="badge-1" class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/30 text-cyan-300 font-bold">READY</span>
-                </div>
-                <div class="text-[8px] text-slate-300 mt-1">Correlating 9 telemetry streams; detects anomalies on Web 10.0.4.50.</div>
-              </div>
-
-              <!-- Point 2 -->
-              <div id="stepCard-2" class="p-2 rounded bg-[#061220] border border-cyan-500/20 text-slate-400 transition">
-                <div class="font-bold flex justify-between items-center">
-                  <span class="flex items-center space-x-1"><span>②</span><span>AI REASONING & PROPOSAL</span></span>
-                  <span id="badge-2" class="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 font-bold">WAITING</span>
-                </div>
-                <div class="text-[8px] text-slate-500 mt-1">Formulates H1-H4 hypotheses & QAOA defense cut. Pauses for Human Approval.</div>
-              </div>
-
-              <!-- Point 3 -->
-              <div id="stepCard-3" class="p-2 rounded bg-[#061220] border border-cyan-500/20 text-slate-400 transition">
-                <div class="font-bold flex justify-between items-center">
-                  <span class="flex items-center space-x-1"><span>③</span><span>REMEDIATION EXECUTION</span></span>
-                  <span id="badge-3" class="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 font-bold">WAITING</span>
-                </div>
-                <div class="text-[8px] text-slate-500 mt-1">Isolates host, revokes tokens, seals SHA-256 ledger block, reduces risk to 6%.</div>
-              </div>
-
-              <!-- Point 4 & 5 Branch -->
-              <div class="grid grid-cols-2 gap-1 pt-1 border-t border-cyan-500/20">
-                <div id="stepCard-4" class="p-1.5 rounded bg-[#061220] border border-cyan-500/20 text-slate-400 text-[9px]">
-                  <div class="font-bold flex justify-between"><span>④ TWIN REPLAY</span><span id="badge-4" class="text-[7px]">STANDBY</span></div>
-                  <div class="text-[7px] text-slate-500">Adversary simulation</div>
-                </div>
-                <div id="stepCard-5" class="p-1.5 rounded bg-[#061220] border border-cyan-500/20 text-slate-400 text-[9px]">
-                  <div class="font-bold flex justify-between"><span>⑤ LEDGER VAULT</span><span id="badge-5" class="text-[7px]">STANDBY</span></div>
-                  <div class="text-[7px] text-slate-500">Tamper-evident logs</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Interactive Action Button -->
-          <div class="mt-2 pt-2 border-t border-cyan-500/30">
-            <button id="btnWorkflowMain" onclick="handleMainAction()" class="w-full py-2 bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 hover:from-cyan-500 hover:to-blue-500 text-slate-950 font-bold rounded-lg text-xs orbitron transition glow-cyan">
-              ▶ 1. START POINT 1 ➔ TRANSMIT TO 2
-            </button>
-          </div>
+    <!-- FLOATING APPROVAL NOTIFICATION BANNER (Appears dynamically when Point 2 completes) -->
+    <div id="approvalBanner" class="hidden pointer-events-auto self-center max-w-2xl w-full my-2 hud-glass rounded-xl p-3 border-2 border-amber-500/60 bg-[#0d1c08]/90 shadow-2xl transition-all animate-bounce">
+      <div class="flex justify-between items-center border-b border-amber-500/40 pb-1.5 mb-2">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+          <span class="orbitron text-xs font-bold text-amber-300">POINT ② APPROVAL REQUIRED // HUMAN GATE</span>
         </div>
-
-        <!-- Strategy Summary Mini-Card -->
-        <div class="hud-panel hud-interactive rounded-xl p-2.5 font-mono text-[9px]">
-          <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1 mb-1">
-            <span class="orbitron text-[10px] font-bold text-cyan-400">🧠 ACTIVE STRATEGY</span>
-            <span class="text-emerald-400">BAYESIAN: S3 (0.94)</span>
-          </div>
-          <div class="text-slate-300 text-[8px]">
-            Once Point 2 receives approval, Point 3 applies firewall quarantine & token eviction.
-          </div>
-        </div>
-
+        <span class="px-2 py-0.5 rounded text-[8px] font-mono bg-amber-500/20 text-amber-300 font-bold">READY TO TRANSMIT</span>
       </div>
-
-      <!-- CENTER COLUMN: ACTIVE NODE FOCUS CARD & WORKFLOW STATUS BANNER (6 COLS) -->
-      <div class="lg:col-span-6 flex flex-col justify-between pointer-events-none">
-        
-        <!-- TOP CENTER: INTERACTIVE APPROVAL MODAL (Pops up when Point 2 completes work) -->
-        <div id="approvalGateBanner" class="hud-panel hud-interactive rounded-xl p-3 pointer-events-auto transition-all duration-300 border-2 border-amber-500/50 bg-[#0c1605]/95">
-          <div class="flex justify-between items-center border-b border-amber-500/40 pb-1.5 mb-2">
-            <div class="flex items-center space-x-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-              <h3 class="orbitron text-xs font-bold text-amber-300 tracking-wider">POINT ② APPROVAL GATE // DECISION REQUIRED</h3>
-            </div>
-            <span class="px-2 py-0.5 rounded text-[8px] font-mono bg-amber-500/20 text-amber-300 font-bold">READY FOR TRANSMISSION</span>
-          </div>
-
-          <div class="text-[10px] font-mono text-slate-200 mb-2.5">
-            Point ① has transmitted correlated telemetry to Point ②. AI Guardian has formulated QAOA defense plan:
-            <strong class="text-emerald-400 block mt-1">"Isolate Compromised Web Host 10.0.4.50 & Evict admin_svc JWT Tokens (-94% risk reduction)"</strong>
-          </div>
-
-          <div class="flex space-x-2">
-            <button onclick="step2_Approve()" class="flex-1 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-slate-950 font-bold rounded font-mono text-[10px] transition glow-emerald flex items-center justify-center space-x-1.5">
-              <span>✅</span><span>GIVE APPROVAL ➔ TRANSMIT TO POINT ③</span>
-            </button>
-            <button onclick="step1_Ingest()" class="px-3 py-1.5 bg-[#051424] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 rounded font-mono text-[9px] transition">
-              🔄 RE-SIMULATE
-            </button>
-          </div>
-        </div>
-
-        <!-- 8-AGENT SPECIALIZED INTELLIGENCE SUITE MATRIX -->
-        <div class="hud-panel hud-interactive rounded-xl p-2.5 pointer-events-auto">
-          <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1 mb-1.5">
-            <div class="flex items-center space-x-1.5">
-              <span class="orbitron text-[10px] font-bold text-cyan-400">🤖 8-AGENT SPECIALIZED INTELLIGENCE SUITE</span>
-              <span class="text-[8px] font-mono px-1.5 py-0.2 bg-cyan-950 text-cyan-300 rounded border border-cyan-500/30">MULTI-MODEL ORCHESTRATION</span>
-            </div>
-            <span class="text-[8px] font-mono text-emerald-400 animate-pulse">8 ENGINES SYNCED</span>
-          </div>
-
-          <div class="grid grid-cols-4 gap-1 text-[8px] font-mono">
-            <!-- 1. Astra -->
-            <div onclick="showAgentDetail('astra')" class="p-1.5 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded cursor-pointer transition">
-              <div class="flex justify-between items-center"><strong class="text-cyan-300">1. Astra</strong><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span></div>
-              <div class="text-slate-400 text-[7px]">Multi-Agent Valid.</div>
-              <div class="text-emerald-300 text-[7px] font-bold">95% True Pos.</div>
-            </div>
-            <!-- 2. XBOW -->
-            <div onclick="showAgentDetail('xbow')" class="p-1.5 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded cursor-pointer transition">
-              <div class="flex justify-between items-center"><strong class="text-cyan-300">2. XBOW</strong><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span></div>
-              <div class="text-slate-400 text-[7px]">Web Exploit Chains</div>
-              <div class="text-amber-300 text-[7px] font-bold">94% Feasibility</div>
-            </div>
-            <!-- 3. NodeZero -->
-            <div onclick="showAgentDetail('nodezero')" class="p-1.5 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded cursor-pointer transition">
-              <div class="flex justify-between items-center"><strong class="text-cyan-300">3. NodeZero</strong><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span></div>
-              <div class="text-slate-400 text-[7px]">Attack Paths (DAG)</div>
-              <div class="text-red-400 text-[7px] font-bold">3 Hops to DB</div>
-            </div>
-            <!-- 4. Pentera -->
-            <div onclick="showAgentDetail('pentera')" class="p-1.5 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded cursor-pointer transition">
-              <div class="flex justify-between items-center"><strong class="text-cyan-300">4. Pentera</strong><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span></div>
-              <div class="text-slate-400 text-[7px]">Continuous Valid.</div>
-              <div class="text-amber-300 text-[7px] font-bold">3 Drift Alerts</div>
-            </div>
-            <!-- 5. Penligent -->
-            <div onclick="showAgentDetail('penligent')" class="p-1.5 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded cursor-pointer transition">
-              <div class="flex justify-between items-center"><strong class="text-cyan-300">5. Penligent</strong><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span></div>
-              <div class="text-slate-400 text-[7px]">Tool Orchestration</div>
-              <div class="text-cyan-300 text-[7px] font-bold">DAG Optimized</div>
-            </div>
-            <!-- 6. Hadrian -->
-            <div onclick="showAgentDetail('hadrian')" class="p-1.5 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded cursor-pointer transition">
-              <div class="flex justify-between items-center"><strong class="text-cyan-300">6. Hadrian</strong><span class="w-1.5 h-1.5 rounded-full bg-red-400"></span></div>
-              <div class="text-slate-400 text-[7px]">External Surface</div>
-              <div class="text-purple-300 text-[7px] font-bold">5 Assets / 2 Unk</div>
-            </div>
-            <!-- 7. PentestGPT -->
-            <div onclick="showAgentDetail('pentestgpt')" class="p-1.5 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded cursor-pointer transition">
-              <div class="flex justify-between items-center"><strong class="text-cyan-300">7. PentestGPT</strong><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span></div>
-              <div class="text-slate-400 text-[7px]">LLM Pentest Tree</div>
-              <div class="text-emerald-300 text-[7px] font-bold">85% Post-Exploit</div>
-            </div>
-            <!-- 8. Garak -->
-            <div onclick="showAgentDetail('garak')" class="p-1.5 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded cursor-pointer transition">
-              <div class="flex justify-between items-center"><strong class="text-cyan-300">8. Garak</strong><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span></div>
-              <div class="text-slate-400 text-[7px]">AI Red Team Test</div>
-              <div class="text-emerald-300 text-[7px] font-bold">47/47 Blocked</div>
-            </div>
-          </div>
-
-          <div id="agentDetailBox" class="mt-1.5 pt-1 border-t border-cyan-500/20 text-[8px] font-mono text-slate-300 flex justify-between items-center">
-            <span>💡 <em>Click any of the 8 security AI models above to inspect its active reasoning trace.</em></span>
-            <span class="text-cyan-400 font-bold">ORCHESTRATION LATENCY: 2.84s</span>
-          </div>
-        </div>
-
-        <!-- TARGET PROFILING, SCOPE BOUNDARY & DYNAMIC SELECTION HUD -->
-        <div class="hud-panel hud-interactive rounded-xl p-2.5 pointer-events-auto font-mono text-[8px]">
-          <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1 mb-1.5">
-            <div class="flex items-center space-x-1.5">
-              <span class="orbitron text-[9px] font-bold text-cyan-300">🎯 TARGET UNDERSTANDING & DYNAMIC SCOPE</span>
-              <span class="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/30 font-bold">42.5% TIME SAVED</span>
-            </div>
-            <span class="text-cyan-400">REACTIVE TOOL CHAIN</span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2 text-slate-300 mb-1">
-            <div class="p-1.5 bg-[#030914] border border-cyan-500/20 rounded">
-              <span class="text-cyan-400 font-bold block mb-0.5">1. TARGET PROFILE UNDERSTOOD:</span>
-              <span>web-prod-01 (Ubuntu 22.04 LTS / AWS Hybrid)</span>
-              <div class="text-[7px] text-slate-400">NGINX + AD Kerberos + PostgreSQL + S3</div>
-            </div>
-            <div class="p-1.5 bg-[#030914] border border-cyan-500/20 rounded">
-              <span class="text-amber-400 font-bold block mb-0.5">2. TARGET-DRIVEN SCOPE (FILTERED):</span>
-              <span class="text-emerald-300 font-bold">4 irrelevant tools excluded</span> (No SCADA, No Mainframe, No Bare-Metal escape).
-              <div class="text-[7px] text-slate-400">Zero wasted cycles • Clean operational boundary</div>
-            </div>
-          </div>
-
-          <div class="p-1 bg-[#020712] border border-cyan-500/30 rounded text-[7px] text-slate-300 flex justify-between items-center">
-            <span>⚡ <strong>DYNAMIC SELECTION RULE:</strong> <em>"Next tool is decided at runtime based on what the previous tool discovers."</em></span>
-            <span class="text-emerald-400 font-bold">DISCOVERY-DRIVEN</span>
-          </div>
-        </div>
-
-        <!-- BOTTOM CENTER: 3D FLOW HINT -->
-        <div class="hud-panel rounded-xl px-3 py-2 text-center pointer-events-auto font-mono text-[9px] text-cyan-400/90 flex justify-between items-center">
-          <span>🖱️ <strong>3D VIEWPORT:</strong> Drag to rotate • Scroll to zoom • Click any numbered node ① ➔ ② ➔ ③ ➔ ④ ➔ ⑤</span>
-          <span class="text-emerald-400 font-bold">TRANSMISSION SPEED: REAL-TIME</span>
-        </div>
-
+      <div class="text-[10px] font-mono text-slate-200 mb-2 flex justify-between items-center">
+        <span>QAOA Defense Plan: <strong class="text-emerald-400">"Isolate Compromised Web Host 10.0.4.50 & Evict JWT (-94% risk)"</strong></span>
       </div>
-
-      <!-- RIGHT COLUMN: CONVERSATIONAL COPILOT & AUDIT LOG (3 COLS) -->
-      <div class="lg:col-span-3 space-y-2 flex flex-col justify-between overflow-y-auto pl-1 pointer-events-auto">
-        
-        <!-- NEXUS Copilot Chat Console -->
-        <div class="hud-panel hud-interactive rounded-xl p-3 flex-1 flex flex-col justify-between h-[360px]">
-          <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1.5 mb-2">
-            <span class="orbitron text-xs font-bold text-cyan-400 flex items-center space-x-1.5">
-              <span>💬</span><span>NEXUS WORKFLOW COPILOT</span>
-            </span>
-            <span class="text-[8px] text-emerald-400 font-mono">LIVE SYNC</span>
-          </div>
-
-          <!-- Quick Action Prompts -->
-          <div class="grid grid-cols-2 gap-1 pb-1.5 mb-1.5 border-b border-cyan-500/20 text-[9px]">
-            <button onclick="executeCommand('What is happening?')" class="p-1 rounded bg-[#071828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30">"What is happening?"</button>
-            <button onclick="executeCommand('Investigate.')" class="p-1 rounded bg-[#071828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30">"Investigate."</button>
-            <button onclick="executeCommand('Defend.')" class="p-1 rounded bg-[#071828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30">"Defend."</button>
-            <button onclick="executeCommand('Approve option 1.')" class="p-1 rounded bg-[#0a2815] hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 font-bold">"Approve option 1."</button>
-          </div>
-
-          <!-- Chat Transcript Stream -->
-          <div id="tacticalTerminal" class="flex-1 overflow-y-auto space-y-2 text-[10px] font-mono pr-1">
-            <div class="p-2 bg-[#020914] border border-cyan-500/30 rounded text-cyan-300">
-              <span class="text-cyan-400 font-bold orbitron text-[9px] block">🤖 NEXUS:</span>
-              3D Workflow DAG initialized matching topology layout (① ➔ ② ➔ ③ and ① ➔ ④, ⑤). Ready to trigger live work transmission.
-            </div>
-          </div>
-
-          <!-- Input Bar -->
-          <div class="mt-2 pt-2 border-t border-cyan-500/30 flex space-x-1.5">
-            <input id="terminalInput" type="text" onkeydown="if(event.key==='Enter') submitTerminalInput()" placeholder="Direct NEXUS (e.g. 'Approve option 1.')..." class="flex-1 bg-[#020712] border border-cyan-500/50 rounded px-2.5 py-1 text-[10px] text-cyan-200 focus:outline-none focus:border-cyan-400 font-mono">
-            <button onclick="submitTerminalInput()" class="px-2 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold rounded text-[10px] orbitron">SEND</button>
-          </div>
-        </div>
-
-        <!-- Live Node Telemetry Details Mini-Panel -->
-        <div id="selectedNodeCard" class="hud-panel hud-interactive rounded-xl p-2.5 font-mono text-[9px]">
-          <div class="flex justify-between items-center border-b border-cyan-500/30 pb-1 mb-1.5">
-            <span class="orbitron text-[10px] font-bold text-cyan-300" id="selNodeTitle">NODE ① TELEMETRY</span>
-            <span class="text-cyan-400" id="selNodeStatus">ACTIVE</span>
-          </div>
-          <div class="space-y-1 text-slate-300 text-[8px]" id="selNodeBody">
-            <div><strong class="text-slate-400">Function:</strong> 9-Stream Ingestion & Anomaly Triage</div>
-            <div><strong class="text-slate-400">Target Line:</strong> Connected to Node ② (Reasoning Engine)</div>
-            <div><strong class="text-slate-400">Branching:</strong> Sub-circuits to ④ (Twin) and ⑤ (Ledger)</div>
-          </div>
-        </div>
-
+      <div class="flex space-x-2">
+        <button onclick="step2_Approve()" class="flex-1 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-slate-950 font-bold rounded-lg font-mono text-[10px] transition glow-emerald flex items-center justify-center space-x-1.5">
+          <span>✅</span><span>GIVE APPROVAL ➔ TRANSMIT TO POINT ③</span>
+        </button>
+        <button onclick="step1_Ingest()" class="px-3 py-1.5 bg-[#071828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 rounded-lg font-mono text-[9px] transition">
+          ↺ RE-RUN
+        </button>
       </div>
-
     </div>
+
+    <!-- BOTTOM FLOATING STATUS BAR (Non-Intrusive, 3D world stays 100% visible) -->
+    <footer class="hud-glass rounded-xl px-4 py-2 flex flex-wrap justify-between items-center pointer-events-auto border-t border-cyan-500/30 text-[10px] font-mono">
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="liveStatusText" class="text-emerald-400 font-bold">3D DAG READY: VIEWING UNRESTRICTED</span>
+        </div>
+        <span class="text-slate-500">|</span>
+        <span class="text-slate-400">Active Target: <strong class="text-cyan-300">web-prod-01 (10.0.4.50)</strong></span>
+        <span class="text-slate-500">|</span>
+        <span class="text-slate-400">Optimal Choke: <strong class="text-emerald-300">Credential Guard (-94% risk)</strong></span>
+      </div>
+
+      <div class="flex items-center space-x-3 text-slate-400">
+        <span>🖱️ <strong>3D CONTROLS:</strong> Drag to Rotate • Scroll to Zoom • Click Node to Focus</span>
+        <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-500/30">REAL-TIME BEAM SYNC</span>
+      </div>
+    </footer>
 
   </div>
 
-  <!-- THREE.JS 3D WORKFLOW SCRIPT -->
+  <!-- ============================================================== -->
+  <!-- SLIDE-OVER DRAWER PANELS (Collapsed by default so 3D is clear) -->
+  <!-- ============================================================== -->
+
+  <!-- 1. 8-AGENT INTELLIGENCE SUITE SLIDE-OVER -->
+  <div id="agentDrawer" class="drawer-panel fixed top-16 right-4 z-40 w-96 hud-glass rounded-2xl p-3.5 shadow-2xl border border-cyan-500/40 hidden pointer-events-auto max-h-[80vh] overflow-y-auto">
+    <div class="flex justify-between items-center border-b border-cyan-500/30 pb-2 mb-2">
+      <div class="flex items-center space-x-2">
+        <span class="orbitron text-xs font-bold text-cyan-400">🤖 8-AGENT INTELLIGENCE SUITE</span>
+      </div>
+      <button onclick="togglePanel('agentDrawer')" class="text-slate-400 hover:text-cyan-300 text-xs font-mono">✕ CLOSE</button>
+    </div>
+
+    <div class="space-y-1.5 text-[9px] font-mono">
+      <div onclick="showAgentDetail('hadrian')" class="p-2 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded-lg cursor-pointer transition">
+        <div class="flex justify-between items-center"><strong class="text-cyan-300">1. Hadrian (External Recon)</strong><span class="text-purple-400 font-bold">5 Assets</span></div>
+        <div class="text-slate-400 text-[8px]">Discovered 2 unknown-unknowns • 88% surface risk</div>
+      </div>
+      <div onclick="showAgentDetail('astra')" class="p-2 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded-lg cursor-pointer transition">
+        <div class="flex justify-between items-center"><strong class="text-cyan-300">2. Astra (Multi-Agent Valid)</strong><span class="text-emerald-400 font-bold">95% TP</span></div>
+        <div class="text-slate-400 text-[8px]">4 sub-agents • 8 findings • 1 false positive eliminated</div>
+      </div>
+      <div onclick="showAgentDetail('nodezero')" class="p-2 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded-lg cursor-pointer transition">
+        <div class="flex justify-between items-center"><strong class="text-cyan-300">3. NodeZero (Attack Path Graph)</strong><span class="text-red-400 font-bold">3 Hops to DB</span></div>
+        <div class="text-slate-400 text-[8px]">Shortest path mapped to Crown Jewel 10.0.4.51</div>
+      </div>
+      <div onclick="showAgentDetail('xbow')" class="p-2 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded-lg cursor-pointer transition">
+        <div class="flex justify-between items-center"><strong class="text-cyan-300">4. XBOW (Web Exploit Chains)</strong><span class="text-amber-400 font-bold">94% Feasibility</span></div>
+        <div class="text-slate-400 text-[8px]">CVE-2024-3400 RCE ➔ LSASS dump ➔ DB pivot</div>
+      </div>
+      <div onclick="showAgentDetail('pentera')" class="p-2 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded-lg cursor-pointer transition">
+        <div class="flex justify-between items-center"><strong class="text-cyan-300">5. Pentera (Control Validation)</strong><span class="text-amber-400 font-bold">3 Drift Alerts</span></div>
+        <div class="text-slate-400 text-[8px]">6 live controls tested • MFA & S3 ACL drift detected</div>
+      </div>
+      <div onclick="showAgentDetail('pentestgpt')" class="p-2 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded-lg cursor-pointer transition">
+        <div class="flex justify-between items-center"><strong class="text-cyan-300">6. PentestGPT (Task Tree)</strong><span class="text-emerald-400 font-bold">85% Complete</span></div>
+        <div class="text-slate-400 text-[8px]">6-node hierarchical tree in Post-Exploitation phase</div>
+      </div>
+      <div onclick="showAgentDetail('garak')" class="p-2 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded-lg cursor-pointer transition">
+        <div class="flex justify-between items-center"><strong class="text-cyan-300">7. Garak (AI Red Team)</strong><span class="text-emerald-400 font-bold">47/47 Blocked</span></div>
+        <div class="text-slate-400 text-[8px]">100% prompt injection & jailbreak resilience</div>
+      </div>
+      <div onclick="showAgentDetail('penligent')" class="p-2 bg-[#040e1c] hover:bg-cyan-950/60 border border-cyan-500/30 rounded-lg cursor-pointer transition">
+        <div class="flex justify-between items-center"><strong class="text-cyan-300">8. Penligent (Tool Orchestrator)</strong><span class="text-cyan-400 font-bold">2.84s Latency</span></div>
+        <div class="text-slate-400 text-[8px]">Dynamic ReAct DAG chain optimizer</div>
+      </div>
+    </div>
+
+    <div id="drawerDetailBox" class="mt-2 p-2 bg-[#020712] border border-cyan-500/30 rounded-lg text-[8px] font-mono text-slate-300">
+      Click any agent to inspect its active reasoning trace.
+    </div>
+  </div>
+
+  <!-- 2. TARGET SCOPE SLIDE-OVER -->
+  <div id="scopeDrawer" class="drawer-panel fixed top-16 right-4 z-40 w-96 hud-glass rounded-2xl p-3.5 shadow-2xl border border-cyan-500/40 hidden pointer-events-auto max-h-[80vh] overflow-y-auto">
+    <div class="flex justify-between items-center border-b border-cyan-500/30 pb-2 mb-2">
+      <div class="flex items-center space-x-2">
+        <span class="orbitron text-xs font-bold text-cyan-400">🎯 TARGET SCOPE & UNDERSTANDING</span>
+      </div>
+      <button onclick="togglePanel('scopeDrawer')" class="text-slate-400 hover:text-cyan-300 text-xs font-mono">✕ CLOSE</button>
+    </div>
+
+    <div class="space-y-2 text-[9px] font-mono">
+      <div class="p-2 bg-[#040e1c] border border-cyan-500/30 rounded-lg">
+        <strong class="text-cyan-300 block mb-1">1. TARGET PROFILE UNDERSTOOD:</strong>
+        <div class="text-slate-300">Host: web-prod-01 (10.0.4.50)</div>
+        <div class="text-slate-400 text-[8px]">OS: Ubuntu 22.04 LTS / AWS EC2 Hybrid</div>
+        <div class="text-slate-400 text-[8px]">Stack: NGINX + AD Kerberos + PostgreSQL + S3</div>
+      </div>
+
+      <div class="p-2 bg-[#040e1c] border border-cyan-500/30 rounded-lg">
+        <strong class="text-amber-400 block mb-1">2. TARGET-DRIVEN SCOPE (FILTERED):</strong>
+        <div class="text-emerald-300 font-bold">4 Irrelevant Tools Excluded:</div>
+        <ul class="list-disc list-inside text-slate-400 text-[8px] mt-1 space-y-0.5">
+          <li>No SCADA/Modbus Fuzzer (No industrial OT)</li>
+          <li>No Mainframe TN3270 Scanner (No z/OS)</li>
+          <li>No Bare-Metal Hypervisor Escape (Cloud VM)</li>
+          <li>No Bluetooth/RF Prober (AWS VPC)</li>
+        </ul>
+        <div class="mt-1 text-emerald-400 text-[8px] font-bold">→ 42.5% Time Saved & Blast Radius Bounded</div>
+      </div>
+
+      <div class="p-2 bg-[#040e1c] border border-cyan-500/30 rounded-lg">
+        <strong class="text-cyan-400 block mb-1">3. DYNAMIC SELECTION RULE:</strong>
+        <div class="text-slate-300 text-[8px]">
+          "The agent does not always run the same sequence. The next tool depends on what the previous tool discovered."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. COPILOT TERMINAL SLIDE-OVER -->
+  <div id="copilotDrawer" class="drawer-panel fixed top-16 right-4 z-40 w-96 hud-glass rounded-2xl p-3.5 shadow-2xl border border-cyan-500/40 hidden pointer-events-auto h-[480px] flex flex-col justify-between">
+    <div>
+      <div class="flex justify-between items-center border-b border-cyan-500/30 pb-2 mb-2">
+        <span class="orbitron text-xs font-bold text-cyan-400 flex items-center space-x-1.5">
+          <span>💬</span><span>NEXUS WORKFLOW COPILOT</span>
+        </span>
+        <button onclick="togglePanel('copilotDrawer')" class="text-slate-400 hover:text-cyan-300 text-xs font-mono">✕ CLOSE</button>
+      </div>
+
+      <!-- Quick prompts -->
+      <div class="grid grid-cols-2 gap-1 pb-2 mb-2 border-b border-cyan-500/20 text-[9px] font-mono">
+        <button onclick="executeCommand('What is happening?')" class="p-1 rounded bg-[#071828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30">"What is happening?"</button>
+        <button onclick="executeCommand('Investigate.')" class="p-1 rounded bg-[#071828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30">"Investigate."</button>
+        <button onclick="executeCommand('Defend.')" class="p-1 rounded bg-[#071828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30">"Defend."</button>
+        <button onclick="executeCommand('Approve option 1.')" class="p-1 rounded bg-[#0a2815] hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 font-bold">"Approve option 1."</button>
+      </div>
+    </div>
+
+    <!-- Chat history -->
+    <div id="tacticalTerminal" class="flex-1 overflow-y-auto space-y-2 text-[10px] font-mono pr-1 my-1">
+      <div class="p-2 bg-[#020914] border border-cyan-500/30 rounded text-cyan-300">
+        <span class="text-cyan-400 font-bold orbitron text-[9px] block">🤖 NEXUS:</span>
+        3D Workflow DAG initialized (① ➔ ② ➔ ③ and ① ➔ ④, ⑤). Center viewport is clear. Ready to trigger live work transmission.
+      </div>
+    </div>
+
+    <!-- Input bar -->
+    <div class="pt-2 border-t border-cyan-500/30 flex space-x-1.5">
+      <input id="terminalInput" type="text" onkeydown="if(event.key==='Enter') submitTerminalInput()" placeholder="Direct NEXUS..." class="flex-1 bg-[#020712] border border-cyan-500/50 rounded px-2.5 py-1 text-[10px] text-cyan-200 focus:outline-none focus:border-cyan-400 font-mono">
+      <button onclick="submitTerminalInput()" class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold rounded text-[10px] orbitron">SEND</button>
+    </div>
+  </div>
+
+  <!-- THREE.JS 3D WORKFLOW ENGINE -->
   <script>
     let scene, camera, renderer, raycaster, mouse;
     let nodesGroup, linksGroup, beamGroup;
     let isMouseDown = false, mouseX = 0, mouseY = 0;
-    let targetRotationY = 0, targetRotationX = 0.1;
+    let targetRotationY = 0, targetRotationX = 0.05;
 
     // Active beam particles traveling along edges
     let activeBeams = [];
+    let workflowStage = 0; // 0: Idle, 1: 1->2, 2: Waiting Approval, 3: 2->3 Done
 
-    // Current Workflow Step: 0: Idle, 1: 1->2 Transmitting, 2: 2 Waiting Approval, 3: 2->3 Transmitted / Done
-    let workflowStage = 0;
-
-    // 5-Node Topology precisely matching the user's sketch:
-    // Node 1 (Top Left/Center), Node 2 (Top Right), Node 3 (Bottom Right from 2), Node 4 (Bottom Left from 1), Node 5 (Bottom Center from 1)
+    // 5-Node Topology precisely matching sketch
     const WORKFLOW_NODES = [
       {
         id: 1,
-        name: 'POINT ①: TELEMETRY & INGESTION',
+        name: 'POINT ①: INGESTION',
         role: 'Observation / Ingestion',
-        pos: [-8, 5, 0],
+        pos: [-9, 5, 0],
         color: 0x00f0ff,
         icon: '📡',
-        status: 'READY / LISTENING',
-        desc: 'Correlates raw events across 9 streams. Initiates work packet to Point ②.'
+        status: 'READY',
+        desc: 'Correlates 9 streams on Web 10.0.4.50. Streams to Point ②.'
       },
       {
         id: 2,
-        name: 'POINT ②: AI REASONING & PROPOSAL',
+        name: 'POINT ②: AI REASONING',
         role: 'Hypothesis & Proposal',
-        pos: [10, 5, -2],
+        pos: [10, 5, -1],
         color: 0xffb700,
         icon: '🧠',
-        status: 'STANDBY FOR ①',
-        desc: 'Receives work from ①. Computes QAOA mitigation. Pauses at Human Approval Gate.'
+        status: 'STANDBY',
+        desc: 'Synthesizes QAOA defense cut. Pauses for Human Approval.'
       },
       {
         id: 3,
-        name: 'POINT ③: REMEDIATION EXECUTION',
-        role: 'Execution & Verification',
-        pos: [12, -6, 2],
+        name: 'POINT ③: EXECUTION',
+        role: 'Remediation & Verification',
+        pos: [12, -6, 1],
         color: 0x00ff66,
         icon: '🛡️',
-        status: 'STANDBY FOR APPROVAL',
-        desc: 'Receives approval from ②. Executes host isolation and seals Block #1.'
+        status: 'STANDBY',
+        desc: 'Applies firewall quarantine & seals Block #1 (Risk: 6%).'
       },
       {
         id: 4,
-        name: 'POINT ④: DIGITAL TWIN REPLAY',
-        role: 'Shadow Twin Simulation',
-        pos: [-14, -8, 4],
+        name: 'POINT ④: TWIN REPLAY',
+        role: 'Digital Twin Simulation',
+        pos: [-14, -8, 3],
         color: 0xff003c,
         icon: '🔮',
-        status: 'STANDBY FOR ①',
-        desc: 'Branch from ①: Simulates adversarial lateral path in isolated virtual twin.'
+        status: 'STANDBY',
+        desc: 'Simulates Red AI lateral path in isolated virtual twin.'
       },
       {
         id: 5,
-        name: 'POINT ⑤: EVIDENCE LEDGER VAULT',
+        name: 'POINT ⑤: EVIDENCE VAULT',
         role: 'Immutable Evidence Ledger',
         pos: [-4, -4, 2],
         color: 0xb026ff,
         icon: '🔒',
-        status: 'STANDBY FOR ①',
-        desc: 'Branch from ①: Cryptographic SHA-256 tamper-proof ledger archive.'
+        status: 'STANDBY',
+        desc: 'Tamper-evident SHA-256 ledger recording all decisions.'
       }
     ];
 
-    // Directed connections matching sketch: 1->2, 2->3, 1->4, 1->5
     const WORKFLOW_EDGES = [
-      { id: 'e1_2', from: 1, to: 2, label: 'Work Telemetry Stream', active: false, color: 0x00f0ff },
-      { id: 'e2_3', from: 2, to: 3, label: 'Approved Remediation Payload', active: false, color: 0x00ff66 },
-      { id: 'e1_4', from: 1, to: 4, label: 'Twin Simulation Branch', active: false, color: 0xff003c },
-      { id: 'e1_5', from: 1, to: 5, label: 'Evidence Stream Branch', active: false, color: 0xb026ff }
+      { id: 'e1_2', from: 1, to: 2, label: 'Work Telemetry Stream', color: 0x00f0ff },
+      { id: 'e2_3', from: 2, to: 3, label: 'Approved Remediation Payload', color: 0x00ff66 },
+      { id: 'e1_4', from: 1, to: 4, label: 'Twin Simulation Branch', color: 0xff003c },
+      { id: 'e1_5', from: 1, to: 5, label: 'Evidence Stream Branch', color: 0xb026ff }
     ];
 
-    function init3DWorkflow() {
+    function init3D() {
       const container = document.getElementById('canvas-container');
       const width = window.innerWidth;
       const height = window.innerHeight;
@@ -517,8 +420,8 @@
       scene.background = new THREE.Color(0x02060d);
       scene.fog = new THREE.FogExp2(0x02060d, 0.012);
 
-      // 2. Camera (Perspective angled view for crisp 3D spatial clarity)
-      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+      // 2. Camera: Positioned so all 5 nodes are perfectly visible with ample margin
+      camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1000);
       camera.position.set(0, 0, 36);
       camera.lookAt(0, -1, 0);
 
@@ -529,17 +432,19 @@
       container.appendChild(renderer.domElement);
 
       // 4. Lighting
-      const ambientLight = new THREE.AmbientLight(0x081525, 3.0);
+      const ambientLight = new THREE.AmbientLight(0x091b2c, 3.5);
       scene.add(ambientLight);
 
-      const dirLight = new THREE.DirectionalLight(0x00f0ff, 2.0);
-      dirLight.position.set(10, 20, 20);
+      const dirLight = new THREE.DirectionalLight(0x00f0ff, 2.5);
+      dirLight.position.set(10, 25, 25);
       scene.add(dirLight);
 
-      // 5. Build Ground Cyber Circuit Floor
-      buildBackgroundGrid();
+      // 5. Grid
+      const grid = new THREE.GridHelper(70, 35, 0x00f0ff, 0x071b2d);
+      grid.position.y = -12;
+      scene.add(grid);
 
-      // 6. Groups for Nodes and Links
+      // 6. Groups
       nodesGroup = new THREE.Group();
       linksGroup = new THREE.Group();
       beamGroup = new THREE.Group();
@@ -550,7 +455,7 @@
       buildNodes();
       buildEdges();
 
-      // 7. Raycasting & Mouse Controls
+      // 7. Raycasting & Events
       raycaster = new THREE.Raycaster();
       mouse = new THREE.Vector2();
 
@@ -565,17 +470,8 @@
       window.addEventListener('pointermove', onPointerMove);
       window.addEventListener('wheel', onWheel);
 
-      // Create HTML Overlays
       createHTMLLabels();
-
-      // Start Animation
       animate();
-    }
-
-    function buildBackgroundGrid() {
-      const grid = new THREE.GridHelper(60, 30, 0x00f0ff, 0x091b2e);
-      grid.position.y = -12;
-      scene.add(grid);
     }
 
     function buildNodes() {
@@ -584,18 +480,17 @@
         group.position.set(n.pos[0], n.pos[1], n.pos[2]);
         group.userData = n;
 
-        // Outer Glowing Glass Ring
-        const ringGeom = new THREE.TorusGeometry(2.2, 0.1, 16, 32);
+        // Outer Ring
+        const ringGeom = new THREE.TorusGeometry(2.3, 0.1, 16, 32);
         const ringMat = new THREE.MeshBasicMaterial({ color: n.color });
         const ringMesh = new THREE.Mesh(ringGeom, ringMat);
         ringMesh.name = 'outerRing';
         group.add(ringMesh);
 
-        // Rotating Cyber Hexagon Frame
-        const hexGeom = new THREE.CircleGeometry(2.0, 6);
+        // Core Hexagon Glass
+        const hexGeom = new THREE.CircleGeometry(2.1, 6);
         const hexMat = new THREE.MeshBasicMaterial({
           color: 0x061528,
-          wireframe: false,
           transparent: true,
           opacity: 0.85,
           side: THREE.DoubleSide
@@ -603,20 +498,20 @@
         const hexMesh = new THREE.Mesh(hexGeom, hexMat);
         group.add(hexMesh);
 
-        // Core Glowing Crystal Sphere
-        const coreGeom = new THREE.SphereGeometry(0.8, 16, 16);
+        // Core Crystal
+        const coreGeom = new THREE.OctahedronGeometry(0.85, 0);
         const coreMat = new THREE.MeshPhongMaterial({
           color: n.color,
           emissive: n.color,
-          emissiveIntensity: 0.6,
+          emissiveIntensity: 0.7,
           wireframe: true
         });
         const coreMesh = new THREE.Mesh(coreGeom, coreMat);
         coreMesh.name = 'coreSphere';
         group.add(coreMesh);
 
-        // Light point
-        const pointLight = new THREE.PointLight(n.color, 1.2, 10);
+        // Point Light
+        const pointLight = new THREE.PointLight(n.color, 1.5, 12);
         group.add(pointLight);
 
         nodesGroup.add(group);
@@ -632,21 +527,20 @@
         const p1 = new THREE.Vector3(...fromNode.pos);
         const p2 = new THREE.Vector3(...toNode.pos);
 
-        // Base Circuit Line
         const geom = new THREE.BufferGeometry().setFromPoints([p1, p2]);
         const mat = new THREE.LineBasicMaterial({
-          color: 0x163450,
+          color: 0x143450,
           transparent: true,
           opacity: 0.6,
           linewidth: 2
         });
         const line = new THREE.Line(geom, mat);
-        line.name = `edge_${edge.id}`;
+        line.name = `edge_e${edge.from}_${edge.to}`;
         linksGroup.add(line);
       });
     }
 
-    function spawnBeam(fromId, toId, colorHex, count = 3) {
+    function spawnBeam(fromId, toId, colorHex, count = 4) {
       const fromNode = WORKFLOW_NODES.find(n => n.id === fromId);
       const toNode = WORKFLOW_NODES.find(n => n.id === toId);
       if (!fromNode || !toNode) return;
@@ -654,21 +548,21 @@
       const p1 = new THREE.Vector3(...fromNode.pos);
       const p2 = new THREE.Vector3(...toNode.pos);
 
-      // Highlight base line
+      // Highlight line
       const edge = linksGroup.getObjectByName(`edge_e${fromId}_${toId}`);
       if (edge) {
         edge.material.color.setHex(colorHex);
-        edge.material.opacity = 0.9;
+        edge.material.opacity = 1.0;
       }
 
       for (let i = 0; i < count; i++) {
-        const pktGeom = new THREE.SphereGeometry(0.35, 12, 12);
+        const pktGeom = new THREE.SphereGeometry(0.38, 12, 12);
         const pktMat = new THREE.MeshBasicMaterial({ color: colorHex });
         const pkt = new THREE.Mesh(pktGeom, pktMat);
         pkt.userData = {
           p1, p2,
           progress: i * (1 / count),
-          speed: 0.015,
+          speed: 0.014,
           colorHex
         };
         beamGroup.add(pkt);
@@ -683,16 +577,16 @@
       WORKFLOW_NODES.forEach(n => {
         const div = document.createElement('div');
         div.id = `node-label-${n.id}`;
-        div.className = "node-label bg-[#050f1d]/90 border border-cyan-500/40 rounded-xl p-2 shadow-2xl text-center backdrop-blur min-w-[140px]";
+        div.className = "node-label hud-glass rounded-xl px-2.5 py-1.5 shadow-2xl text-center min-w-[130px] border border-cyan-500/40";
         div.onclick = () => selectNode(n.id);
 
         div.innerHTML = `
-          <div class="flex items-center space-x-1.5 justify-center mb-0.5">
-            <span class="text-base">${n.icon}</span>
+          <div class="flex items-center space-x-1.5 justify-center">
+            <span class="text-sm">${n.icon}</span>
             <span class="orbitron text-xs font-bold" style="color: #${n.color.toString(16).padStart(6, '0')}">${n.name}</span>
           </div>
           <div class="text-[8px] font-mono text-slate-300">${n.role}</div>
-          <div id="badge-live-${n.id}" class="mt-1 text-[7px] font-mono px-1 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 font-bold">${n.status}</div>
+          <div id="badge-live-${n.id}" class="mt-0.5 text-[7px] font-mono px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 font-bold border border-cyan-500/30">${n.status}</div>
         `;
         container.appendChild(div);
       });
@@ -704,8 +598,7 @@
         if (!label) return;
 
         const worldPos = new THREE.Vector3(...n.pos);
-        // Place label slightly above the node
-        worldPos.y += 3.2;
+        worldPos.y += 3.3;
         const screenPos = worldPos.clone().project(camera);
 
         const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
@@ -716,17 +609,27 @@
       });
     }
 
-    function selectNode(id) {
-      const n = WORKFLOW_NODES.find(node => node.id === id);
-      if (!n) return;
+    function onPointerMove(e) {
+      if (isMouseDown) {
+        targetRotationY += (e.clientX - mouseX) * 0.005;
+        targetRotationX += (e.clientY - mouseY) * 0.005;
+        targetRotationX = Math.max(-0.35, Math.min(0.35, targetRotationX));
+      }
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    }
 
-      document.getElementById('selNodeTitle').textContent = n.name;
-      document.getElementById('selNodeStatus').textContent = n.status;
-      document.getElementById('selNodeBody').innerHTML = `
-        <div><strong class="text-slate-400">Function:</strong> ${n.desc}</div>
-        <div><strong class="text-slate-400">Topology:</strong> Node ${n.id} in DAG Tree</div>
-        <div><strong class="text-slate-400">Status:</strong> <span class="text-cyan-300">${n.status}</span></div>
-      `;
+    function onWheel(e) {
+      camera.position.z += e.deltaY * 0.04;
+      camera.position.z = Math.max(18, Math.min(60, camera.position.z));
+    }
+
+    function onWindowResize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
     }
 
     function onNodeClick(e) {
@@ -746,47 +649,30 @@
       }
     }
 
-    function onPointerMove(e) {
-      if (isMouseDown) {
-        targetRotationY += (e.clientX - mouseX) * 0.005;
-        targetRotationX += (e.clientY - mouseY) * 0.005;
-        targetRotationX = Math.max(-0.4, Math.min(0.4, targetRotationX));
-      }
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    }
-
-    function onWheel(e) {
-      camera.position.z += e.deltaY * 0.04;
-      camera.position.z = Math.max(20, Math.min(65, camera.position.z));
-    }
-
-    function onWindowResize() {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
+    function selectNode(id) {
+      const n = WORKFLOW_NODES.find(node => node.id === id);
+      if (!n) return;
+      appendTerminal('🤖 NEXUS', `Focused on <strong>${n.name}</strong> [${n.role}]: ${n.desc}`);
     }
 
     function animate() {
       requestAnimationFrame(animate);
 
-      // Smooth camera orbit
       nodesGroup.rotation.y += (targetRotationY - nodesGroup.rotation.y) * 0.05;
       nodesGroup.rotation.x += (targetRotationX - nodesGroup.rotation.x) * 0.05;
       linksGroup.rotation.copy(nodesGroup.rotation);
       beamGroup.rotation.copy(nodesGroup.rotation);
 
-      // Self-spin node crystals
       nodesGroup.children.forEach(group => {
         const ring = group.getObjectByName('outerRing');
         const core = group.getObjectByName('coreSphere');
         if (ring) ring.rotation.z += 0.01;
-        if (core) core.rotation.y += 0.02;
+        if (core) {
+          core.rotation.y += 0.02;
+          core.rotation.x += 0.01;
+        }
       });
 
-      // Animate flowing beam packets
       activeBeams.forEach(pkt => {
         pkt.userData.progress += pkt.userData.speed;
         if (pkt.userData.progress > 1) pkt.userData.progress = 0;
@@ -801,107 +687,125 @@
     // STEP-BY-STEP LIVE TRANSMISSION LOGIC
     // ==========================================
 
-    function handleMainAction() {
-      if (workflowStage === 0) {
-        step1_Ingest();
-      } else if (workflowStage === 1 || workflowStage === 2) {
-        step2_Approve();
-      } else {
-        step1_Ingest();
-      }
-    }
-
-    // 1. STEP 1: Point 1 ingests & transmits to Point 2 (and branches to 4, 5)
     function step1_Ingest() {
       workflowStage = 1;
-      document.getElementById('workflowBadge').textContent = 'STATE: ① TRANSMITTING TO ②';
-      document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[8px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 tracking-wider animate-pulse';
-      document.getElementById('liveStatusText').textContent = 'POINT ① ➔ TRANSMITTING TO ②';
+      document.getElementById('workflowBadge').textContent = '① TRANSMITTING TO ②';
+      document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-500/30 text-cyan-200 border border-cyan-400 tracking-wider animate-pulse';
+      document.getElementById('liveStatusText').textContent = 'POINT ① ➔ TRANSMITTING TELEMETRY TO POINT ②';
+      document.getElementById('badge-live-1').textContent = 'STREAMING TO ②';
 
-      // Update Step Card 1
-      document.getElementById('stepCard-1').className = 'p-2 rounded bg-cyan-950/80 border border-cyan-400 text-cyan-200 transition';
-      document.getElementById('badge-1').textContent = 'TRANSMITTING';
-      document.getElementById('badge-1').className = 'text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/40 text-cyan-200 font-bold animate-pulse';
-      document.getElementById('badge-live-1').textContent = 'STREAMING TO POINT ②';
+      appendTerminal('🤖 NEXUS', '<strong>[POINT ① ACTIVATED]</strong> Ingested 9 streams. Launching live transmission beam from <strong>Point ① ➔ Point ②</strong>.');
 
-      appendTerminal('🤖 NEXUS', '<strong>[POINT ① ACTIVATED]</strong> 9-Stream correlation finished. Outbound SMB exploit anomaly isolated. Launching live transmission beam from <strong>Point ① ➔ Point ②</strong>.');
-
-      // Spawn Beam from 1 -> 2
-      spawnBeam(1, 2, 0x00f0ff, 4);
-
-      // Also branch to 4 and 5 in parallel
+      // Beams from 1 -> 2
+      spawnBeam(1, 2, 0x00f0ff, 5);
       spawnBeam(1, 4, 0xff003c, 2);
       spawnBeam(1, 5, 0xb026ff, 2);
-      document.getElementById('badge-4').textContent = 'REPLAYING';
-      document.getElementById('badge-5').textContent = 'LOGGING';
       document.getElementById('badge-live-4').textContent = 'SIMULATING TWIN';
       document.getElementById('badge-live-5').textContent = 'RECORDING LEDGER';
 
-      // After transmission arrives at Point 2 (~1.2s), pause at Human Approval Gate
+      // Arrives at Point 2 after 1.2s -> Shows Approval Banner
       setTimeout(() => {
         workflowStage = 2;
-        document.getElementById('workflowBadge').textContent = 'STATE: ② AWAITING APPROVAL';
-        document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[8px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40 tracking-wider animate-pulse';
-        document.getElementById('liveStatusText').textContent = 'POINT ② PAUSED: APPROVAL REQUIRED';
+        document.getElementById('workflowBadge').textContent = '② AWAITING APPROVAL';
+        document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/30 text-amber-200 border border-amber-400 tracking-wider animate-pulse';
+        document.getElementById('liveStatusText').textContent = 'POINT ② PAUSED: HUMAN APPROVAL REQUIRED';
+        document.getElementById('badge-live-2').textContent = 'AWAITING APPROVAL';
 
-        document.getElementById('stepCard-2').className = 'p-2 rounded bg-amber-950/70 border border-amber-400 text-amber-200 transition';
-        document.getElementById('badge-2').textContent = 'APPROVAL REQ';
-        document.getElementById('badge-2').className = 'text-[9px] px-1.5 py-0.2 rounded bg-amber-500/40 text-amber-200 font-bold animate-pulse';
-        document.getElementById('badge-live-2').textContent = 'AWAITING COMMANDER APPROVAL';
+        document.getElementById('approvalBanner').classList.remove('hidden');
 
-        document.getElementById('approvalGateBanner').classList.remove('hidden');
-        document.getElementById('btnWorkflowMain').textContent = '✅ 2. APPROVE ➔ TRANSMIT TO POINT ③';
-        document.getElementById('btnWorkflowMain').className = 'w-full py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-slate-950 font-bold rounded-lg text-xs orbitron transition glow-emerald';
-
-        appendTerminal('🤖 NEXUS', '<strong>[POINT ② RECEIVED WORK]</strong> AI Guardian computed QAOA optimal cut: Isolate Host 10.0.4.50 & Evict JWT (-94% risk). <strong>Awaiting Human Authorization to transmit to Point ③.</strong>');
+        appendTerminal('🤖 NEXUS', '<strong>[POINT ② RECEIVED WORK]</strong> QAOA Optimal Cut: Isolate Web 10.0.4.50 & Evict JWT (-94% risk). <strong>Awaiting Human Authorization to transmit to Point ③.</strong>');
       }, 1400);
     }
 
-    // 2. STEP 2: Human Approval Given -> Transmit to Point 3
     function step2_Approve() {
       workflowStage = 3;
-      document.getElementById('workflowBadge').textContent = 'STATE: ② TRANSMITTING TO ③';
-      document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[8px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 tracking-wider animate-pulse';
-      document.getElementById('liveStatusText').textContent = 'APPROVED! POINT ② ➔ TRANSMITTING TO ③';
+      document.getElementById('approvalBanner').classList.add('hidden');
+      document.getElementById('workflowBadge').textContent = '② TRANSMITTING TO ③';
+      document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/30 text-emerald-200 border border-emerald-400 tracking-wider animate-pulse';
+      document.getElementById('liveStatusText').textContent = 'APPROVED! TRANSMITTING REMEDIATION TO POINT ③';
+      document.getElementById('badge-live-2').textContent = 'AUTHORIZED';
 
-      document.getElementById('badge-2').textContent = 'APPROVED';
-      document.getElementById('badge-2').className = 'text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/30 text-emerald-300 font-bold';
-      document.getElementById('badge-live-2').textContent = 'AUTHORIZED & TRANSMITTED';
+      appendTerminal('👤 COMMANDER', '<strong>APPROVAL GRANTED (NX-84721)</strong>. Transmit remediation payload to Point ③.');
 
-      appendTerminal('👤 COMMANDER', '<strong>APPROVAL GRANTED (Signature: NX-84721)</strong>. Authorize remediation transmission to Point ③.');
+      // Emerald laser beam from 2 -> 3
+      spawnBeam(2, 3, 0x00ff66, 6);
 
-      // Spawn bright high-energy laser beam from Point 2 -> Point 3
-      spawnBeam(2, 3, 0x00ff66, 5);
-
-      // Transmission arrives at Point 3
       setTimeout(() => {
-        document.getElementById('workflowBadge').textContent = 'STATE: POINT ③ EXECUTED & SECURED';
-        document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[8px] font-bold bg-emerald-500/30 text-emerald-300 border border-emerald-400 tracking-wider';
-        document.getElementById('liveStatusText').textContent = 'POINT ③ ENFORCED: RISK REDUCED TO 6%';
+        document.getElementById('workflowBadge').textContent = 'POINT ③ SECURED (6% RISK)';
+        document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/40 text-emerald-200 border border-emerald-400 tracking-wider';
+        document.getElementById('liveStatusText').textContent = 'POINT ③ REMEDIATION ENFORCED: RISK REDUCED TO 6%';
+        document.getElementById('badge-live-3').textContent = 'ENFORCED (6% RISK)';
 
-        document.getElementById('stepCard-3').className = 'p-2 rounded bg-emerald-950/80 border border-emerald-400 text-emerald-200 transition';
-        document.getElementById('badge-3').textContent = 'ENFORCED';
-        document.getElementById('badge-3').className = 'text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/40 text-emerald-200 font-bold';
-        document.getElementById('badge-live-3').textContent = 'REMEDIATION ACTIVE (RISK: 6%)';
-
-        document.getElementById('btnWorkflowMain').textContent = '🔄 RESTART WORKFLOW (① ➔ ② ➔ ③)';
-        document.getElementById('btnWorkflowMain').className = 'w-full py-2 bg-[#061828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold rounded-lg text-xs orbitron transition';
-
-        appendTerminal('🤖 NEXUS', '<strong>[POINT ③ REMEDIATION COMPLETE]</strong> Firewall quarantine engaged. Web Host 10.0.4.50 isolated. Ledger Block #1 Sealed. Residual risk decreased from 94% ➔ <strong>6%</strong>.');
+        appendTerminal('🤖 NEXUS', '<strong>[POINT ③ REMEDIATION COMPLETE]</strong> Firewall quarantine engaged. Host 10.0.4.50 isolated. Block #1 Sealed into Ledger.');
       }, 1500);
     }
 
     function runFullAutoWorkflow() {
-      step1_Ingest();
-      setTimeout(() => {
-        step2_Approve();
-      }, 2000);
+      resetWorkflow();
+      setTimeout(step1_Ingest, 200);
+      setTimeout(step2_Approve, 2200);
     }
 
-    // Terminal Commands
+    function resetWorkflow() {
+      workflowStage = 0;
+      activeBeams = [];
+      while (beamGroup.children.length > 0) {
+        beamGroup.remove(beamGroup.children[0]);
+      }
+      document.getElementById('approvalBanner').classList.add('hidden');
+      document.getElementById('workflowBadge').textContent = 'POINT 1 READY';
+      document.getElementById('workflowBadge').className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 tracking-wider';
+      document.getElementById('liveStatusText').textContent = '3D DAG READY: VIEWING UNRESTRICTED';
+
+      WORKFLOW_NODES.forEach(n => {
+        const badge = document.getElementById(`badge-live-${n.id}`);
+        if (badge) badge.textContent = n.status;
+      });
+      WORKFLOW_EDGES.forEach(edge => {
+        const line = linksGroup.getObjectByName(`edge_e${edge.from}_${edge.to}`);
+        if (line) {
+          line.material.color.setHex(0x143450);
+          line.material.opacity = 0.6;
+        }
+      });
+      appendTerminal('🤖 NEXUS', '3D workflow reset to initial baseline.');
+    }
+
+    function togglePanel(id) {
+      const panel = document.getElementById(id);
+      if (!panel) return;
+      ['agentDrawer', 'scopeDrawer', 'copilotDrawer'].forEach(pId => {
+        if (pId !== id) {
+          document.getElementById(pId)?.classList.add('hidden');
+        }
+      });
+      panel.classList.toggle('hidden');
+    }
+
+    const AGENT_DATA = {
+      'hadrian': { name: '🌐 Hadrian (External Recon)', summary: '5 exposed assets mapped (2 unknown-unknowns, 88% surface risk).' },
+      'astra': { name: '🛡️ Astra (Multi-Agent Valid)', summary: '4 sub-agents, 8 findings, 1 FP eliminated, 95% true-positive accuracy.' },
+      'nodezero': { name: '⚡ NodeZero (Attack Path Graph)', summary: 'Mapped shortest path to DB 10.0.4.51 (3 hops). Pinpointed Credential Guard choke point.' },
+      'xbow': { name: '🎯 XBOW (Web Exploit Chains)', summary: 'Chained CVE-2024-3400 RCE ➔ token dump ➔ DB lateral pivot (94% feasibility).' },
+      'pentera': { name: '🔄 Pentera (Control Validation)', summary: '6 live controls tested (WAF/EDR pass; MFA bypass & S3 ACL drift flagged).' },
+      'pentestgpt': { name: '🤖 PentestGPT (Task Tree)', summary: '6-node hierarchical tree in Post-Exploitation phase (85% complete).' },
+      'garak': { name: '🧪 Garak (AI Red Team)', summary: '47 offensive probes tested against AI Guardian (100% blocked, 0 vulnerabilities).' },
+      'penligent': { name: '🎛️ Penligent (Tool Orchestrator)', summary: 'Optimized ReAct DAG execution chain (2,840ms total latency).' }
+    };
+
+    function showAgentDetail(key) {
+      const data = AGENT_DATA[key];
+      if (!data) return;
+      const box = document.getElementById('drawerDetailBox');
+      if (box) {
+        box.innerHTML = `<strong class="text-cyan-300 block mb-0.5">${data.name}</strong><span class="text-slate-200">${data.summary}</span>`;
+      }
+      appendTerminal('🤖 ' + key.toUpperCase(), `<strong>[${data.name}]</strong>: ${data.summary}`);
+    }
+
     const COMMAND_RESPONSES = {
-      'what is happening?': 'Point ① has detected SMB egress & CVE-2024-3400 exploit pattern on Web Host 10.0.4.50.',
-      'investigate.': 'Point ① correlated 2,481 events. Hypothesis H1 (State-sponsored initial access) confirmed at 95% confidence.',
+      'what is happening?': 'Point ① detected SMB egress & CVE-2024-3400 exploit pattern on Web Host 10.0.4.50.',
+      'investigate.': 'Point ① correlated 2,481 events across 9 streams. H1 confirmed at 95% confidence.',
       'defend.': 'Point ② computed QAOA mitigation cut. Awaiting Human Authorization to transmit to Point ③.',
       'approve option 1.': '✅ Authorization recorded. Transmitting remediation payload to Point ③ now!'
     };
@@ -909,7 +813,7 @@
     function executeCommand(cmd) {
       appendTerminal('👤 COMMANDER', cmd);
       const norm = cmd.trim().toLowerCase();
-      const resp = COMMAND_RESPONSES[norm] || `Directive received: "<em>${cmd}</em>". Transmitting through workflow graph.`;
+      const resp = COMMAND_RESPONSES[norm] || `Directive received: "<em>${cmd}</em>". Transmitting through 3D graph.`;
       setTimeout(() => appendTerminal('🤖 NEXUS', resp), 200);
 
       if (cmd.includes('Approve') || cmd.includes('approve')) {
@@ -937,52 +841,7 @@
       term.scrollTop = term.scrollHeight;
     }
 
-    const AGENT_DATA = {
-      'astra': {
-        name: '🛡️ ASTRA (Multi-Agent Security Validation Coordinator)',
-        summary: 'Decomposed scope into 4 parallel sub-agents (Auth, API, Config, Logic). Cross-validated 8 candidate findings, eliminated 1 false positive (/api/v2/search SQLi), achieved 95% true-positive accuracy.'
-      },
-      'xbow': {
-        name: '🎯 XBOW (Autonomous Web Vulnerability Reasoning)',
-        summary: 'Chained CVE-2024-3400 RCE ➔ LSASS token dump ➔ DB lateral pivot (Feasibility: 94%). Synthesized SSRF ➔ AWS IMDSv1 ➔ IAM escalation ➔ S3 bucket exfiltration (Feasibility: 78%).'
-      },
-      'nodezero': {
-        name: '⚡ NODEZERO (Autonomous Attack Path Graph Discovery)',
-        summary: 'Mapped shortest attack path to Crown Jewel Customer DB 10.0.4.51 (3 hops). Identified optimal defensive choke point: Credential Guard on 10.0.4.50 severs 100% of reachability.'
-      },
-      'pentera': {
-        name: '🔄 PENTERA (Continuous Security Validation & Drift)',
-        summary: 'Tested 6 enterprise controls with live canary payloads: WAF (95% effective), EDR (91% effective). Detected 3 critical control drifts: MFA bypass, missing AWS SCP, public-read S3 ACL.'
-      },
-      'penligent': {
-        name: '🎛️ PENLIGENT (Intelligent Tool Orchestration Engine)',
-        summary: 'Constructed optimal DAG execution dependency chain: Parallel(Hadrian, Garak) ➔ Parallel(NodeZero, Astra) ➔ Parallel(XBOW, Pentera) ➔ PentestGPT ➔ Synthesis. Latency: 2,840ms.'
-      },
-      'hadrian': {
-        name: '🌐 HADRIAN (Autonomous External Attack Surface Recon)',
-        summary: 'Scanned external perimeter: Discovered 5 exposed assets including 2 unknown-unknowns (forgotten staging.target-corp.com with .env DB credentials, open S3 backup bucket). Surface risk: 88%.'
-      },
-      'pentestgpt': {
-        name: '🤖 PENTESTGPT (LLM Pentest Research & Task Tree)',
-        summary: 'Maintained 6-node hierarchical Pentest Tree across 4 phases. Currently 85% complete in Post-Exploitation phase. Formulated contextual next steps for lateral isolation.'
-      },
-      'garak': {
-        name: '🧪 GARAK (LLM Adversarial Self-Defense Red Team)',
-        summary: 'Executed 47 offensive AI probes against NEXUS-X: Direct/Indirect prompt injections, DAN jailbreaks, Base64 evasion, training data extraction. 100% blocked by AI Guardian (0 vulnerabilities).'
-      }
-    };
-
-    function showAgentDetail(key) {
-      const data = AGENT_DATA[key];
-      if (!data) return;
-      const box = document.getElementById('agentDetailBox');
-      if (box) {
-        box.innerHTML = `<span class="text-cyan-300 font-bold">${data.name}:</span> <span class="text-slate-200">${data.summary}</span>`;
-      }
-      appendTerminal('🤖 ' + key.toUpperCase(), `<strong>[${data.name}]</strong>: ${data.summary}`);
-    }
-
-    window.onload = init3DWorkflow;
+    window.onload = init3D;
   </script>
 </body>
 </html>
