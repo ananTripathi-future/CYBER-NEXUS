@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS-X // Interactive Cyber Operations Console</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #02060d;
+      color: #cbd5e1;
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      user-select: none;
+    }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    .font-mono { font-family: 'Fira Code', monospace; }
+
+    .hud-glass {
+      background: rgba(5, 12, 24, 0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(0, 240, 255, 0.22);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.75);
+    }
+    .red-glass {
+      background: rgba(24, 5, 12, 0.9);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 0, 60, 0.35);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.75);
+    }
+    .blue-glass {
+      background: rgba(5, 16, 28, 0.9);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.75);
+    }
+
+    .glow-cyan { text-shadow: 0 0 10px rgba(0, 240, 255, 0.7); }
+    .glow-red { text-shadow: 0 0 10px rgba(255, 0, 60, 0.7); }
+    .glow-emerald { text-shadow: 0 0 10px rgba(0, 255, 102, 0.7); }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #030814; }
+    ::-webkit-scrollbar-thumb { background: #00f0ff44; border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00f0ff88; }
+  </style>
+</head>
+<body class="bg-[#02060d] text-slate-200 min-h-screen flex flex-col p-3 space-y-3">
+
+  <!-- TOP HEADER & STATUS BAR -->
+  <header class="hud-glass rounded-xl px-4 py-2.5 flex flex-wrap justify-between items-center border-b-2 border-cyan-500/40">
+    <div class="flex items-center space-x-3">
+      <div class="relative w-8 h-8 flex items-center justify-center">
+        <div class="absolute inset-0 rounded-full border border-cyan-400 animate-ping opacity-60"></div>
+        <div class="w-7 h-7 rounded-lg border border-cyan-400 bg-cyan-950/90 flex items-center justify-center text-cyan-300 font-bold text-xs orbitron">NX</div>
+      </div>
+      <div>
+        <h1 class="orbitron font-black text-sm tracking-wider text-cyan-400 glow-cyan">NEXUS-X // INTERACTIVE CYBER OPERATIONS DECK</h1>
+        <div class="text-[9px] text-cyan-500/80 font-mono">HANDS-ON ATTACK VALIDATION (RED) & REMEDIATION CONSOLE (BLUE)</div>
+      </div>
+    </div>
+
+    <!-- Live Posture Gauge -->
+    <div class="flex items-center space-x-4 font-mono text-[10px]">
+      <div class="text-right">
+        <div class="text-slate-400 text-[8px]">TARGET: <strong class="text-cyan-300">10.0.4.50 (web-prod-01)</strong></div>
+        <div class="text-slate-400 text-[8px]">ACTIVE DEFENSES: <span id="defenseCount" class="text-amber-400 font-bold">0 / 4 APPLIED</span></div>
+      </div>
+      <div class="p-2 rounded-lg bg-black/60 border border-cyan-500/30 text-center">
+        <div class="text-[8px] text-slate-400">RESIDUAL RISK</div>
+        <div id="riskGauge" class="orbitron text-xs font-black text-red-500 glow-red animate-pulse">94% (CRITICAL)</div>
+      </div>
+      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-[#071828] hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono transition">
+        🌐 3D DAG VIEW
+      </a>
+    </div>
+  </header>
+
+  <!-- SPLIT SCREEN: RED (ATTACK) vs BLUE (DEFEND) -->
+  <main class="grid grid-cols-1 lg:grid-cols-2 gap-3 flex-1">
+
+    <!-- ======================================================== -->
+    <!-- LEFT: 🔴 RED TEAM ATTACK VALIDATION CONSOLE             -->
+    <!-- ======================================================== -->
+    <section class="red-glass rounded-2xl p-3.5 flex flex-col justify-between space-y-2 border border-red-500/30">
+      
+      <!-- Red Header -->
+      <div class="flex justify-between items-center border-b border-red-500/30 pb-2">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+          <h2 class="orbitron text-xs font-bold text-red-400 glow-red">🔴 RED TEAM // ATTACK VALIDATION ENGINE</h2>
+        </div>
+        <span class="px-2 py-0.5 rounded text-[8px] font-mono bg-red-950 text-red-300 border border-red-500/30 font-bold">ADVERSARY REPLAY</span>
+      </div>
+
+      <!-- Red Action Trigger Palette -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 font-mono text-[9px]">
+        <button onclick="runRedAction('profile')" class="p-1.5 rounded bg-[#1e060d] hover:bg-red-500/30 text-red-200 border border-red-500/40 text-left transition">
+          <strong class="block text-red-400">1. Understand Target</strong>
+          <span class="text-[7px] text-slate-400">Profile stack & 42.5% scope</span>
+        </button>
+        <button onclick="runRedAction('recon')" class="p-1.5 rounded bg-[#1e060d] hover:bg-red-500/30 text-red-200 border border-red-500/40 text-left transition">
+          <strong class="block text-red-400">2. External Recon</strong>
+          <span class="text-[7px] text-slate-400">Hadrian 5 assets / 2 unk</span>
+        </button>
+        <button onclick="runRedAction('audit')" class="p-1.5 rounded bg-[#1e060d] hover:bg-red-500/30 text-red-200 border border-red-500/40 text-left transition">
+          <strong class="block text-red-400">3. Audit Vulns</strong>
+          <span class="text-[7px] text-slate-400">Astra 4 sub-agents (95% TP)</span>
+        </button>
+        <button onclick="runRedAction('xbow')" class="p-1.5 rounded bg-[#1e060d] hover:bg-red-500/30 text-red-200 border border-red-500/40 text-left transition">
+          <strong class="block text-red-400">4. Exploit Chain</strong>
+          <span class="text-[7px] text-slate-400">XBOW CVE-2024-3400 (94%)</span>
+        </button>
+        <button onclick="runRedAction('nodezero')" class="p-1.5 rounded bg-[#1e060d] hover:bg-red-500/30 text-red-200 border border-red-500/40 text-left transition">
+          <strong class="block text-red-400">5. Attack Paths</strong>
+          <span class="text-[7px] text-slate-400">NodeZero 3 hops to DB</span>
+        </button>
+        <button onclick="runRedAction('garak')" class="p-1.5 rounded bg-[#1e060d] hover:bg-red-500/30 text-red-200 border border-red-500/40 text-left transition">
+          <strong class="block text-red-400">6. AI Red Team</strong>
+          <span class="text-[7px] text-slate-400">Garak 47 probes</span>
+        </button>
+      </div>
+
+      <!-- Red Output Terminal -->
+      <div id="redTerminal" class="flex-1 bg-[#090204] border border-red-500/30 rounded-xl p-2.5 font-mono text-[9px] overflow-y-auto space-y-1.5 h-72">
+        <div class="text-red-400 font-bold">[RED OPS CONSOLE READY] Target: 10.0.4.50. Select an attack validation action or type command below.</div>
+      </div>
+
+      <!-- Red Command Input -->
+      <div class="flex space-x-1.5 pt-1">
+        <input id="redInput" type="text" onkeydown="if(event.key==='Enter') submitRedCommand()" placeholder="Enter Red Command (e.g. 'recon', 'audit', 'exploit_chain', 'attack_paths')..." class="flex-1 bg-[#0a0204] border border-red-500/50 rounded-lg px-2.5 py-1 text-[10px] text-red-200 focus:outline-none focus:border-red-400 font-mono">
+        <button onclick="submitRedCommand()" class="px-3 py-1 bg-red-600 hover:bg-red-500 text-slate-950 font-bold rounded-lg text-[10px] orbitron">EXEC</button>
+      </div>
+    </section>
+
+
+    <!-- ======================================================== -->
+    <!-- RIGHT: 🔵 BLUE TEAM DEFENSE & REMEDIATION CONSOLE        -->
+    <!-- ======================================================== -->
+    <section class="blue-glass rounded-2xl p-3.5 flex flex-col justify-between space-y-2 border border-cyan-500/30">
+      
+      <!-- Blue Header -->
+      <div class="flex justify-between items-center border-b border-cyan-500/30 pb-2">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+          <h2 class="orbitron text-xs font-bold text-cyan-400 glow-cyan">🔵 BLUE TEAM // DEFENSE & INCIDENT RESPONSE</h2>
+        </div>
+        <span class="px-2 py-0.5 rounded text-[8px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-500/30 font-bold">REMEDIATION DESK</span>
+      </div>
+
+      <!-- Blue Action Trigger Palette -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 font-mono text-[9px]">
+        <button onclick="runBlueAction('isolate')" class="p-1.5 rounded bg-[#041424] hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-left transition">
+          <strong class="block text-cyan-300">1. Isolate Host</strong>
+          <span class="text-[7px] text-slate-400">Quarantine 10.0.4.50</span>
+        </button>
+        <button onclick="runBlueAction('revoke')" class="p-1.5 rounded bg-[#041424] hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-left transition">
+          <strong class="block text-cyan-300">2. Revoke Tokens</strong>
+          <span class="text-[7px] text-slate-400">Evict admin_svc JWT</span>
+        </button>
+        <button onclick="runBlueAction('block')" class="p-1.5 rounded bg-[#041424] hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-left transition">
+          <strong class="block text-cyan-300">3. Block C2 IP</strong>
+          <span class="text-[7px] text-slate-400">Drop 198.51.100.44</span>
+        </button>
+        <button onclick="runBlueAction('cloud')" class="p-1.5 rounded bg-[#041424] hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-left transition">
+          <strong class="block text-cyan-300">4. Cloud Lockdown</strong>
+          <span class="text-[7px] text-slate-400">Revert S3 ACL & SCP</span>
+        </button>
+        <button onclick="runBlueAction('qaoa')" class="p-1.5 rounded bg-[#041424] hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-left transition">
+          <strong class="block text-cyan-300">5. QAOA Quantum Opt</strong>
+          <span class="text-[7px] text-slate-400">QUBO Energy -2.208 H</span>
+        </button>
+        <button onclick="runBlueAction('seal')" class="p-1.5 rounded bg-[#041424] hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-left transition">
+          <strong class="block text-cyan-300">6. Seal Ledger</strong>
+          <span class="text-[7px] text-slate-400">SHA-256 Block #1</span>
+        </button>
+      </div>
+
+      <!-- Blue Output Terminal -->
+      <div id="blueTerminal" class="flex-1 bg-[#020814] border border-cyan-500/30 rounded-xl p-2.5 font-mono text-[9px] overflow-y-auto space-y-1.5 h-72">
+        <div class="text-cyan-400 font-bold">[BLUE DEFENSE CONSOLE READY] Awaiting defensive remediation commands. Select an action or type below.</div>
+      </div>
+
+      <!-- Blue Command Input -->
+      <div class="flex space-x-1.5 pt-1">
+        <input id="blueInput" type="text" onkeydown="if(event.key==='Enter') submitBlueCommand()" placeholder="Enter Blue Command (e.g. 'isolate 10.0.4.50', 'revoke admin_svc', 'block 198.51.100.44', 'qaoa')..." class="flex-1 bg-[#020814] border border-cyan-500/50 rounded-lg px-2.5 py-1 text-[10px] text-cyan-200 focus:outline-none focus:border-cyan-400 font-mono">
+        <button onclick="submitBlueCommand()" class="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold rounded-lg text-[10px] orbitron">APPLY</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let appliedDefenses = new Set();
+
+    function updateRisk() {
+      const count = appliedDefenses.size;
+      const countEl = document.getElementById('defenseCount');
+      const riskEl = document.getElementById('riskGauge');
+
+      countEl.textContent = `${count} / 4 APPLIED`;
+      if (count === 0) {
+        riskEl.textContent = '94% (CRITICAL)';
+        riskEl.className = 'orbitron text-xs font-black text-red-500 glow-red animate-pulse';
+      } else if (count === 1) {
+        riskEl.textContent = '68% (ELEVATED)';
+        riskEl.className = 'orbitron text-xs font-black text-amber-500';
+      } else if (count === 2) {
+        riskEl.textContent = '35% (CONTAINED)';
+        riskEl.className = 'orbitron text-xs font-black text-blue-400';
+      } else if (count >= 3) {
+        riskEl.textContent = '6% (SECURED)';
+        riskEl.className = 'orbitron text-xs font-black text-emerald-400 glow-emerald';
+      }
+    }
+
+    function appendRed(msg) {
+      const term = document.getElementById('redTerminal');
+      const div = document.createElement('div');
+      div.className = "p-1.5 bg-[#140408] border border-red-500/20 rounded text-slate-200";
+      div.innerHTML = msg;
+      term.appendChild(div);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function appendBlue(msg) {
+      const term = document.getElementById('blueTerminal');
+      const div = document.createElement('div');
+      div.className = "p-1.5 bg-[#031122] border border-cyan-500/20 rounded text-slate-200";
+      div.innerHTML = msg;
+      term.appendChild(div);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function runRedAction(act) {
+      if (act === 'profile') {
+        appendRed(`<strong>[TARGET PROFILER]</strong> Profiled <em>web-prod-01 (10.0.4.50)</em>:<br>• OS: Ubuntu 22.04 LTS / AWS EC2 Hybrid<br>• Stack: NGINX + AD Kerberos + PostgreSQL + S3<br>• <span class="text-emerald-400">Target-Driven Scope: 4 irrelevant tools excluded (42.5% time saved)</span>`);
+      } else if (act === 'recon') {
+        appendRed(`<strong>[HADRIAN RECON]</strong> Discovered 5 exposed assets (2 unknown-unknowns):<br>1. dev-api.target-corp.com (Swagger UI exposed)<br>2. staging.target-corp.com (.env DB credentials exposed)<br>3. legacy-vpn.target-corp.com (OpenVPN CVE-2023-46850)<br>4. s3://target-corp-backups (public-read)<br>• Surface Risk Score: <strong class="text-red-400">88%</strong>`);
+      } else if (act === 'audit') {
+        appendRed(`<strong>[ASTRA MULTI-AGENT]</strong> Deployed 4 sub-agents (Auth, API, Config, Logic):<br>• Auth Tester: MFA bypass & token replay confirmed (CRITICAL)<br>• API Fuzzer: Bulk export 14,200 records unthrottled<br>• Config Auditor: TLS 1.0 & PowerShell logging disabled<br>• <span class="text-cyan-300">1 False Positive Eliminated (/api/v2/search) -> 95% True Positive</span>`);
+      } else if (act === 'xbow') {
+        appendRed(`<strong>[XBOW WEB EXPLOIT]</strong> Synthesized 2 Exploit Chains:<br>• <strong class="text-amber-400">Chain 1 (94% Feasibility):</strong> CVE-2024-3400 RCE ➔ LSASS dump ➔ PostgreSQL lateral movement<br>• <strong class="text-purple-400">Chain 2 (78% Feasibility):</strong> SSRF ➔ AWS IMDSv1 ➔ IAM role escalation ➔ S3 data exfiltration`);
+      } else if (act === 'nodezero') {
+        appendRed(`<strong>[NODEZERO PATH GRAPH]</strong> Discovered Shortest Attack Path to Crown Jewel:<br>Hop 1: 198.51.100.44 ──[CVE-2024-3400]──> 10.0.4.50 (Web)<br>Hop 2: 10.0.4.50 ──[LSASS dump: admin_svc NTLM]──> Memory<br>Hop 3: 10.0.4.50 ──[Token Replay]──> 10.0.4.51 (Customer DB)<br>• <span class="text-emerald-400">Optimal Choke: Credential Guard on 10.0.4.50 breaks Hop 2</span>`);
+      } else if (act === 'garak') {
+        appendRed(`<strong>[GARAK AI RED TEAM]</strong> Fuzzed AI Guardian with 47 adversarial probes:<br>• Prompt Injection (12/12 blocked)<br>• DAN Jailbreaks (10/10 blocked)<br>• Data Extraction (8/8 blocked)<br>• <span class="text-emerald-400">AI Guardian Block Rate: 100% (0 vulnerabilities)</span>`);
+      }
+    }
+
+    function runBlueAction(act) {
+      if (act === 'isolate') {
+        appliedDefenses.add('isolate');
+        appendBlue(`<strong>[REMEDIATION] HOST ISOLATION ENGAGED:</strong><br>• Host <em>10.0.4.50</em> placed into strict containment VLAN.<br>• All inbound/outbound lateral SMB, SSH, and RDP sessions severed.<br>• Ingress WAF Rule R-9901 deployed.`);
+        updateRisk();
+      } else if (act === 'revoke') {
+        appliedDefenses.add('revoke');
+        appendBlue(`<strong>[IDENTITY REMEDIATION] SESSIONS REVOKED:</strong><br>• Active JWT tokens for <em>admin_svc</em> evicted across API gateways.<br>• Kerberos TGT tickets purged from Domain Controllers.<br>• Forced FIDO2 hardware MFA re-enrollment.`);
+        updateRisk();
+      } else if (act === 'block') {
+        appliedDefenses.add('block');
+        appendBlue(`<strong>[BORDER DEFENSE] C2 BLOCKED:</strong><br>• Dropped CIDR <em>198.51.100.0/24</em> and domain <em>c2beacon.apt41-infra.example</em>.<br>• DNS sinkhole active for known APT-41 domains.`);
+        updateRisk();
+      } else if (act === 'cloud') {
+        appliedDefenses.add('cloud');
+        appendBlue(`<strong>[CLOUD LOCKDOWN] AWS BOUNDARIES ENFORCED:</strong><br>• S3 Block Public Access enabled on <em>s3://prod-secrets-vault</em>.<br>• AdministratorAccess detached from <em>lambda-backup-role</em>.<br>• Service Control Policy (SCP) deployed to prevent unauthorized IAM attachments.`);
+        updateRisk();
+      } else if (act === 'qaoa') {
+        appendBlue(`<strong>[QUANTUM QAOA OPTIMIZER] SOLVER CONVERGED:</strong><br>• QUBO Energy: <strong>-2.208 H</strong> (Classical Baseline: -2.8262 H)<br>• Quantum Speedup: <strong>1.28x</strong><br>• Selected Strategy: <em>Blue Containment + Cloud Lockdown (Efficacy: 97%, Disruption: 10%)</em>`);
+      } else if (act === 'seal') {
+        appendBlue(`<strong>[EVIDENCE LEDGER] SHA-256 BLOCK SEALED:</strong><br>• Block Index: <strong>#1</strong><br>• SHA-256 Hash: <code class="text-amber-300">09e6eb6001fe65af0864c2cd756d3d5f5a7354e0fee74c3e...</code><br>• Audit Status: <strong class="text-emerald-400">Cryptographically Sealed & Tamper-Evident</strong>`);
+      }
+    }
+
+    function submitRedCommand() {
+      const inp = document.getElementById('redInput');
+      const val = inp.value.trim().toLowerCase();
+      if (!val) return;
+      inp.value = '';
+      appendRed(`\033[91m>\033[0m <code>${val}</code>`);
+      if (val.includes('recon')) runRedAction('recon');
+      else if (val.includes('audit') || val.includes('vuln')) runRedAction('audit');
+      else if (val.includes('exploit') || val.includes('chain')) runRedAction('xbow');
+      else if (val.includes('path') || val.includes('nodezero')) runRedAction('nodezero');
+      else if (val.includes('garak') || val.includes('ai')) runRedAction('garak');
+      else if (val.includes('profile')) runRedAction('profile');
+      else appendRed(`Command '${val}' executed. Scanning target...`);
+    }
+
+    function submitBlueCommand() {
+      const inp = document.getElementById('blueInput');
+      const val = inp.value.trim().toLowerCase();
+      if (!val) return;
+      inp.value = '';
+      appendBlue(`\033[92m>\033[0m <code>${val}</code>`);
+      if (val.includes('isolate')) runBlueAction('isolate');
+      else if (val.includes('revoke')) runBlueAction('revoke');
+      else if (val.includes('block')) runBlueAction('block');
+      else if (val.includes('cloud')) runBlueAction('cloud');
+      else if (val.includes('qaoa') || val.includes('optimize')) runBlueAction('qaoa');
+      else if (val.includes('seal') || val.includes('ledger')) runBlueAction('seal');
+      else appendBlue(`Remediation policy for '${val}' enforced.`);
+    }
+  </script>
+</body>
+</html>
