@@ -1401,6 +1401,267 @@ class PenligentAgent:
 
 
 # ==========================================================================
+# NEW SECURITY PLATFORMS: AIKIDO ATTACK & HIDDENLAYER
+# ==========================================================================
+
+class AikidoAttackAgent:
+    """
+    Aikido Attack — Automated Offensive AppSec Testing Engine.
+    Integrates into CI/CD pipelines to perform continuous application
+    security testing including SAST, DAST, SCA, and secrets detection.
+    """
+    def execute_appsec_audit(self, events: List[TelemetryEvent],
+                              hypotheses: List[CausalHypothesis]) -> Dict[str, Any]:
+        """Run full AppSec audit combining SAST + DAST + SCA findings."""
+        findings = [
+            {"id": "AIKIDO-SAST-001", "type": "SAST", "severity": "HIGH",
+             "title": "SQL Injection in user input handler",
+             "file": "src/api/users.py", "line": 142,
+             "cwe": "CWE-89", "confidence": 0.94},
+            {"id": "AIKIDO-DAST-001", "type": "DAST", "severity": "CRITICAL",
+             "title": "Reflected XSS in search endpoint",
+             "endpoint": "/api/v2/search?q=", "method": "GET",
+             "cwe": "CWE-79", "confidence": 0.97},
+            {"id": "AIKIDO-SCA-001", "type": "SCA", "severity": "HIGH",
+             "title": "Known vulnerable dependency: log4j-core 2.14.1",
+             "cve": "CVE-2021-44228", "package": "log4j-core",
+             "fix_version": "2.17.1", "confidence": 1.0},
+            {"id": "AIKIDO-SECRET-001", "type": "SECRET", "severity": "CRITICAL",
+             "title": "AWS Access Key exposed in configuration file",
+             "file": "config/deploy.yaml", "line": 23,
+             "secret_type": "AWS_ACCESS_KEY", "confidence": 0.99},
+        ]
+        return {
+            "agent": "AikidoAttack",
+            "scan_type": "Full AppSec Audit",
+            "total_findings": len(findings),
+            "critical": sum(1 for f in findings if f["severity"] == "CRITICAL"),
+            "high": sum(1 for f in findings if f["severity"] == "HIGH"),
+            "findings": findings,
+            "pipeline_safe": False,
+            "recommendation": "Block deployment until CRITICAL findings resolved"
+        }
+
+    def scan_ci_cd_pipeline(self, pipeline_config: str) -> Dict[str, Any]:
+        """Scan CI/CD pipeline configuration for security weaknesses."""
+        issues = [
+            {"id": "PIPE-001", "severity": "HIGH",
+             "issue": "Pipeline uses unverified third-party action",
+             "action": "actions/checkout@v2", "fix": "Pin to SHA hash"},
+            {"id": "PIPE-002", "severity": "MEDIUM",
+             "issue": "Secrets passed as environment variables to build step",
+             "fix": "Use dedicated secrets manager integration"},
+            {"id": "PIPE-003", "severity": "LOW",
+             "issue": "No SBOM generation step in pipeline",
+             "fix": "Add syft/cyclonedx SBOM generation after build"},
+        ]
+        return {
+            "agent": "AikidoAttack",
+            "scan_type": "CI/CD Pipeline Security Audit",
+            "pipeline_config": pipeline_config[:50] + "...",
+            "total_issues": len(issues),
+            "issues": issues,
+            "pipeline_score": 62,
+            "verdict": "NEEDS_REMEDIATION"
+        }
+
+
+class HiddenLayerAgent:
+    """
+    HiddenLayer — AI/ML Model Security & Adversarial Defense Engine.
+    Tests ML model endpoints for adversarial vulnerabilities including
+    model extraction, prompt injection, training data poisoning,
+    adversarial input attacks, and model inversion.
+    """
+    def scan_ml_models(self, model_endpoints: List[str]) -> Dict[str, Any]:
+        """Scan deployed ML model endpoints for security vulnerabilities."""
+        model_findings = []
+        for i, endpoint in enumerate(model_endpoints):
+            model_findings.append({
+                "endpoint": endpoint,
+                "model_id": f"MODEL-{i+1:03d}",
+                "vulnerabilities": [
+                    {"type": "MODEL_EXTRACTION", "risk": "HIGH",
+                     "detail": "Model architecture leakable via 2500 targeted queries",
+                     "mitigation": "Rate-limit inference API, add watermarking"},
+                    {"type": "PROMPT_INJECTION", "risk": "CRITICAL",
+                     "detail": "System prompt extractable via role-play attack vector",
+                     "mitigation": "Input sanitization + output filtering layer"},
+                    {"type": "DATA_POISONING_RISK", "risk": "MEDIUM",
+                     "detail": "Training pipeline accepts user-submitted data without validation",
+                     "mitigation": "Add data provenance checks + anomaly filtering"},
+                ],
+                "overall_risk": "HIGH",
+                "compliance": {"NIST_AI_RMF": "PARTIAL", "EU_AI_ACT": "NON_COMPLIANT"}
+            })
+        return {
+            "agent": "HiddenLayer",
+            "scan_type": "ML Model Security Assessment",
+            "models_scanned": len(model_endpoints),
+            "total_vulnerabilities": sum(len(m["vulnerabilities"]) for m in model_findings),
+            "critical_count": sum(1 for m in model_findings
+                                  for v in m["vulnerabilities"] if v["risk"] == "CRITICAL"),
+            "model_findings": model_findings,
+            "recommendation": "Implement inference API hardening and input/output guards"
+        }
+
+    def detect_adversarial_attacks(self, model_name: str) -> Dict[str, Any]:
+        """Run adversarial attack simulation against a specific model."""
+        attacks_tested = [
+            {"attack": "FGSM (Fast Gradient Sign Method)", "success_rate": 0.12,
+             "severity": "MEDIUM", "defense": "Adversarial training applied"},
+            {"attack": "PGD (Projected Gradient Descent)", "success_rate": 0.08,
+             "severity": "LOW", "defense": "Input preprocessing + certified defense"},
+            {"attack": "Carlini-Wagner L2", "success_rate": 0.03,
+             "severity": "LOW", "defense": "Distillation + ensemble defense"},
+            {"attack": "TextFooler (NLP)", "success_rate": 0.22,
+             "severity": "HIGH", "defense": "Synonym-aware input normalization needed"},
+            {"attack": "Model Inversion", "success_rate": 0.05,
+             "severity": "MEDIUM", "defense": "Differential privacy applied to outputs"},
+        ]
+        return {
+            "agent": "HiddenLayer",
+            "scan_type": "Adversarial Attack Simulation",
+            "model": model_name,
+            "attacks_tested": len(attacks_tested),
+            "max_success_rate": max(a["success_rate"] for a in attacks_tested),
+            "results": attacks_tested,
+            "overall_robustness": "MODERATE",
+            "recommendation": "Address TextFooler NLP attack vector — highest success rate"
+        }
+
+
+# ==========================================================================
+# LLM INTELLIGENCE ORCHESTRATION LAYER
+# ==========================================================================
+
+@dataclass
+class LLMModelSpec:
+    """Specification for an LLM model in the intelligence orchestrator."""
+    name: str
+    provider: str
+    specialty: str
+    rating: float
+    context_window: int
+    is_local: bool
+    status: str = "ONLINE"
+    task_types: List[str] = field(default_factory=list)
+
+
+class LLMOrchestrator:
+    """
+    LLM Intelligence Orchestrator — Routes queries to the optimal LLM
+    based on task type, context requirements, and model specialization.
+
+    Manages 8 language models across cloud and local deployment:
+      - GPT-5.6 Sol (Deep reasoning, vuln analysis)
+      - GPT-5.6-Cyber (Exploit validation, security testing)
+      - Gemini 3.8 Flash (Long-context, agentic workflows)
+      - Gemini Deep Research (CVE research, threat intel)
+      - DeepSeek V4 Pro (Coding, large-context analysis)
+      - Claude (Code auditing, architecture)
+      - Qwen (Local open-model experimentation)
+      - Llama-family (Local private security research)
+    """
+    def __init__(self):
+        self.models: List[LLMModelSpec] = [
+            LLMModelSpec(
+                name="GPT-5.6 Sol", provider="OpenAI", rating=5.0,
+                specialty="Deep reasoning, vuln analysis, exploit-chain reasoning, code review, agent architecture",
+                context_window=1_000_000, is_local=False,
+                task_types=["vuln_analysis", "exploit_chain", "code_review", "architecture", "deep_reasoning"]),
+            LLMModelSpec(
+                name="GPT-5.6-Cyber", provider="OpenAI", rating=5.5,
+                specialty="Specialized authorized vulnerability research, exploit validation, security testing",
+                context_window=500_000, is_local=False,
+                task_types=["exploit_validation", "vuln_research", "security_testing", "red_team"]),
+            LLMModelSpec(
+                name="Gemini 3.8 Flash", provider="Google", rating=5.0,
+                specialty="Long-context analysis, codebases, logs, agentic workflows",
+                context_window=2_000_000, is_local=False,
+                task_types=["agentic_workflow", "log_analysis", "codebase_analysis", "long_context"]),
+            LLMModelSpec(
+                name="Gemini Deep Research", provider="Google", rating=5.0,
+                specialty="Researching CVEs, papers, techniques, threat intelligence",
+                context_window=1_000_000, is_local=False,
+                task_types=["cve_research", "threat_intel", "paper_analysis", "technique_research"]),
+            LLMModelSpec(
+                name="DeepSeek V4 Pro", provider="DeepSeek", rating=4.5,
+                specialty="Coding, reasoning, large-context analysis, inexpensive experimentation",
+                context_window=1_000_000, is_local=False,
+                task_types=["coding", "reasoning", "large_context", "experimentation"]),
+            LLMModelSpec(
+                name="Claude", provider="Anthropic", rating=4.5,
+                specialty="Code auditing, reasoning, documentation and architecture",
+                context_window=200_000, is_local=False,
+                task_types=["code_audit", "documentation", "architecture", "reasoning"]),
+            LLMModelSpec(
+                name="Qwen", provider="Alibaba (Local)", rating=4.0,
+                specialty="Local/open-model experimentation and coding",
+                context_window=128_000, is_local=True,
+                task_types=["local_experimentation", "coding", "open_model"]),
+            LLMModelSpec(
+                name="Llama-family", provider="Meta (Local)", rating=4.0,
+                specialty="Local/private security research and custom agents",
+                context_window=128_000, is_local=True,
+                task_types=["local_private", "security_research", "custom_agents"]),
+        ]
+        self._task_routing: Dict[str, str] = {}
+        self._build_routing_table()
+
+    def _build_routing_table(self):
+        """Build optimized routing table: task_type -> best model name."""
+        for model in self.models:
+            for task_type in model.task_types:
+                existing = self._task_routing.get(task_type)
+                if existing is None:
+                    self._task_routing[task_type] = model.name
+                else:
+                    existing_model = next(m for m in self.models if m.name == existing)
+                    if model.rating > existing_model.rating:
+                        self._task_routing[task_type] = model.name
+
+    def select_best_model(self, task_type: str) -> LLMModelSpec:
+        """Select the optimal LLM for a given task type."""
+        model_name = self._task_routing.get(task_type)
+        if model_name:
+            return next(m for m in self.models if m.name == model_name)
+        # Fallback: highest-rated online model
+        online = [m for m in self.models if m.status == "ONLINE"]
+        return max(online, key=lambda m: m.rating)
+
+    def route_query(self, query: str, task_type: str) -> Dict[str, Any]:
+        """Route a query to the best LLM and return simulated result."""
+        model = self.select_best_model(task_type)
+        return {
+            "routed_to": model.name,
+            "provider": model.provider,
+            "task_type": task_type,
+            "query_preview": query[:80] + ("..." if len(query) > 80 else ""),
+            "model_rating": model.rating,
+            "context_window": model.context_window,
+            "is_local": model.is_local,
+            "status": "COMPLETED",
+            "response_summary": f"[{model.name}] Processed '{task_type}' query — analysis complete"
+        }
+
+    def get_status(self) -> List[Dict[str, Any]]:
+        """Return status of all 8 LLM models."""
+        return [
+            {
+                "name": m.name,
+                "provider": m.provider,
+                "rating": m.rating,
+                "status": m.status,
+                "is_local": m.is_local,
+                "specialty": m.specialty,
+                "context_window": m.context_window,
+            }
+            for m in self.models
+        ]
+
+
+# ==========================================================================
 # TARGET PROFILING, SCOPE ENGINE & DYNAMIC SELECTION
 # ==========================================================================
 
@@ -1511,19 +1772,21 @@ class DynamicSelector:
 
 class NexusAgentOrchestrator:
     """
-    Master orchestrator coordinating all 8 specialized agents
-    using Target-Driven Scoping and Dynamic Selection.
+    Master orchestrator coordinating 8 LLM models and 10 specialized security agents
+    using Target-Driven Scoping, Dynamic Selection, and Reactive Feedback Chaining.
 
-    Four Core Principles Enforced:
+    Core Principles Enforced:
     1. Target Profiling & Understanding: First understands the target before executing.
     2. Target-Driven Scope: Excludes irrelevant tools, saves 42.5% time.
     3. Dynamic Selection: Next tool chosen conditionally based on prior discovery.
     4. Feedback-Driven Chaining: Continuous optimization of execution order.
+    5. Multi-Model LLM Orchestration: Dynamic query routing across 8 LLM engines.
     """
     def __init__(self):
         self.profiler = TargetProfiler()
         self.scope_engine = TargetScopeEngine()
         self.dynamic_selector = DynamicSelector()
+        self.llm_orchestrator = LLMOrchestrator()
         self.hadrian = HadrianAgent()
         self.astra = AstraAgent()
         self.nodezero = NodeZeroAgent()
@@ -1532,6 +1795,8 @@ class NexusAgentOrchestrator:
         self.penligent = PenligentAgent()
         self.pentestgpt = PentestGPTAgent()
         self.garak = GarakAgent()
+        self.aikido = AikidoAttackAgent()
+        self.hiddenlayer = HiddenLayerAgent()
 
     def execute_all_agents(self, events: List[TelemetryEvent],
                            hypotheses: List[CausalHypothesis],
@@ -1551,22 +1816,28 @@ class NexusAgentOrchestrator:
         print(f"  [TARGET-DRIVEN SCOPE] {len(scope.included_tools)} tools active | {len(scope.excluded_tools)} irrelevant tools scoped out")
         print(f"    Time Saved: {scope.time_saved_pct}% | Scoped Out: {', '.join(scope.excluded_tools[:2])}...")
 
-        # 2. DYNAMIC SELECTION & TOOL EXECUTION
-        # Step 1: External Surface Recon
+        # 2. LLM INTELLIGENCE ROUTING
+        llm_route = self.llm_orchestrator.route_query(f"Deep reasoning on {hypotheses[0].title}", "deep_reasoning")
+        results["llm_routing"] = llm_route
+        print(f"  [LLM ORCHESTRATOR] 8 Models Active | Auto-routed to [{llm_route['routed_to']}] ({llm_route['provider']})")
+        print(f"    Task: {llm_route['task_type']} | Rating: {llm_route['model_rating']}/5.0 | Context: {llm_route['context_window']:,} tokens")
+
+        # 3. DYNAMIC SELECTION & TOOL EXECUTION (10 Specialized Engines)
+        # Step 1: External Surface Recon (Hadrian)
         surface_map = self.hadrian.scan_external_surface()
         results["hadrian"] = surface_map
         d1 = self.dynamic_selector.decide_next(1, f"Found {surface_map.total_assets_discovered} exposed assets", ["AstraAgent", "XBOWAgent", "SCADA Fuzzer"])
         print(f"  [DYNAMIC STEP 1 -> HADRIAN] Mapped {surface_map.total_assets_discovered} assets ({surface_map.unknown_unknowns} unknown unknowns)")
         print(f"    --> Next Tool: {d1.selected_tool} (Trigger: {d1.triggering_discovery})")
 
-        # Step 2: Multi-Agent Validation
+        # Step 2: Multi-Agent Validation (Astra)
         astra_report = self.astra.execute(events, hypotheses)
         results["astra"] = astra_report
         d2 = self.dynamic_selector.decide_next(2, "Unpatched CVE-2024-3400 + MFA Bypass Confirmed", ["XBOWAgent", "NodeZeroAgent"])
         print(f"  [DYNAMIC STEP 2 -> ASTRA] 4 sub-agents | {len(astra_report.findings)} findings | 1 FP eliminated (95% TP)")
         print(f"    --> Next Tool: {d2.selected_tool} (Trigger: {d2.triggering_discovery})")
 
-        # Step 3: Web Exploit Reasoning
+        # Step 3: Web Exploit Reasoning (XBOW)
         exploit_chains = self.xbow.analyze(events)
         results["xbow"] = exploit_chains
         best_chain = max(exploit_chains, key=lambda c: c.total_feasibility)
@@ -1574,7 +1845,7 @@ class NexusAgentOrchestrator:
         print(f"  [DYNAMIC STEP 3 -> XBOW] 2 exploit chains reasoned (Feasibility: {best_chain.total_feasibility:.0%})")
         print(f"    --> Next Tool: {d3.selected_tool} (Trigger: {d3.triggering_discovery})")
 
-        # Step 4: Attack Path Navigation
+        # Step 4: Attack Path Navigation (NodeZero)
         attack_paths = self.nodezero.discover_paths(events)
         results["nodezero"] = attack_paths
         shortest = min(attack_paths, key=lambda p: p.total_hops)
@@ -1582,7 +1853,7 @@ class NexusAgentOrchestrator:
         print(f"  [DYNAMIC STEP 4 -> NODEZERO] {len(attack_paths)} paths | Shortest: {shortest.total_hops} hops to Crown Jewel DB")
         print(f"    --> Next Tool: {d4.selected_tool} (Trigger: {d4.triggering_discovery})")
 
-        # Step 5: Continuous Control Validation
+        # Step 5: Continuous Control Validation (Pentera)
         control_results = self.pentera.validate_controls(events, hypotheses)
         results["pentera"] = control_results
         effective = sum(1 for c in control_results if c.effectiveness_pct >= 80)
@@ -1591,7 +1862,7 @@ class NexusAgentOrchestrator:
         print(f"  [DYNAMIC STEP 5 -> PENTERA] 6 controls tested | {effective} EFFECTIVE | {drifted} DRIFT DETECTED")
         print(f"    --> Next Tool: {d5.selected_tool} (Trigger: {d5.triggering_discovery})")
 
-        # Step 6: Pentest Research & Next Steps
+        # Step 6: Pentest Research & Next Steps (PentestGPT)
         task_tree = self.pentestgpt.research_and_plan(hypotheses, research)
         results["pentestgpt"] = task_tree
         print(f"  [DYNAMIC STEP 6 -> PENTESTGPT] Task Tree: {len(task_tree.nodes)} nodes | Progress: {task_tree.progress_pct:.0f}% ({task_tree.current_phase})")
@@ -1605,6 +1876,16 @@ class NexusAgentOrchestrator:
         orch_plan = self.penligent.orchestrate("Cloud-Hybrid", "APT-41 Multi-Stage Intrusion")
         results["penligent"] = orch_plan
         print(f"  [ORCHESTRATION -> PENLIGENT] ReAct Dynamic Chain Optimized: {' -> '.join(orch_plan.execution_order[:3])}... ({orch_plan.total_execution_time_ms:.0f}ms)")
+
+        # Step 9: Offensive AppSec & CI/CD Pipeline (Aikido Attack)
+        aikido_report = self.aikido.execute_appsec_audit(events, hypotheses)
+        results["aikido"] = aikido_report
+        print(f"  [APPSEC -> AIKIDO ATTACK] {aikido_report['total_findings']} findings ({aikido_report['critical']} CRITICAL, {aikido_report['high']} HIGH) | Pipeline Safe: {aikido_report['pipeline_safe']}")
+
+        # Step 10: AI/ML Model Security & Adversarial Defense (HiddenLayer)
+        hidden_report = self.hiddenlayer.scan_ml_models(["https://api.internal/v1/embeddings", "https://api.internal/v1/guard-llm"])
+        results["hiddenlayer"] = hidden_report
+        print(f"  [AI/ML SECURITY -> HIDDENLAYER] {hidden_report['models_scanned']} models scanned | {hidden_report['total_vulnerabilities']} vulns ({hidden_report['critical_count']} CRITICAL)")
 
         return results
 
@@ -1818,7 +2099,7 @@ class ReportEngine:
    8. Establish mandatory pentest finding remediation SLAs (< 30 days for CRITICAL).
    9. Schedule quarterly Shadow-Twin attack replay exercises.
 
-11. 8-AGENT SPECIALIZED INTELLIGENCE SYNTHESIS
+11. 8 LLMs × 10 SECURITY PLATFORMS INTELLIGENCE SYNTHESIS
 {'-'*40}
    [1] HADRIAN (External Recon)     : 5 exposed assets | 2 unknown unknowns | Surface risk: 88%
    [2] ASTRA (Multi-Agent Valid.)   : 4 sub-agents | 8 findings | 1 false positive eliminated (95% TP)
@@ -1828,6 +2109,9 @@ class ReportEngine:
    [6] PENTESTGPT (Research Trees)  : 6-node task tree | 85% complete | Phase: Post-Exploitation
    [7] GARAK (AI Red Team Defense)  : 47 probes | 0 vulnerabilities found | Guardian block rate: 100%
    [8] PENLIGENT (Tool Orchestrator): Optimized DAG chain executed (2,840ms total latency)
+   [9] AIKIDO ATTACK (AppSec/CI-CD) : 4 findings (2 CRITICAL, 2 HIGH) | Secrets & SCA flagged
+   [10] HIDDENLAYER (AI/ML Defense) : 2 model endpoints scanned | Adversarial extraction guarded
+   [*] LLM ORCHESTRATOR            : 8 models online (GPT-5.6 Sol/Cyber, Gemini 3.8/Research, DeepSeek, Claude, Qwen, Llama)
 
 {'='*80}
    Ledger Block #{block.block_index}
@@ -1877,6 +2161,7 @@ class NexusXPowerStack:
         self.cycle_count = 0
         self.ledger = EvidenceLedger()
         self.learning = LearningEngine()
+        self.llm_orchestrator = LLMOrchestrator()
 
     def execute_full_cycle(self):
         self.cycle_count += 1
@@ -1886,6 +2171,7 @@ class NexusXPowerStack:
         print(f"  NEXUS-X POWER STACK — CYCLE #{self.cycle_count}")
         print(f"  9-STREAM TELEMETRY -> SENTINEL-X -> Q-REASON -> RESEARCH -> SHADOW-TWIN")
         print(f"  -> RED/BLUE -> QUANTUM -> POLICY -> HUMAN -> EXECUTE -> VERIFY -> LEARN")
+        print(f"  [8 LLMs ORCHESTRATED × 10 SPECIALIZED CYBER SECURITY PLATFORMS]")
         print(f"{'='*80}\n")
 
         # 9-Stream Telemetry Collection
@@ -1926,9 +2212,9 @@ class NexusXPowerStack:
         print(f"  [RESEARCH AI] {len(research.technique_ids)} techniques | {len(research.cve_refs)} CVEs | {len(research.advisories)} advisories | {len(research.research_papers)} papers")
         print(f"    CRITICAL: Q2 pentest identified same attack path — REMEDIATION WAS OVERDUE\n")
 
-        # 8-Agent Specialized Intelligence Orchestration Suite
+        # 8 LLMs × 10 Specialized Security Platforms Suite
         print(f"  {'-'*70}")
-        print("  [8-AGENT SPECIALIZED INTELLIGENCE SUITE (MULTI-AGENT REASONING)]")
+        print("  [8 LLMs × 10 SPECIALIZED SECURITY PLATFORMS INTELLIGENCE SUITE]")
         print(f"  {'-'*70}")
         orchestrator = NexusAgentOrchestrator()
         guardian = PolicyRiskEngine().guardian

@@ -285,7 +285,8 @@
       <!-- Bottom System Status Indicators -->
       <div class="border-t border-[#112642] pt-2 space-y-1 font-mono text-[8px]">
         <div class="text-slate-400 font-bold uppercase tracking-wider">SYSTEM STATUS</div>
-        <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>AI Agents Online (8/8)</span></div>
+        <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>AI Agents Online (10/10)</span></div>
+        <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>LLM Models Active (8/8)</span></div>
         <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Toolchain Ready</span></div>
         <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Digital Twin Active</span></div>
         <div class="flex items-center space-x-1.5 text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Threat Intel Connected</span></div>
@@ -1178,74 +1179,176 @@
       </div>
 
       <!-- ==================================================================== -->
-      <!-- SCREEN 9: TOOLS (8 SPECIALIZED AI SECURITY ENGINES)                  -->
+      <!-- SCREEN 9: TOOLS (8 LLMs × 10 SECURITY PLATFORMS)                  -->
       <!-- ==================================================================== -->
       <div id="screen-tools" class="app-screen space-y-3 font-mono text-[9px]">
         <div class="flex justify-between items-center cyber-card p-3">
           <div>
             <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
-              <span class="text-cyan-400">🛠️</span><span>SECURITY ENGINES & TOOLCHAIN ORCHESTRATOR</span>
+              <span class="text-cyan-400">🛠️</span><span>SECURITY ENGINES, LLM ORCHESTRATOR & TOOLCHAIN</span>
             </h2>
-            <div class="text-[8px] text-slate-400 mt-0.5">8 Specialized Security Models with Dynamic Selection & Target Understanding</div>
+            <div class="text-[8px] text-slate-400 mt-0.5">8 AI Language Models × 10 Specialized Security Platforms with Dynamic Selection & Target Understanding</div>
           </div>
-          <span class="px-2 py-0.5 bg-cyan-950 text-cyan-300 border border-cyan-500 rounded text-[8px]">8 / 8 READY</span>
+          <span class="px-2 py-0.5 bg-cyan-950 text-cyan-300 border border-cyan-500 rounded text-[8px]">18 / 18 READY</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5">
-          <!-- 1. Hadrian -->
-          <div class="cyber-card p-2.5 space-y-1.5">
-            <div class="font-bold text-cyan-300 text-[9px]">1. HADRIAN</div>
-            <div class="text-slate-400 text-[7px]">Autonomous External Recon & Perimeter Mapping</div>
-            <button onclick="alert('Hadrian Recon: Found 14 assets, 3 exposed APIs')" class="w-full py-1 bg-cyan-800 hover:bg-cyan-700 text-slate-100 rounded text-[7px]">RUN RECON</button>
+        <!-- LLM INTELLIGENCE LAYER -->
+        <div class="cyber-card p-3 space-y-2 border-t-2 border-t-cyan-500">
+          <div class="flex justify-between items-center border-b border-[#112642] pb-1">
+            <div class="text-[10px] font-bold text-cyan-400" style="font-family: 'Orbitron', sans-serif;">🧠 LLM INTELLIGENCE ORCHESTRATOR</div>
+            <span class="text-[7px] text-slate-400 font-mono">Queries auto-routed to optimal model based on task type</span>
           </div>
-
-          <!-- 2. XBOW -->
-          <div class="cyber-card p-2.5 space-y-1.5">
-            <div class="font-bold text-red-400 text-[9px]">2. XBOW</div>
-            <div class="text-slate-400 text-[7px]">Autonomous Web Exploitation & Logic Bug Reasoning</div>
-            <button onclick="alert('XBOW Web Audit: Verified CVE-2024-3400 vulnerability in sandbox')" class="w-full py-1 bg-red-800 hover:bg-red-700 text-slate-100 rounded text-[7px]">AUDIT WEB APPS</button>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <!-- LLM 1: GPT-5.6 Sol -->
+            <div class="p-2 bg-[#040c18] rounded border border-[#112642] hover:border-cyan-500/50 space-y-1 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-slate-100 text-[9px]">GPT-5.6 Sol</span>
+                <span class="text-emerald-400 flex items-center space-x-0.5 text-[6px]"><span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span><span>ONLINE</span></span>
+              </div>
+              <div class="text-slate-400 text-[7px]">Deep Reasoning & Vuln Analysis</div>
+              <div class="text-amber-400 text-[7px]">⭐⭐⭐⭐⭐</div>
+              <button onclick="copilotPrompt('Route query to GPT-5.6 Sol for deep reasoning')" class="w-full py-0.5 bg-slate-800 hover:bg-cyan-900 text-cyan-300 rounded text-[6px] border border-slate-700 hover:border-cyan-600">ROUTE QUERY</button>
+            </div>
+            <!-- LLM 2: GPT-5.6-Cyber -->
+            <div class="p-2 bg-[#040c18] rounded border border-[#112642] hover:border-red-500/50 space-y-1 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-red-300 text-[9px]">GPT-5.6-Cyber</span>
+                <span class="text-emerald-400 flex items-center space-x-0.5 text-[6px]"><span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span><span>ONLINE</span></span>
+              </div>
+              <div class="text-slate-400 text-[7px]">Exploit Validation & Security Testing</div>
+              <div class="text-amber-400 text-[7px]">⭐⭐⭐⭐⭐+</div>
+              <button onclick="copilotPrompt('Route query to GPT-5.6-Cyber for exploit validation')" class="w-full py-0.5 bg-slate-800 hover:bg-red-950 text-red-300 rounded text-[6px] border border-slate-700 hover:border-red-600">ROUTE QUERY</button>
+            </div>
+            <!-- LLM 3: Gemini 3.8 Flash -->
+            <div class="p-2 bg-[#040c18] rounded border border-[#112642] hover:border-blue-500/50 space-y-1 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-blue-300 text-[9px]">Gemini 3.8 Flash</span>
+                <span class="text-emerald-400 flex items-center space-x-0.5 text-[6px]"><span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span><span>ONLINE</span></span>
+              </div>
+              <div class="text-slate-400 text-[7px]">Long-Context & Agentic Workflows</div>
+              <div class="text-amber-400 text-[7px]">⭐⭐⭐⭐⭐</div>
+              <button onclick="copilotPrompt('Route query to Gemini 3.8 Flash for agentic workflow')" class="w-full py-0.5 bg-slate-800 hover:bg-blue-950 text-blue-300 rounded text-[6px] border border-slate-700 hover:border-blue-600">ROUTE QUERY</button>
+            </div>
+            <!-- LLM 4: Gemini Deep Research -->
+            <div class="p-2 bg-[#040c18] rounded border border-[#112642] hover:border-purple-500/50 space-y-1 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-purple-300 text-[9px]">Gemini Deep Research</span>
+                <span class="text-emerald-400 flex items-center space-x-0.5 text-[6px]"><span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span><span>ONLINE</span></span>
+              </div>
+              <div class="text-slate-400 text-[7px]">CVE & Threat Intelligence Research</div>
+              <div class="text-amber-400 text-[7px]">⭐⭐⭐⭐⭐</div>
+              <button onclick="copilotPrompt('Route query to Gemini Deep Research for CVE lookup')" class="w-full py-0.5 bg-slate-800 hover:bg-purple-950 text-purple-300 rounded text-[6px] border border-slate-700 hover:border-purple-600">ROUTE QUERY</button>
+            </div>
+            <!-- LLM 5: DeepSeek V4 Pro -->
+            <div class="p-2 bg-[#040c18] rounded border border-[#112642] hover:border-cyan-500/50 space-y-1 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-cyan-200 text-[9px]">DeepSeek V4 Pro</span>
+                <span class="text-emerald-400 flex items-center space-x-0.5 text-[6px]"><span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span><span>ONLINE</span></span>
+              </div>
+              <div class="text-slate-400 text-[7px]">Coding & Large-Context Analysis</div>
+              <div class="text-amber-400 text-[7px]">⭐⭐⭐⭐½</div>
+              <button onclick="copilotPrompt('Route query to DeepSeek V4 Pro for code analysis')" class="w-full py-0.5 bg-slate-800 hover:bg-cyan-950 text-cyan-300 rounded text-[6px] border border-slate-700 hover:border-cyan-600">ROUTE QUERY</button>
+            </div>
+            <!-- LLM 6: Claude -->
+            <div class="p-2 bg-[#040c18] rounded border border-[#112642] hover:border-amber-500/50 space-y-1 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-amber-200 text-[9px]">Claude</span>
+                <span class="text-emerald-400 flex items-center space-x-0.5 text-[6px]"><span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span><span>ONLINE</span></span>
+              </div>
+              <div class="text-slate-400 text-[7px]">Code Auditing & Architecture</div>
+              <div class="text-amber-400 text-[7px]">⭐⭐⭐⭐½</div>
+              <button onclick="copilotPrompt('Route query to Claude for code audit and architecture review')" class="w-full py-0.5 bg-slate-800 hover:bg-amber-950 text-amber-300 rounded text-[6px] border border-slate-700 hover:border-amber-600">ROUTE QUERY</button>
+            </div>
+            <!-- LLM 7: Qwen -->
+            <div class="p-2 bg-[#040c18] rounded border border-[#112642] hover:border-emerald-500/50 space-y-1 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-emerald-200 text-[9px]">Qwen</span>
+                <span class="text-emerald-400 flex items-center space-x-0.5 text-[6px]"><span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span><span>LOCAL</span></span>
+              </div>
+              <div class="text-slate-400 text-[7px]">Local/Open-Model Experimentation</div>
+              <div class="text-amber-400 text-[7px]">⭐⭐⭐⭐</div>
+              <button onclick="copilotPrompt('Route query to Qwen for local experimentation')" class="w-full py-0.5 bg-slate-800 hover:bg-emerald-950 text-emerald-300 rounded text-[6px] border border-slate-700 hover:border-emerald-600">ROUTE QUERY</button>
+            </div>
+            <!-- LLM 8: Llama-family -->
+            <div class="p-2 bg-[#040c18] rounded border border-[#112642] hover:border-emerald-500/50 space-y-1 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-emerald-200 text-[9px]">Llama-family</span>
+                <span class="text-emerald-400 flex items-center space-x-0.5 text-[6px]"><span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span><span>LOCAL</span></span>
+              </div>
+              <div class="text-slate-400 text-[7px]">Local/Private Security Research</div>
+              <div class="text-amber-400 text-[7px]">⭐⭐⭐⭐</div>
+              <button onclick="copilotPrompt('Route query to Llama-family for private security research')" class="w-full py-0.5 bg-slate-800 hover:bg-emerald-950 text-emerald-300 rounded text-[6px] border border-slate-700 hover:border-emerald-600">ROUTE QUERY</button>
+            </div>
           </div>
+        </div>
 
-          <!-- 3. NodeZero -->
-          <div class="cyber-card p-2.5 space-y-1.5">
-            <div class="font-bold text-amber-400 text-[9px]">3. NODEZERO</div>
-            <div class="text-slate-400 text-[7px]">Autonomous Attack Paths & Multi-Hop Traversal</div>
-            <button onclick="alert('NodeZero Path: Shortest attack route to DB-01 mapped')" class="w-full py-1 bg-amber-800 hover:bg-amber-700 text-slate-100 rounded text-[7px]">FIND ATTACK PATHS</button>
+        <!-- SECURITY PLATFORMS (10) -->
+        <div class="cyber-card p-3 space-y-2 border-t-2 border-t-red-500">
+          <div class="flex justify-between items-center border-b border-[#112642] pb-1">
+            <div class="text-[10px] font-bold text-red-400" style="font-family: 'Orbitron', sans-serif;">⚔️ SPECIALIZED SECURITY PLATFORMS</div>
+            <span class="text-[7px] text-slate-400 font-mono">10 Engines | Dynamic Selection | Target-Driven Scope | Reactive Feedback Chaining</span>
           </div>
-
-          <!-- 4. Pentera -->
-          <div class="cyber-card p-2.5 space-y-1.5">
-            <div class="font-bold text-purple-400 text-[9px]">4. PENTERA</div>
-            <div class="text-slate-400 text-[7px]">Continuous Automated Security Validation</div>
-            <button onclick="alert('Pentera: Continuous posture validation score: 87/100')" class="w-full py-1 bg-purple-800 hover:bg-purple-700 text-slate-100 rounded text-[7px]">VALIDATE POSTURE</button>
-          </div>
-
-          <!-- 5. Penligent -->
-          <div class="cyber-card p-2.5 space-y-1.5">
-            <div class="font-bold text-blue-400 text-[9px]">5. PENLIGENT</div>
-            <div class="text-slate-400 text-[7px]">Dynamic Tool Orchestration & Reactive Feedback Chaining</div>
-            <button onclick="alert('Penligent: Toolchain chained: Nmap ➔ Nuclei ➔ Mimikatz ➔ Sandbox')" class="w-full py-1 bg-blue-800 hover:bg-blue-700 text-slate-100 rounded text-[7px]">CHAIN TOOLS</button>
-          </div>
-
-          <!-- 6. Astra -->
-          <div class="cyber-card p-2.5 space-y-1.5">
-            <div class="font-bold text-emerald-400 text-[9px]">6. ASTRA</div>
-            <div class="text-slate-400 text-[7px]">Multi-Agent Architecture & Collaborative Defense</div>
-            <button onclick="alert('Astra: 4 sub-agents coordinated on incident resolution')" class="w-full py-1 bg-emerald-800 hover:bg-emerald-700 text-slate-100 rounded text-[7px]">COORDINATE AGENTS</button>
-          </div>
-
-          <!-- 7. PentestGPT -->
-          <div class="cyber-card p-2.5 space-y-1.5">
-            <div class="font-bold text-cyan-300 text-[9px]">7. PENTESTGPT</div>
-            <div class="text-slate-400 text-[7px]">LLM-Assisted Automated Penetration Testing</div>
-            <button onclick="alert('PentestGPT: Attack tree synthesized with 94% accuracy')" class="w-full py-1 bg-cyan-800 hover:bg-cyan-700 text-slate-100 rounded text-[7px]">SYNTHESIZE TREE</button>
-          </div>
-
-          <!-- 8. Garak -->
-          <div class="cyber-card p-2.5 space-y-1.5">
-            <div class="font-bold text-red-300 text-[9px]">8. GARAK</div>
-            <div class="text-slate-400 text-[7px]">LLM-Specific Vulnerability & Prompt Injection Scanner</div>
-            <button onclick="alert('Garak: LLM prompt injection test passed (0 leaks)')" class="w-full py-1 bg-red-800 hover:bg-red-700 text-slate-100 rounded text-[7px]">SCAN LLM SAFETY</button>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+            <div class="cyber-card p-2 space-y-1">
+              <div class="font-bold text-cyan-300 text-[8px]">1. HADRIAN</div>
+              <div class="text-slate-400 text-[6px]">External Recon & Perimeter</div>
+              <div class="text-[6px] text-slate-500">Best for: External recon</div>
+              <button onclick="copilotPrompt('Run Hadrian external recon scan')" class="w-full py-0.5 bg-cyan-900 hover:bg-cyan-800 text-cyan-200 rounded text-[6px]">RUN RECON</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1">
+              <div class="font-bold text-red-400 text-[8px]">2. XBOW</div>
+              <div class="text-slate-400 text-[6px]">Autonomous Web Exploitation</div>
+              <div class="text-[6px] text-slate-500">Best for: Web pentesting</div>
+              <button onclick="copilotPrompt('Run XBOW autonomous web exploit audit')" class="w-full py-0.5 bg-red-900 hover:bg-red-800 text-red-200 rounded text-[6px]">AUDIT WEB APPS</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1">
+              <div class="font-bold text-amber-400 text-[8px]">3. NODEZERO</div>
+              <div class="text-slate-400 text-[6px]">Autonomous Attack Paths</div>
+              <div class="text-[6px] text-slate-500">Best for: Internal networks</div>
+              <button onclick="copilotPrompt('Run NodeZero attack path discovery')" class="w-full py-0.5 bg-amber-900 hover:bg-amber-800 text-amber-200 rounded text-[6px]">FIND PATHS</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1">
+              <div class="font-bold text-purple-400 text-[8px]">4. PENTERA</div>
+              <div class="text-slate-400 text-[6px]">Continuous Security Validation</div>
+              <div class="text-[6px] text-slate-500">Best for: Enterprise infra</div>
+              <button onclick="copilotPrompt('Run Pentera security validation')" class="w-full py-0.5 bg-purple-900 hover:bg-purple-800 text-purple-200 rounded text-[6px]">VALIDATE</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1">
+              <div class="font-bold text-blue-400 text-[8px]">5. PENLIGENT</div>
+              <div class="text-slate-400 text-[6px]">Agentic Tool Orchestration</div>
+              <div class="text-[6px] text-slate-500">Best for: Web/API/network</div>
+              <button onclick="copilotPrompt('Run Penligent tool chain orchestration')" class="w-full py-0.5 bg-blue-900 hover:bg-blue-800 text-blue-200 rounded text-[6px]">CHAIN TOOLS</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1">
+              <div class="font-bold text-emerald-400 text-[8px]">6. ASTRA</div>
+              <div class="text-slate-400 text-[6px]">Multi-Agent Pentesting</div>
+              <div class="text-[6px] text-slate-500">Best for: Web/API/continuous</div>
+              <button onclick="copilotPrompt('Run Astra multi-agent coordination')" class="w-full py-0.5 bg-emerald-900 hover:bg-emerald-800 text-emerald-200 rounded text-[6px]">COORDINATE</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1">
+              <div class="font-bold text-cyan-300 text-[8px]">7. PENTESTGPT</div>
+              <div class="text-slate-400 text-[6px]">LLM-Assisted Pentest Research</div>
+              <div class="text-[6px] text-slate-500">Best for: Learning/research</div>
+              <button onclick="copilotPrompt('Run PentestGPT attack tree synthesis')" class="w-full py-0.5 bg-cyan-900 hover:bg-cyan-800 text-cyan-200 rounded text-[6px]">SYNTHESIZE</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1">
+              <div class="font-bold text-red-300 text-[8px]">8. GARAK</div>
+              <div class="text-slate-400 text-[6px]">LLM Vulnerability Scanner</div>
+              <div class="text-[6px] text-slate-500">Best for: AI/LLM security</div>
+              <button onclick="copilotPrompt('Run Garak LLM safety scan')" class="w-full py-0.5 bg-red-900 hover:bg-red-800 text-red-200 rounded text-[6px]">SCAN LLM</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1 border border-emerald-500/30">
+              <div class="font-bold text-emerald-300 text-[8px]">9. AIKIDO ATTACK</div>
+              <div class="text-slate-400 text-[6px]">Automated Offensive AppSec</div>
+              <div class="text-[6px] text-slate-500">Best for: AppSec / CI-CD</div>
+              <button onclick="copilotPrompt('Run Aikido Attack CI/CD pipeline audit')" class="w-full py-0.5 bg-emerald-900 hover:bg-emerald-800 text-emerald-200 rounded text-[6px]">AUDIT CI/CD</button>
+            </div>
+            <div class="cyber-card p-2 space-y-1 border border-purple-500/30">
+              <div class="font-bold text-purple-300 text-[8px]">10. HIDDENLAYER</div>
+              <div class="text-slate-400 text-[6px]">AI/ML Model Security</div>
+              <div class="text-[6px] text-slate-500">Best for: ML/AI security</div>
+              <button onclick="copilotPrompt('Run HiddenLayer ML model security scan')" class="w-full py-0.5 bg-purple-900 hover:bg-purple-800 text-purple-200 rounded text-[6px]">SCAN ML MODELS</button>
+            </div>
           </div>
         </div>
       </div>

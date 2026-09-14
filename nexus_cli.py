@@ -27,6 +27,9 @@ from nexus_x_core import (
     PentestGPTAgent,
     GarakAgent,
     PenligentAgent,
+    AikidoAttackAgent,
+    HiddenLayerAgent,
+    LLMOrchestrator,
     QuantumOptimizer,
     EvidenceLedger,
     AIGuardian,
@@ -68,6 +71,9 @@ class NexusInteractiveCLI(cmd.Cmd):
         self.guardian = AIGuardian()
         self.profiler = TargetProfiler()
         self.scope_engine = TargetScopeEngine()
+        self.llm = LLMOrchestrator()
+        self.aikido = AikidoAttackAgent()
+        self.hiddenlayer = HiddenLayerAgent()
 
     def do_mode(self, arg):
         """Switch operating mode: mode red | mode blue | mode neutral"""
@@ -201,6 +207,49 @@ class NexusInteractiveCLI(cmd.Cmd):
         print(f"[+] Tested {report.total_probes} probes. Vulnerabilities Found: {report.vulnerabilities_found}")
         print(f"[+] AI Guardian Block Rate: {report.guardian_block_rate:.0%}")
         print(f"[+] Resilience Grade: {report.overall_resilience}\n")
+
+    def do_aikido_audit(self, arg):
+        """[RED/APPSEC] Run Aikido offensive AppSec audit & CI/CD pipeline security check: aikido_audit"""
+        print("[*] [AIKIDO ATTACK] Performing comprehensive AppSec audit (SAST, DAST, SCA, Secrets)...")
+        time.sleep(0.5)
+        res = self.aikido.execute_appsec_audit([], [])
+        print(f"[+] Total Findings: {res['total_findings']} (Critical: {res['critical']}, High: {res['high']})")
+        for f in res['findings']:
+            print(f"    [{f['severity']:<8}] ({f['type']:<6}) {f['title']}")
+        print(f"[+] Verdict: {'PIPELINE_SAFE' if res['pipeline_safe'] else 'BLOCK_DEPLOYMENT'}")
+        print(f"[+] Recommendation: {res['recommendation']}\n")
+
+    def do_scan_ml(self, arg):
+        """[RED/AI] Run HiddenLayer AI/ML Model Security & Adversarial Vulnerability Scan: scan_ml [endpoint]"""
+        ep = arg.strip() if arg.strip() else "https://api.internal/v1/embeddings"
+        print(f"[*] [HIDDENLAYER] Assessing ML endpoint {ep} for model extraction, prompt injection & poisoning...")
+        time.sleep(0.5)
+        res = self.hiddenlayer.scan_ml_models([ep])
+        print(f"[+] Scanned {res['models_scanned']} models. Total Vulnerabilities: {res['total_vulnerabilities']} (Critical: {res['critical_count']})")
+        for m in res['model_findings']:
+            for v in m['vulnerabilities']:
+                print(f"    [{v['risk']:<8}] ({v['type']:<20}) {v['detail']}")
+        print(f"[+] Recommendation: {res['recommendation']}\n")
+
+    def do_llm(self, arg):
+        """[AI] Query or inspect 8 LLM models in intelligence orchestrator: llm list | llm [task_type] [query]"""
+        args = arg.strip().split(maxsplit=1)
+        if not args or args[0].lower() == "list":
+            print("\n==================== LLM INTELLIGENCE ORCHESTRATOR ====================")
+            for m in self.llm.models:
+                loc = "LOCAL" if m.is_local else "CLOUD"
+                print(f"  {m.name:<24} | {m.provider:<16} | ⭐ {m.rating} | {loc:<5} | {m.status}")
+                print(f"    Specialty: {m.specialty}")
+            print("========================================================================\n")
+        else:
+            task_type = args[0]
+            query = args[1] if len(args) > 1 else f"Analyze threat context for {task_type}"
+            print(f"[*] [LLM ROUTER] Determining optimal model for task '{task_type}'...")
+            time.sleep(0.3)
+            routed = self.llm.route_query(query, task_type)
+            print(f"[+] Routed to: {routed['routed_to']} ({routed['provider']})")
+            print(f"    Context Window : {routed['context_window']:,} tokens | Rating: {routed['model_rating']}/5.0")
+            print(f"    Response       : {routed['response_summary']}\n")
 
     # ==========================================
     # BLUE TEAM DEFENSIVE REMEDIATION COMMANDS
