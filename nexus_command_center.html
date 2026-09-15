@@ -976,98 +976,155 @@
       </div>
 
       <!-- ==================================================================== -->
-      <!-- SCREEN 5: DIGITAL TWIN                                               -->
+      <!-- SCREEN 5: DIGITAL TWIN, WHAT-IF SIMULATOR & BLAST RADIUS            -->
       <!-- ==================================================================== -->
       <div id="screen-digital-twin" class="app-screen space-y-3 font-mono text-[9px]">
         <div class="flex justify-between items-center cyber-card p-3">
           <div>
             <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
-              <span class="text-cyan-400">🌐</span><span>SHADOW-TWIN SIMULATION SANDBOX</span>
+              <span class="text-cyan-400">🌐</span><span>DIGITAL TWIN, WHAT-IF SIMULATOR & BLAST RADIUS</span>
             </h2>
-            <div class="text-[8px] text-slate-400 mt-0.5">Zero-Risk Virtual Mirror of Production Topology for Adversarial Stress Testing</div>
+            <div class="text-[8px] text-slate-400 mt-0.5">Constrained QAOA Optimization & Downstream Compromise Graph Propagation</div>
           </div>
-          <button onclick="alert('Running Shadow Twin Full Kill Chain Simulation...')" class="px-3 py-1 bg-purple-700 hover:bg-purple-600 text-slate-100 font-bold rounded text-[8px]">EXECUTE DRILL</button>
+          <button onclick="copilotPrompt('Run What-If Digital Twin simulation across all defensive intervention candidates')" class="px-3 py-1 bg-purple-700 hover:bg-purple-600 text-slate-100 font-bold rounded text-[8px]">EXECUTE WHAT-IF</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div class="cyber-card p-3 space-y-2">
-            <div class="text-[9px] font-bold text-purple-300 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">DRILL CONTROLS & SCENARIO SELECTION</div>
-            <div class="space-y-1.5">
-              <label class="block text-slate-400 text-[8px]">Adversary Profile:</label>
-              <select class="w-full bg-[#040a14] border border-[#112642] rounded p-1 text-slate-200 text-[8px]">
-                <option>APT-41 (Credential Replay + CVE-2024-3400)</option>
-                <option>LockBit 3.0 (Ransomware Lateral Encryption)</option>
-                <option>Volt Typhoon (Living-Off-The-Land WMI / PowerShell)</option>
-              </select>
-
-              <label class="block text-slate-400 text-[8px] mt-2">Remediation Policy to Test:</label>
-              <select class="w-full bg-[#040a14] border border-[#112642] rounded p-1 text-slate-200 text-[8px]">
-                <option>Isolate Host 10.0.4.50 + Evict Active Tokens</option>
-                <option>Dynamic Honey-Token Injection on DB-01</option>
-                <option>Emergency Zero-Trust Microsegmentation</option>
-              </select>
-
-              <div class="pt-2 flex space-x-2">
-                <button onclick="alert('Simulation running: 100% containment achieved with 0 service disruption.')" class="flex-1 py-1.5 bg-cyan-700 hover:bg-cyan-600 text-slate-950 font-bold rounded text-[8px]">RUN TWIN REPLAY</button>
-                <button onclick="alert('Twin Reset to Current Production Snapshot.')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[8px]">RESET SNAPSHOT</button>
+        <!-- 3-Column Layout: What-If Scenarios + Blast Radius + Outcome Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+          <!-- Column 1: What-If Defensive Simulations -->
+          <div class="cyber-card p-2.5 space-y-2 border-t-2 border-t-cyan-500">
+            <div class="text-[9px] font-bold text-cyan-300 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">WHAT-IF DEFENSIVE SIMULATOR</div>
+            <div class="space-y-1.5 text-[7px]">
+              <div class="p-1.5 bg-[#030a16] rounded border border-cyan-500/20 hover:border-cyan-500/60 cursor-pointer">
+                <div class="font-bold text-slate-200">Scenario A: Disable Account admin_svc</div>
+                <div class="text-slate-400 mt-0.5">Paths Broken: 2 | Paths Remaining: 1 | Disruption: 15%</div>
+                <div class="text-cyan-400 font-mono mt-0.5">Risk Reduction: 65% | QAOA: -1.85 H</div>
+              </div>
+              <div class="p-1.5 bg-[#031522] rounded border border-emerald-500/40 hover:border-emerald-500/80 cursor-pointer">
+                <div class="flex justify-between items-center font-bold text-emerald-300">
+                  <span>Scenario B: Segment DB + Restrict IAM</span>
+                  <span class="text-[6px] bg-emerald-950 px-1 py-0.2 rounded text-emerald-300 border border-emerald-500">QAOA OPTIMAL</span>
+                </div>
+                <div class="text-slate-400 mt-0.5">Paths Broken: 3 | Paths Remaining: 0 | Disruption: 4%</div>
+                <div class="text-emerald-400 font-mono mt-0.5">Risk Reduction: 94% | QAOA: -2.208 H</div>
+              </div>
+              <div class="p-1.5 bg-[#030a16] rounded border border-red-500/20 hover:border-red-500/60 cursor-pointer">
+                <div class="font-bold text-slate-200">Scenario C: Total Subnet Blackhole</div>
+                <div class="text-slate-400 mt-0.5">Paths Broken: 3 | Services Disrupted: 14 | Disruption: 90%</div>
+                <div class="text-red-400 font-mono mt-0.5">Risk Reduction: 98% | QAOA: -0.45 H (High Penalty)</div>
               </div>
             </div>
           </div>
 
-          <div class="cyber-card p-3 space-y-2">
-            <div class="text-[9px] font-bold text-emerald-300 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">SIMULATION OUTCOME METRICS</div>
-            <div class="space-y-2 text-[8px]">
-              <div class="flex justify-between p-1.5 bg-[#041220] rounded border border-blue-500/20">
-                <span>Blast Radius Containment:</span><strong class="text-emerald-400">98.5% CONTAINED</strong>
+          <!-- Column 2: Blast Radius Propagation Engine -->
+          <div class="cyber-card p-2.5 space-y-2 border-t-2 border-t-red-500">
+            <div class="text-[9px] font-bold text-red-300 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">BLAST RADIUS IMPACT ENGINE</div>
+            <div class="space-y-1.5 text-[7px]">
+              <div class="flex justify-between p-1 bg-[#140608] rounded border border-red-500/30">
+                <span class="text-slate-400">Compromised Pivot:</span><strong class="text-red-300">10.0.4.50 (web-prod-01)</strong>
               </div>
-              <div class="flex justify-between p-1.5 bg-[#041220] rounded border border-blue-500/20">
-                <span>Production Service Availability:</span><strong class="text-emerald-400">99.98% (NO OUTAGE)</strong>
+              <div class="flex justify-between p-1 bg-[#140608] rounded border border-red-500/30">
+                <span class="text-slate-400">Blast Radius Score:</span><strong class="text-red-400 font-bold">88.5 / 100 (TIER-1 CRITICAL)</strong>
               </div>
-              <div class="flex justify-between p-1.5 bg-[#041220] rounded border border-blue-500/20">
-                <span>Data Exfiltration Risk:</span><strong class="text-emerald-400">0.0% (ZERO BYTES LOST)</strong>
+              <div class="p-1.5 bg-[#0a0508] rounded border border-slate-800 space-y-0.5">
+                <div class="text-slate-400 font-bold">Reachable Crown Jewel Targets:</div>
+                <div class="text-slate-300">• db-prod-01 (10.0.4.51) — 1.2M Customer Records</div>
+                <div class="text-slate-300">• ad-dc-01 (10.0.4.10) — Domain Controller</div>
+                <div class="text-slate-300">• s3://prod-secrets-vault — Master API Keys</div>
               </div>
-              <div class="flex justify-between p-1.5 bg-[#041220] rounded border border-blue-500/20">
-                <span>Quantum Optimization Score:</span><strong class="text-purple-300">-2.208 H (GLOBAL MINIMA)</strong>
+              <button onclick="copilotPrompt('Calculate real-time blast radius for target 10.0.4.50')" class="w-full py-1 bg-red-900 hover:bg-red-800 text-red-100 rounded text-[7px]">RE-EVALUATE BLAST RADIUS</button>
+            </div>
+          </div>
+
+          <!-- Column 3: Deception-X Proactive Matrix -->
+          <div class="cyber-card p-2.5 space-y-2 border-t-2 border-t-purple-500">
+            <div class="text-[9px] font-bold text-purple-300 border-b border-[#112642] pb-1" style="font-family: 'Orbitron', sans-serif;">DECEPTION-X PROACTIVE MATRIX</div>
+            <div class="space-y-1.5 text-[7px]">
+              <div class="p-1 bg-[#0b0614] rounded border border-purple-500/30 flex justify-between items-center">
+                <span>[DEC-01] svc_backup_admin (Honey SPN)</span>
+                <span class="text-emerald-400 text-[6px]">ARMED</span>
               </div>
+              <div class="p-1 bg-[#0b0614] rounded border border-purple-500/30 flex justify-between items-center">
+                <span>[DEC-02] canary_aws_key_s3 (Canary)</span>
+                <span class="text-emerald-400 text-[6px]">ARMED</span>
+              </div>
+              <div class="p-1 bg-[#0b0614] rounded border border-purple-500/30 flex justify-between items-center">
+                <span>[DEC-03] /api/v3/internal-admin (Fake API)</span>
+                <span class="text-emerald-400 text-[6px]">ARMED</span>
+              </div>
+              <div class="p-1 bg-[#0b0614] rounded border border-purple-500/30 flex justify-between items-center">
+                <span>[DEC-04] tbl_customer_passwords (Honey DB)</span>
+                <span class="text-emerald-400 text-[6px]">ARMED</span>
+              </div>
+              <button onclick="copilotPrompt('Check Deception-X tripwire alerts and honeytoken status')" class="w-full py-1 bg-purple-900 hover:bg-purple-800 text-purple-100 rounded text-[7px]">PROBE DECEPTION MESH</button>
             </div>
           </div>
         </div>
       </div>
 
       <!-- ==================================================================== -->
-      <!-- SCREEN 6: RED vs BLUE                                                -->
+      <!-- SCREEN 6: RED vs BLUE & PURPLE-X CONTINUOUS FEEDBACK LOOP            -->
       <!-- ==================================================================== -->
       <div id="screen-red-blue" class="app-screen space-y-3 font-mono text-[9px]">
         <div class="flex justify-between items-center cyber-card p-3">
           <div>
             <h2 class="text-xs font-bold text-slate-100 flex items-center space-x-2" style="font-family: 'Orbitron', sans-serif;">
-              <span class="text-purple-400">⚔️</span><span>RED vs BLUE AI ADVERSARIAL ARENA</span>
+              <span class="text-purple-400">⚔️</span><span>PURPLE-X CONTINUOUS ADVERSARIAL FEEDBACK ARENA</span>
             </h2>
-            <div class="text-[8px] text-slate-400 mt-0.5">Continuous Autonomous Red-Team Exploit vs Blue-Team Real-Time Self-Healing Defense</div>
+            <div class="text-[8px] text-slate-400 mt-0.5">Continuous Attack ➔ Defense Feedback Loop with Unified Resilience Scoring (Before vs After)</div>
           </div>
-          <button onclick="alert('New Adversarial Round Engaged!')" class="px-3 py-1 bg-purple-700 hover:bg-purple-600 text-slate-100 font-bold rounded text-[8px]">ENGAGE BATTLE ROUND</button>
+          <button onclick="copilotPrompt('Execute continuous Purple-X feedback loop: Attack -> Detection Check -> Remediation -> Re-Validation')" class="px-3 py-1 bg-purple-700 hover:bg-purple-600 text-slate-100 font-bold rounded text-[8px]">RUN PURPLE LOOP</button>
+        </div>
+
+        <!-- UNIFIED RESILIENCE SCORECARD: BEFORE vs AFTER -->
+        <div class="cyber-card p-3 space-y-2 border-t-2 border-t-emerald-500">
+          <div class="flex justify-between items-center border-b border-[#112642] pb-1">
+            <div class="text-[10px] font-bold text-emerald-300" style="font-family: 'Orbitron', sans-serif;">🏆 UNIFIED NEXUS-X RESILIENCE SCORECARD</div>
+            <span class="text-[8px] text-emerald-400 font-bold">+30.7 GAIN POST-REMEDIATION</span>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-[8px]">
+            <div class="p-2 bg-[#041220] rounded border border-blue-500/30 text-center space-y-0.5">
+              <div class="text-slate-400 text-[7px]">BEFORE REMEDIATION</div>
+              <div class="text-lg font-black text-amber-400" style="font-family: 'Orbitron', sans-serif;">61.3 <span class="text-[9px] text-slate-400">/ 100</span></div>
+              <div class="text-[6px] text-amber-400">ELEVATED SYSTEM EXPOSURE</div>
+            </div>
+            <div class="p-2 bg-[#041a14] rounded border border-emerald-500/40 text-center space-y-0.5">
+              <div class="text-slate-400 text-[7px]">AFTER REMEDIATION</div>
+              <div class="text-lg font-black text-emerald-400" style="font-family: 'Orbitron', sans-serif;">92.0 <span class="text-[9px] text-slate-400">/ 100</span></div>
+              <div class="text-[6px] text-emerald-400 font-bold">HARDENED RESILIENT STATE</div>
+            </div>
+            <div class="p-2 bg-[#0e0a1c] rounded border border-purple-500/30 text-center space-y-0.5">
+              <div class="text-slate-400 text-[7px]">PURPLE TEAM RATING</div>
+              <div class="text-lg font-black text-purple-300" style="font-family: 'Orbitron', sans-serif;">78 <span class="text-[9px] text-slate-400">/ 100</span></div>
+              <div class="text-[6px] text-purple-400">Coverage: 91% | Accuracy: 83%</div>
+            </div>
+            <div class="p-2 bg-[#041220] rounded border border-cyan-500/30 text-center space-y-0.5">
+              <div class="text-slate-400 text-[7px]">CHOKE POINT DEFENSE</div>
+              <div class="text-lg font-black text-cyan-300" style="font-family: 'Orbitron', sans-serif;">3 / 3</div>
+              <div class="text-[6px] text-cyan-400">ALL PATHS INTERCEPTED</div>
+            </div>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <!-- Red Agent -->
           <div class="cyber-card p-3 space-y-2 border-t-2 border-t-red-500">
             <div class="flex justify-between items-center text-[9px] font-bold text-red-400 border-b border-[#112642] pb-1">
-              <span>🔴 RED TEAM AGENT (AUTONOMOUS EXPLOIT)</span>
-              <span class="text-[8px] bg-red-950 px-1.5 py-0.2 rounded text-red-300">WIN RATE: 19%</span>
+              <span>🔴 ADVANCED RED TEAM (DETECTION-AWARE ATTACK INTEL)</span>
+              <span class="text-[8px] bg-red-950 px-1.5 py-0.2 rounded text-red-300">10 ENGINES</span>
             </div>
-            <div class="text-[8px] text-slate-400">Active Engine: <strong>Hadrian + XBOW + NodeZero</strong></div>
-            <div class="space-y-1.5">
+            <div class="space-y-1.5 text-[7px]">
               <div class="p-1.5 bg-[#140608] rounded border border-red-500/30">
-                <div class="font-bold text-red-300">Phase 1: External Recon (Hadrian)</div>
-                <div class="text-[7px] text-slate-400">Discovered 14 open ports, 1 unpatched GlobalProtect endpoint.</div>
+                <div class="font-bold text-red-300">1. Attack Surface Graph: 9 Nodes / 8 Trust Edges</div>
+                <div class="text-slate-400">Mapped perimeter gateway -> web -> identity -> Crown Jewel DB.</div>
               </div>
               <div class="p-1.5 bg-[#140608] rounded border border-red-500/30">
-                <div class="font-bold text-red-300">Phase 2: Weaponized Exploit (XBOW)</div>
-                <div class="text-[7px] text-slate-400">Injected CVE-2024-3400 crafted payload gaining non-root shell.</div>
+                <div class="font-bold text-red-300">2. Attack Hypothesis: HYP-01 Formulated & Verified</div>
+                <div class="text-slate-400">Non-destructive PoC validated CVE-2024-3400 without persistent disk writes.</div>
               </div>
               <div class="p-1.5 bg-[#140608] rounded border border-red-500/30">
-                <div class="font-bold text-red-300">Phase 3: Lateral Pivot (NodeZero)</div>
-                <div class="text-[7px] text-slate-400">Calculated 12 shortest paths to DB-01; executing Pass-the-Hash.</div>
+                <div class="font-bold text-red-300">3. Detection-Awareness: 92% Blue Detection Confidence</div>
+                <div class="text-slate-400">Evaluated SIEM/EDR visibility prior to executing validation step.</div>
               </div>
             </div>
           </div>
@@ -1075,22 +1132,21 @@
           <!-- Blue Agent -->
           <div class="cyber-card p-3 space-y-2 border-t-2 border-t-blue-500">
             <div class="flex justify-between items-center text-[9px] font-bold text-blue-400 border-b border-[#112642] pb-1">
-              <span>🔵 BLUE TEAM AGENT (SELF-HEALING DEFENSE)</span>
-              <span class="text-[8px] bg-blue-950 px-1.5 py-0.2 rounded text-emerald-300 font-bold">WIN RATE: 81%</span>
+              <span>🔵 BLUE-X DEFENSE ENGINE (DIGITAL IMMUNE SYSTEM)</span>
+              <span class="text-[8px] bg-blue-950 px-1.5 py-0.2 rounded text-emerald-300 font-bold">SELF-HEALING</span>
             </div>
-            <div class="text-[8px] text-slate-400">Active Engine: <strong>Sentinel-X + Q-Reason + QAOA Quantum</strong></div>
-            <div class="space-y-1.5">
+            <div class="space-y-1.5 text-[7px]">
               <div class="p-1.5 bg-[#041220] rounded border border-blue-500/30">
-                <div class="font-bold text-emerald-300">Countermeasure 1: Anomaly Interception</div>
-                <div class="text-[7px] text-slate-400">Bayesian engine flagged 47 spray attempts within 320ms.</div>
+                <div class="font-bold text-emerald-300">1. SOC Timeline Investigation & Detection Eng.</div>
+                <div class="text-slate-400">Correlated 26 events; auto-generated Sigma rule SIGMA-2026-081.</div>
               </div>
               <div class="p-1.5 bg-[#041220] rounded border border-blue-500/30">
-                <div class="font-bold text-emerald-300">Countermeasure 2: Dynamic WAF Patching</div>
-                <div class="text-[7px] text-slate-400">Synthesized and deployed rule R-9901 blocking Tor IP range.</div>
+                <div class="font-bold text-emerald-300">2. Automated Containment & Choke Point Remediation</div>
+                <div class="text-slate-400">Isolate 10.0.4.50, revoke admin_svc, block 198.51.100.44, lock S3.</div>
               </div>
               <div class="p-1.5 bg-[#041220] rounded border border-blue-500/30">
-                <div class="font-bold text-emerald-300">Countermeasure 3: Quantum Microsegmentation</div>
-                <div class="text-[7px] text-slate-400">QAOA severed lateral route to DB-01 while maintaining customer traffic.</div>
+                <div class="font-bold text-emerald-300">3. Control Re-Validation & Digital Immune Memory</div>
+                <div class="text-slate-400">Re-test confirmed attack path AP-01 broken; Antibody #ANTIBODY-001 created.</div>
               </div>
             </div>
           </div>

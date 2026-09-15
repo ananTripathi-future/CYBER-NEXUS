@@ -35,7 +35,17 @@ from nexus_x_core import (
     AIGuardian,
     Severity,
     AgentStrategy,
-    AgentMode
+    AgentMode,
+    ContinuousPurpleLoop,
+    BlastRadiusEngine,
+    WhatIfSimulator,
+    DeceptionEngine,
+    AIXEngine,
+    ResilienceScorer,
+    PurpleXEngine,
+    AttackPathRanker,
+    ProvenanceLedger,
+    AuthorizationTier
 )
 
 class NexusInteractiveCLI(cmd.Cmd):
@@ -325,6 +335,129 @@ class NexusInteractiveCLI(cmd.Cmd):
         print(f"[+] Ledger Block #{blk.block_index} Created.")
         print(f"    SHA-256 Hash: {blk.hash_current}")
         print(f"    Prev Hash   : {blk.hash_previous}\n")
+
+    # ==========================================
+    # NEXT-GEN 15-PILLAR ARCHITECTURE COMMANDS
+    # ==========================================
+
+    def do_purple_loop(self, arg):
+        """[PURPLE] Execute full Attack -> Defense Continuous Feedback Loop: purple_loop"""
+        print("[*] [PURPLE-X] Initializing continuous adversarial feedback loop...")
+        time.sleep(0.5)
+        engine = ContinuousPurpleLoop()
+        res = engine.run_complete_feedback_loop()
+        print(f"[+] Attack Surface: {res['surface_graph']['nodes']} Nodes, {res['surface_graph']['edges']} Trust Edges mapped.")
+        print(f"[+] Top Attack Path: {res['ranked_paths'][0].name} (Rank: {res['ranked_paths'][0].rank_score:.2f})")
+        print(f"[+] Critical Choke Point: {res['choke_points'][0].choke_id} ({res['choke_points'][0].asset_or_control})")
+        print(f"[+] Detection Probability: {res['detection_awareness']['blue_detection_confidence']:.0%} on '{res['detection_awareness']['technique']}'")
+        print(f"[+] Remediation & Re-validation: {res['re_validation']['proof']}")
+        print(f"[+] Digital Immune Antibody: #{res['antibody_created']['antibody_id']} neutralized {res['antibody_created']['technique_neutralized']}")
+        scores = res['resilience_scores']
+        print(f"[+] Resilience Delta: {scores.composite_resilience_before:.1f}/100 ➔ {scores.composite_resilience_after:.1f}/100 (+{scores.composite_resilience_after - scores.composite_resilience_before:.1f} Gain)")
+        print(f"[+] Purple Team Score: {res['purple_scores'].overall_purple_rating:.0f}/100 (Coverage: {res['purple_scores'].attack_coverage_pct:.0f}%)\n")
+
+    def do_blast_radius(self, arg):
+        """[BLUE/ANALYTICS] Calculate downstream compromise blast radius for an asset: blast_radius [asset]"""
+        asset = arg.strip() if arg.strip() else self.target
+        print(f"[*] [BLAST RADIUS] Evaluating downstream exposure graph for {asset}...")
+        time.sleep(0.4)
+        engine = BlastRadiusEngine()
+        b = engine.calculate_blast_radius(asset)
+        print(f"[+] Compromised Asset       : {b.compromised_asset}")
+        print(f"[+] Blast Radius Score      : {b.blast_radius_score}/100 ({b.business_impact_tier})")
+        print(f"[+] Exposed Credentials     : {', '.join(b.direct_credentials_exposed)}")
+        print(f"[+] Reachable Assets        : {', '.join(b.reachable_assets)}")
+        print(f"[+] Sensitive Data at Risk  : {', '.join(b.sensitive_data_at_risk)}")
+        print(f"[+] Recovery Priority       : {b.recovery_priority}\n")
+
+    def do_what_if(self, arg):
+        """[DIGITAL TWIN/QAOA] Simulate defensive interventions against attack paths: what_if"""
+        print("[*] [WHAT-IF SIMULATOR] Evaluating candidate defensive interventions in Digital Twin...")
+        time.sleep(0.5)
+        sim = WhatIfSimulator()
+        scenarios = sim.simulate_scenarios()
+        print("\n================ WHAT-IF DEFENSIVE SIMULATIONS ================")
+        for s in scenarios:
+            tag = " \033[92m[OPTIMAL QAOA CHOICE]\033[0m" if s.is_optimal else ""
+            print(f"  {s.scenario_name}{tag}")
+            print(f"    Paths Broken: {s.attack_paths_broken} | Paths Remaining: {s.attack_paths_remaining}")
+            print(f"    Risk Reduction: {s.risk_reduction_pct:.0f}% | Disruption Score: {s.disruption_score:.2f} | QAOA: {s.qaoa_energy} H\n")
+        print("================================================================\n")
+
+    def do_deception(self, arg):
+        """[DECEPTION-X] Manage honeytokens, decoy APIs, and canary credentials: deception [list|trip]"""
+        args = arg.strip().lower()
+        dec = DeceptionEngine()
+        if args == "trip":
+            print("[*] [TRIPWIRE TRIGGER] Simulating adversary touch on Canary AWS Key...")
+            alert = dec.trigger_tripwire("DEC-02", "198.51.100.44")
+            print(f"[+] \033[91m{alert['alert_type']}\033[0m: {alert['decoy_name']} ({alert['decoy_type']})")
+            print(f"    Adversary IP: {alert['adversary_ip']} | Confidence: {alert['confidence']:.0%}")
+            print(f"    Action: {alert['action']}\n")
+        else:
+            print("\n================ DECEPTION-X PROACTIVE MATRIX ================")
+            for d in dec.decoys:
+                status = "TRIPPED" if d.tripped else "ACTIVE ARMED"
+                print(f"  [{d.decoy_id}] {d.name:<25} ({d.decoy_type.value}) -> {status}")
+                print(f"       Location: {d.location}")
+            print("===============================================================\n")
+
+    def do_ai_x_audit(self, arg):
+        """[AI-X] Run AI/LLM-Specific Security Audit (Prompt Injection, Excessive Agency, Leakage): ai_x_audit"""
+        print("[*] [AI-X] Testing AI Guardian with 47 prompt injections & 12 tool abuse vectors...")
+        time.sleep(0.5)
+        aix = AIXEngine()
+        res = aix.run_ai_audit()
+        print(f"[+] Prompt Injections Tested : {res.prompt_injection_tested} (Blocked: {res.prompt_injection_blocked})")
+        print(f"[+] Tool Abuse Attempts      : {res.tool_abuse_attempts} (Prevented: {res.tool_abuse_prevented})")
+        print(f"[+] Data Leakage Checks      : {res.data_leakage_checks} (Prevented: {res.data_leakage_prevented})")
+        print(f"[+] Excessive Agency Verdict : {res.excessive_agency_verdict}")
+        print("[+] Enforced Guardrails      :")
+        for g in res.recommended_guardrails:
+            print(f"    - {g}")
+        print()
+
+    def do_score_resilience(self, arg):
+        """[METRICS] View Unified Multi-Dimensional NEXUS Resilience Scorecard: score_resilience"""
+        scorer = ResilienceScorer()
+        scores = scorer.calculate_scores()
+        purple = PurpleXEngine().compute_purple_score()
+        print("\n================== UNIFIED NEXUS-X RESILIENCE ==================")
+        print(f"  Attack Capability    : {scores.attack_capability:.0f}/100")
+        print(f"  Detection Capability : {scores.detection_capability:.0f}/100")
+        print(f"  Response Capability  : {scores.response_capability:.0f}/100")
+        print(f"  Recovery Capability  : {scores.recovery_capability:.0f}/100")
+        print(f"  Exposure Score       : {scores.exposure_score:.0f}/100")
+        print(f"  Identity Risk        : {scores.identity_risk:.0f}/100")
+        print(f"  Cloud Risk           : {scores.cloud_risk:.0f}/100")
+        print(f"  AI Security          : {scores.ai_security:.0f}/100")
+        print(f"  -------------------------------------------------------------")
+        print(f"  RESILIENCE (BEFORE)  : \033[93m{scores.composite_resilience_before:.1f} / 100\033[0m")
+        print(f"  RESILIENCE (AFTER)   : \033[92m{scores.composite_resilience_after:.1f} / 100\033[0m (+{scores.composite_resilience_after - scores.composite_resilience_before:.1f} GAIN)")
+        print(f"  PURPLE TEAM RATING   : \033[96m{purple.overall_purple_rating:.0f} / 100\033[0m (Attack: {purple.attack_coverage_pct:.0f}%, Detection: {purple.detection_accuracy_pct:.0f}%)")
+        print("================================================================\n")
+
+    def do_choke_points(self, arg):
+        """[STRATEGY] Identify critical choke points where 1 control breaks multiple attack paths: choke_points"""
+        ranker = AttackPathRanker()
+        paths, chokes = ranker.rank_paths()
+        print("\n================ CRITICAL DEFENSIVE CHOKE POINTS ================")
+        for c in chokes:
+            print(f"  [{c.choke_id}] {c.asset_or_control}")
+            print(f"       Paths Intersected: {c.paths_intersected} | Cost: {c.break_cost_estimate}")
+            print(f"       Recommended Action: {c.recommended_control}\n")
+        print("=================================================================\n")
+
+    def do_provenance(self, arg):
+        """[AUDIT] Display cryptographic evidence provenance ledger chain: provenance"""
+        prov = ProvenanceLedger()
+        rec = prov.record_finding("FIND-001", "Raw RCE log", "NEXUS-X", "v2.4", "GPT-5.6 Sol", "Choke point reasoning", AuthorizationTier.LEVEL_2_HIGH_IMPACT, "SecOps Commander", "Remediate DB", "AP-01 Broken")
+        print(f"[+] Finding ID         : {rec.finding_id}")
+        print(f"[+] Tool & Version     : {rec.tool_name} ({rec.tool_version})")
+        print(f"[+] LLM Model Used     : {rec.llm_used}")
+        print(f"[+] Authorization Tier : {rec.authorization_tier.value}")
+        print(f"[+] Action & Outcome   : {rec.action_performed} -> {rec.outcome_summary}")
+        print(f"[+] SHA-256 Block Hash : {rec.block_hash}\n")
 
     def do_run_all(self, arg):
         """Execute full autonomous multi-agent pipeline: run_all"""
